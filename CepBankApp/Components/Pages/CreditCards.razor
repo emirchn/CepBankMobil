@@ -1,0 +1,100 @@
+@page "/cards"
+@using CepBankApp.Data
+@using CepBankApp.Models
+@using CepBankApp.Services
+@using System.Globalization
+@inject DatabaseService Database
+
+<div class="finance-page">
+    <header class="finance-header card-list-header">
+        <div><p class="eyebrow">CEPBANK / KARTLAR</p><h1>Kredi kartları</h1><p class="header-subtitle">Kartlarını ve güncel borçlarını takip et.</p></div>
+        <NavLink href="cards/new" class="header-action">+ Kart ekle</NavLink>
+    </header>
+
+    <section class="card-debt-banner">
+        <span>TOPLAM MEVCUT BORÇ</span>
+        <strong>@FormatMoney(_cards.Sum(card => card.CurrentDebt))</strong>
+        <small>@_cards.Count kart</small>
+    </section>
+    @if (!string.IsNullOrWhiteSpace(_error)) { <p class="error-message">@_error</p> }
+
+    @if (_cards.Count == 0)
+    {
+        <div class="empty-state"><strong>Henüz kart eklenmedi</strong><p>İlk kartını ekleyerek harcamalarını takip etmeye başla.</p><NavLink href="cards/new" class="inline-link">Kart ekle →</NavLink></div>
+    }
+    else
+    {
+        <div class="card-list">
+            @foreach (var card in _cards)
+            {
+                <article class="card-list-item">
+                    <div class="card-list-top">
+                        <div class="mini-card-icon" aria-hidden="true"><span></span><span></span></div>
+                        <div class="card-list-title"><strong>@card.Name</strong><span>•••• @card.LastFourDigits</span></div>
+                        <div class="card-list-actions">
+                            <NavLink href="@($"cards/edit/{card.Id}")" class="section-link">Düzenle</NavLink>
+                            <button class="delete-button" type="button" title="Kartı listeden kaldır" @onclick="() => ArchiveCardAsync(card)">Kaldır</button>
+                        </div>
+                    </div>
+                    <div class="card-list-bottom">
+                        <div><small>Mevcut borç</small><strong>@FormatMoney(card.CurrentDebt)</strong></div>
+                        @if (card.CreditLimit.HasValue)
+                        {
+                            <div><small>Limit</small><strong>@FormatMoney(card.CreditLimit.Value)</strong></div>
+                        }
+                    </div>
+                    <div class="card-period"><span>Bu dönem harcaması</span><strong>@FormatMoney(PeriodSpending(card))</strong></div>
+                    <p class="card-list-dates">@PeriodLabel(card) · Son ödeme günü: @card.PaymentDay</p>
+                    @if (card.ExpirationMonth > 0)
+                    {
+                        <p class="card-expiry">Son kullanma: @card.ExpirationMonth.ToString("00")/@card.ExpirationYear</p>
+                    }
+                </article>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    private List<CreditCard> _cards = new();
+    private List<FinancialTransaction> _transactions = new();
+    private string _error = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Database.InitializeAsync();
+        await ReloadAsync();
+    }
+
+    private async Task ArchiveCardAsync(CreditCard card)
+    {
+        await Database.ArchiveCreditCardAsync(card);
+        try { CardDetailsStore.Remove(card.SecureDetailsKey); }
+        catch { _error = "Kart listeden kaldırıldı, ancak güvenli bilgileri temizlenemedi. Tüm verileri sıfırlama işlemiyle temizleyebilirsin."; }
+        await ReloadAsync();
+    }
+
+    private async Task ReloadAsync()
+    {
+        _cards = (await Database.GetCreditCardsAsync()).Where(card => card.IsActive).ToList();
+        _transactions = await Database.GetTransactionsAsync();
+    }
+
+    private decimal PeriodSpending(CreditCard card)
+    {
+        var cutoff = DatabaseService.GetCardStatementDate(DateTime.Today, card.StatementDay);
+        return _transactions.Where(transaction => transaction.CardId == card.Id && transaction.CardDebtChange > 0 &&
+            (transaction.CardStatementDate ?? DatabaseService.GetCardStatementDate(transaction.Date, card.StatementDay)) == cutoff)
+            .Sum(transaction => transaction.Amount);
+    }
+
+    private static string PeriodLabel(CreditCard card)
+    {
+        var end = DatabaseService.GetCardStatementDate(DateTime.Today, card.StatementDay);
+        var previousMonth = end.AddMonths(-1);
+        var previousEnd = new DateTime(previousMonth.Year, previousMonth.Month, Math.Clamp(card.StatementDay, 1, DateTime.DaysInMonth(previousMonth.Year, previousMonth.Month)));
+        return $"{previousEnd.AddDays(1):dd.MM} – {end:dd.MM.yyyy}";
+    }
+
+    private static string FormatMoney(decimal amount) => string.Format(new CultureInfo("tr-TR"), "{0:C2}", amount);
+}

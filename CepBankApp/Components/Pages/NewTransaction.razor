@@ -1,0 +1,115 @@
+@page "/transaction"
+@using CepBankApp.Data
+@using CepBankApp.Models
+@using System.Globalization
+@inject DatabaseService Database
+@inject NavigationManager Navigation
+
+<div class="finance-page">
+    <header class="finance-header">
+        <div><p class="eyebrow">HAREKETLER / YENİ KAYIT</p><h1>Yeni işlem</h1><p class="header-subtitle">Gelir ve giderlerini birkaç adımda kaydet.</p></div>
+    </header>
+    <section class="add-card">
+        <div class="section-heading"><div><p class="section-kicker">İŞLEM DETAYLARI</p><h2>Bilgileri doldur</h2></div><span>Bu cihazda saklanır</span></div>
+        <div class="form-grid">
+            <TypeToggle @bind-Value="_typeValue" />
+            <label>Tarih<input type="date" @bind="_date" /></label>
+            <label>Tutar<input type="number" min="0" step="0.01" @bind="_amountText" placeholder="0,00" /></label>
+            <label>Açıklama<input type="text" @bind="_description" placeholder="Örn. Maaş, market" /></label>
+            @if (_typeValue == "Expense")
+            {
+                <label>Kategori
+                    <select @bind="_category">
+                        <option>Kredi Kartı Ödemesi</option>
+                        <option>Yemek</option>
+                        <option>Market</option>
+                        <option>Kıyafet</option>
+                        <option>Ulaşım</option>
+                        <option>Fatura</option>
+                        <option>Sağlık</option>
+                        <option>Eğlence</option>
+                        <option>Eğitim</option>
+                        <option>Diğer</option>
+                    </select>
+                </label>
+                <label>Kart (isteğe bağlı)
+                    <select @bind="_cardIdValue">
+                        <option value="">Kart seçme</option>
+                        @foreach (var card in _cards)
+                        {
+                            <option value="@card.Id">@card.Name •••• @card.LastFourDigits</option>
+                        }
+                    </select>
+                </label>
+            }
+        </div>
+        @if (_typeValue == "Expense" && _cards.Count == 0)
+        {
+            <p class="field-hint">Kartla yaptığın harcamaları eklemek için önce <NavLink href="cards/new">kart ekle</NavLink>.</p>
+        }
+        else if (_typeValue == "Expense" && !string.IsNullOrEmpty(_cardIdValue))
+        {
+            <p class="field-hint">@CardEffectHint()</p>
+        }
+        @if (!string.IsNullOrWhiteSpace(_errorMessage)) { <p class="error-message">@_errorMessage</p> }
+        <button class="primary-button" type="button" @onclick="AddTransactionAsync">İşlemi kaydet</button>
+    </section>
+</div>
+
+@code {
+    private DateTime _date = DateTime.Today;
+    private string _typeValue = "Expense";
+    private string _amountText = string.Empty;
+    private string _description = string.Empty;
+    private string _category = "Diğer";
+    private string _cardIdValue = string.Empty;
+    private string _errorMessage = string.Empty;
+    private List<CreditCard> _cards = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Database.InitializeAsync();
+        _cards = (await Database.GetCreditCardsAsync()).Where(card => card.IsActive).ToList();
+    }
+
+    private string CardEffectHint()
+    {
+        if (_category == "Kredi Kartı Ödemesi") return "Ödeme seçilen kartın mevcut borcunu azaltır.";
+        var card = _cards.FirstOrDefault(card => card.Id.ToString(CultureInfo.InvariantCulture) == _cardIdValue);
+        if (card is null) return string.Empty;
+        var cutoff = DatabaseService.GetCardStatementDate(_date, card.StatementDay);
+        return $"Harcama {cutoff:dd.MM.yyyy} kesimli döneme ve kartın mevcut borcuna eklenir.";
+    }
+
+    private async Task AddTransactionAsync()
+    {
+        _errorMessage = string.Empty;
+        if (!decimal.TryParse(_amountText, NumberStyles.Number, CultureInfo.InvariantCulture, out var amount) &&
+            !decimal.TryParse(_amountText, NumberStyles.Number, new CultureInfo("tr-TR"), out amount))
+        {
+            _errorMessage = "Geçerli bir tutar girin.";
+            return;
+        }
+        if (amount <= 0) { _errorMessage = "Tutar sıfırdan büyük olmalıdır."; return; }
+        if (string.IsNullOrWhiteSpace(_description)) { _errorMessage = "Bir açıklama girin."; return; }
+
+        try
+        {
+            await Database.AddTransactionAsync(new FinancialTransaction
+            {
+                Date = _date,
+                Type = _typeValue == "Income" ? TransactionType.Income : TransactionType.Expense,
+                Amount = amount,
+                Description = _description.Trim(),
+                Category = _typeValue == "Income" ? "Gelir" : _category,
+                CardId = _typeValue == "Expense" && int.TryParse(_cardIdValue, out var cardId) ? cardId : null,
+                Source = "Manual"
+            });
+            Navigation.NavigateTo("/");
+        }
+        catch (InvalidOperationException ex)
+        {
+            _errorMessage = ex.Message;
+        }
+    }
+}

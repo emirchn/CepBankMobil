@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:CepBankApp"
+             xmlns:components="clr-namespace:CepBankApp.Components"
+             x:Class="CepBankApp.MainPage"
+             SafeAreaEdges="SoftInput"
+             BackgroundColor="{AppThemeBinding Light=#EEF2FF, Dark=#161D38}">
+
+    <BlazorWebView x:Name="blazorWebView" HostPage="wwwroot/index.html"
+                   BackgroundColor="Transparent"
+                   BlazorWebViewInitialized="OnBlazorWebViewInitialized">
+        <BlazorWebView.RootComponents>
+            <RootComponent Selector="#app" ComponentType="{x:Type components:Routes}" />
+        </BlazorWebView.RootComponents>
+    </BlazorWebView>
+
+</ContentPage>

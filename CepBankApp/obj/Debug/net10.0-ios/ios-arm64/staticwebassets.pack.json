@@ -1,0 +1,57 @@
+{
+  "Files": [
+    {
+      "Id": "/Users/emir-mac/.nuget/packages/microsoft.aspnetcore.components.webview/10.0.0/staticwebassets/blazor.modules.json",
+      "PackagePath": "staticwebassets/_framework/blazor.modules.json"
+    },
+    {
+      "Id": "/Users/emir-mac/.nuget/packages/microsoft.aspnetcore.components.webview/10.0.0/staticwebassets/blazor.webview.js",
+      "PackagePath": "staticwebassets/_framework/blazor.webview.js"
+    },
+    {
+      "Id": "/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/Debug/net10.0-ios/ios-arm64/scopedcss/bundle/CepBankApp.styles.css",
+      "PackagePath": "staticwebassets/CepBankApp.styles.css"
+    },
+    {
+      "Id": "/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/wwwroot/app.css",
+      "PackagePath": "staticwebassets/app.css"
+    },
+    {
+      "Id": "/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/wwwroot/index.html",
+      "PackagePath": "staticwebassets/index.html"
+    },
+    {
+      "Id": "/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/wwwroot/lib/bootstrap/dist/css/bootstrap.min.css",
+      "PackagePath": "staticwebassets/lib/bootstrap/dist/css/bootstrap.min.css"
+    },
+    {
+      "Id": "/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/wwwroot/lib/bootstrap/dist/css/bootstrap.min.css.map",
+      "PackagePath": "staticwebassets/lib/bootstrap/dist/css/bootstrap.min.css.map"
+    },
+    {
+      "Id": "/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/wwwroot/theme.js",
+      "PackagePath": "staticwebassets/theme.js"
+    },
+    {
+      "Id": "obj/Debug/net10.0-ios/ios-arm64/staticwebassets/msbuild.CepBankApp.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssetEndpoints.props"
+    },
+    {
+      "Id": "obj/Debug/net10.0-ios/ios-arm64/staticwebassets/msbuild.CepBankApp.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj/Debug/net10.0-ios/ios-arm64/staticwebassets/msbuild.build.CepBankApp.props",
+      "PackagePath": "build\\CepBankApp.props"
+    },
+    {
+      "Id": "obj/Debug/net10.0-ios/ios-arm64/staticwebassets/msbuild.buildMultiTargeting.CepBankApp.props",
+      "PackagePath": "buildMultiTargeting\\CepBankApp.props"
+    },
+    {
+      "Id": "obj/Debug/net10.0-ios/ios-arm64/staticwebassets/msbuild.buildTransitive.CepBankApp.props",
+      "PackagePath": "buildTransitive\\CepBankApp.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

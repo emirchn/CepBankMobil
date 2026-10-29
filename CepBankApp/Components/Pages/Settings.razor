@@ -1,0 +1,122 @@
+@page "/settings"
+@using CepBankApp.Data
+@using Microsoft.Maui.ApplicationModel.DataTransfer
+@using Microsoft.Maui.Storage
+@using Plugin.LocalNotification
+@inject DatabaseService Database
+@inject IJSRuntime JS
+
+<div class="finance-page">
+    <header class="finance-header">
+        <div><p class="eyebrow">CEPBANK / UYGULAMA</p><h1>Ayarlar</h1><p class="header-subtitle">Verilerin ve uygulama tercihlerin.</p></div>
+    </header>
+
+    <section class="transactions-section">
+        <div class="section-heading"><h2>Yerel veriler</h2><span>Bu cihazda saklanır</span></div>
+        <p class="settings-copy">Gelir, gider, düzenli işlemler ve kartlar yalnızca telefonunuzdaki yerel veritabanında tutulur.</p>
+        <button class="primary-button" @onclick="ExportAsync">Verileri yedek olarak dışa aktar</button>
+        @if (!string.IsNullOrWhiteSpace(_message)) { <p class="settings-message">@_message</p> }
+    </section>
+
+    <section class="transactions-section">
+        <div class="section-heading"><div><p class="section-kicker">GÖRÜNÜM</p><h2>Tema</h2></div></div>
+        <p class="settings-copy">Uygulamanın renklerini seç.</p>
+        <div class="theme-options" role="group" aria-label="Tema seçimi">
+            <button type="button" class="@ThemeClass("light")" aria-pressed="@(_themeMode == "light")" @onclick="SelectLightAsync">Gündüz</button>
+            <button type="button" class="@ThemeClass("dark")" aria-pressed="@(_themeMode == "dark")" @onclick="SelectDarkAsync">Gece</button>
+            <button type="button" class="@ThemeClass("device")" aria-pressed="@(_themeMode == "device")" @onclick="SelectDeviceAsync">Cihaz</button>
+        </div>
+    </section>
+
+    <section class="transactions-section danger-section">
+        <div class="section-heading"><div><p class="section-kicker">VERİ YÖNETİMİ</p><h2>Tüm verileri sıfırla</h2></div></div>
+        <p class="settings-copy">Kayıtlı işlemler, düzenli işlemler ve kartlar silinir.</p>
+        @if (!_showResetConfirm)
+        {
+            <button type="button" class="danger-button" @onclick="ShowResetConfirm">Tüm verileri sıfırla</button>
+        }
+        else
+        {
+            <div class="reset-confirm" role="alert">
+                <strong>Bu işlem geri alınamaz.</strong>
+                <p>Devam etmeden önce istersen yukarıdan yedek al.</p>
+                <div class="reset-actions">
+                    <button type="button" class="secondary-button" @onclick="CancelReset">Vazgeç</button>
+                    <button type="button" class="danger-button" @onclick="ClearAllAsync">Evet, tüm verileri sil</button>
+                </div>
+            </div>
+        }
+        @if (!string.IsNullOrWhiteSpace(_resetMessage)) { <p class="settings-message">@_resetMessage</p> }
+    </section>
+</div>
+
+@code {
+    private string _message = string.Empty;
+    private string _resetMessage = string.Empty;
+    private string _themeMode = "device";
+    private bool _showResetConfirm;
+
+    protected override void OnInitialized() =>
+        _themeMode = Preferences.Default.Get("theme_mode", "device");
+
+    private string ThemeClass(string mode) => _themeMode == mode ? "theme-option active" : "theme-option";
+    private Task SelectLightAsync() => SetThemeAsync("light");
+    private Task SelectDarkAsync() => SetThemeAsync("dark");
+    private Task SelectDeviceAsync() => SetThemeAsync("device");
+
+    private async Task SetThemeAsync(string mode)
+    {
+        _themeMode = mode;
+        Preferences.Default.Set("theme_mode", mode);
+        await CepBankApp.Services.AppAppearance.ApplyAsync(mode);
+        await JS.InvokeVoidAsync("cepbankTheme.apply", mode);
+    }
+
+    private void ShowResetConfirm()
+    {
+        _resetMessage = string.Empty;
+        _showResetConfirm = true;
+    }
+
+    private void CancelReset() => _showResetConfirm = false;
+
+    private async Task ClearAllAsync()
+    {
+        try
+        {
+            await Database.InitializeAsync();
+            await Database.ClearAllDataAsync();
+            SecureStorage.Default.RemoveAll();
+            LocalNotificationCenter.Current.CancelAll();
+            await SetThemeAsync("device");
+            _showResetConfirm = false;
+            _resetMessage = "Tüm veriler silindi.";
+        }
+        catch (Exception ex)
+        {
+            _resetMessage = $"Veriler silinemedi: {ex.Message}";
+        }
+    }
+
+    private async Task ExportAsync()
+    {
+        try
+        {
+            await Database.InitializeAsync();
+            var path = Path.Combine(FileSystem.CacheDirectory, $"cepbank-yedek-{DateTime.Now:yyyyMMdd-HHmm}.json");
+            await Database.ExportJsonAsync(path);
+
+            await Share.Default.RequestAsync(new ShareFileRequest
+            {
+                Title = "CepBank yedeği",
+                File = new ShareFile(path)
+            });
+
+            _message = "Yedek dosyası paylaşım menüsüne hazırlandı.";
+        }
+        catch (Exception ex)
+        {
+            _message = $"Yedek oluşturulamadı: {ex.Message}";
+        }
+    }
+}

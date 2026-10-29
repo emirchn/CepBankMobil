@@ -1,0 +1,152 @@
+@page "/cards/new"
+@page "/cards/edit/{CardId:int}"
+@using CepBankApp.Data
+@using CepBankApp.Models
+@using CepBankApp.Services
+@using System.Globalization
+@inject DatabaseService Database
+@inject NavigationManager Navigation
+
+<div class="finance-page">
+    <header class="finance-header">
+        <div><p class="eyebrow">KARTLAR / @(_editing ? "DÜZENLE" : "YENİ KART")</p><h1>@(_editing ? "Kartı düzenle" : "Kart ekle")</h1></div>
+    </header>
+    <section class="add-card">
+        <div class="section-heading"><h2>Kart bilgileri</h2></div>
+        <div class="form-grid">
+            <label>Kart adı<input @bind="_name" placeholder="Örn. Bonus" /></label>
+            <label>Kart sahibi<input @bind="_cardholder" autocomplete="off" /></label>
+            <label>Kart numarası<input type="@(_showSensitive ? "text" : "password")" maxlength="23" inputmode="numeric" autocomplete="off" @bind="_number" placeholder="@(_editing ? "Değiştirmek için tam numarayı gir" : "Kartın üzerindeki numara")" /></label>
+            <label>CVV / CVC<input type="@(_showSensitive ? "text" : "password")" maxlength="4" inputmode="numeric" autocomplete="off" @bind="_cvv" /></label>
+            <label>Son kullanma ayı
+                <select @bind="_expiryMonth">
+                    @for (var month = 1; month <= 12; month++) { <option value="@month">@month.ToString("00")</option> }
+                </select>
+            </label>
+            <label>Son kullanma yılı
+                <select @bind="_expiryYear">
+                    @for (var year = DateTime.Today.Year - 10; year <= DateTime.Today.Year + 20; year++) { <option value="@year">@year</option> }
+                </select>
+            </label>
+            <label>Kesim günü<input type="number" min="1" max="31" @bind="_statementDay" /></label>
+            <label>Son ödeme günü<input type="number" min="1" max="31" @bind="_paymentDay" /></label>
+            <label>Kart limiti (isteğe bağlı)<input type="number" min="0" step="0.01" @bind="_limitText" /></label>
+        </div>
+        <label class="reveal-card-details"><input type="checkbox" @bind="_showSensitive" /> Kart numarası ve CVV’yi göster</label>
+        <p class="field-hint">Kart numarası ve CVV güvenli alanda tutulur; dışa aktarılan yedeğe eklenmez. iPhone’da cihaz parolası gereklidir.</p>
+        @if (!string.IsNullOrWhiteSpace(_cardError)) { <p class="error-message">@_cardError</p> }
+        <button class="primary-button" disabled="@_saving" type="button" @onclick="SaveCardAsync">@(_saving ? "Kaydediliyor…" : "Kartı kaydet")</button>
+    </section>
+</div>
+
+@code {
+    [Parameter] public int? CardId { get; set; }
+    private bool _editing => CardId.HasValue;
+    private CreditCard? _card;
+    private CardPrivateDetails? _originalDetails;
+    private string _name = string.Empty;
+    private string _cardholder = string.Empty;
+    private string _number = string.Empty;
+    private string _cvv = string.Empty;
+    private int _expiryMonth = DateTime.Today.Month;
+    private int _expiryYear = DateTime.Today.Year;
+    private int _statementDay = 1;
+    private int _paymentDay = 10;
+    private string _limitText = string.Empty;
+    private string _cardError = string.Empty;
+    private bool _showSensitive;
+    private bool _saving;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await Database.InitializeAsync();
+        if (!CardId.HasValue) return;
+        _card = (await Database.GetCreditCardsAsync()).FirstOrDefault(card => card.Id == CardId && card.IsActive);
+        if (_card is null) { Navigation.NavigateTo("cards"); return; }
+        _name = _card.Name;
+        _cardholder = _card.CardholderName;
+        _statementDay = _card.StatementDay;
+        _paymentDay = _card.PaymentDay;
+        _expiryMonth = _card.ExpirationMonth is >= 1 and <= 12 ? _card.ExpirationMonth : DateTime.Today.Month;
+        _expiryYear = _card.ExpirationYear > 0 ? _card.ExpirationYear : DateTime.Today.Year;
+        _limitText = _card.CreditLimit?.ToString(CultureInfo.InvariantCulture) ?? "";
+        try
+        {
+            _originalDetails = await CardDetailsStore.GetAsync(_card.SecureDetailsKey);
+            _number = _originalDetails?.Number ?? "";
+            _cvv = _originalDetails?.Cvv ?? "";
+        }
+        catch
+        {
+            _cardError = "Güvenli kart bilgileri okunamadı. Diğer bilgileri düzenleyebilir veya numarayı yeniden girebilirsin.";
+        }
+    }
+
+    private async Task SaveCardAsync()
+    {
+        if (_saving) return;
+        _cardError = string.Empty;
+        if (string.IsNullOrWhiteSpace(_name)) { _cardError = "Kart adı girin."; return; }
+        var number = _number.Replace(" ", "").Replace("-", "");
+        if ((!_editing || number.Length > 0) && !CardDetailsStore.IsValidNumber(number))
+        { _cardError = "Geçerli bir kart numarası girin."; return; }
+        if (_cvv.Length > 0 && (_cvv.Length is < 3 or > 4 || _cvv.Any(character => character is < '0' or > '9')))
+        { _cardError = "CVV 3 veya 4 rakam olmalıdır."; return; }
+        if (_cvv.Length > 0 && number.Length == 0)
+        { _cardError = "CVV kaydetmek için tam kart numarasını da girin."; return; }
+        if (_statementDay is < 1 or > 31 || _paymentDay is < 1 or > 31)
+        { _cardError = "Kart günleri 1 ile 31 arasında olmalıdır."; return; }
+        decimal? limit = null;
+        if (!string.IsNullOrWhiteSpace(_limitText))
+        {
+            if (!TryAmount(_limitText, out var parsedLimit) || parsedLimit < 0)
+            { _cardError = "Geçerli bir kart limiti girin."; return; }
+            limit = parsedLimit;
+        }
+
+        _saving = true;
+        var card = _card ?? new CreditCard();
+        var key = string.IsNullOrEmpty(card.SecureDetailsKey) ? $"card-details-{Guid.NewGuid():N}" : card.SecureDetailsKey;
+        var wroteDetails = false;
+        try
+        {
+            if (number.Length > 0)
+            {
+                await CardDetailsStore.SetAsync(key, new CardPrivateDetails { Number = number, Cvv = _cvv });
+                wroteDetails = true;
+                card.SecureDetailsKey = key;
+                card.LastFourDigits = number[^4..];
+            }
+            card.Name = _name.Trim();
+            card.CardholderName = _cardholder.Trim();
+            card.ExpirationMonth = _expiryMonth;
+            card.ExpirationYear = _expiryYear;
+            card.StatementDay = _statementDay;
+            card.PaymentDay = _paymentDay;
+            card.CreditLimit = limit;
+            if (_editing) await Database.UpdateCreditCardDetailsAsync(card);
+            else await Database.AddCreditCardAsync(card);
+        }
+        catch
+        {
+            if (wroteDetails)
+            {
+                try
+                {
+                    if (_originalDetails is not null) await CardDetailsStore.SetAsync(key, _originalDetails);
+                    else CardDetailsStore.Remove(key);
+                }
+                catch { }
+            }
+            _cardError = "Kart kaydedilemedi. Cihazın güvenli saklama alanını kontrol edip tekrar dene.";
+            _saving = false;
+            return;
+        }
+        _number = _cvv = string.Empty;
+        Navigation.NavigateTo("cards");
+    }
+
+    private static bool TryAmount(string value, out decimal amount) =>
+        decimal.TryParse(value, NumberStyles.Number, CultureInfo.InvariantCulture, out amount) ||
+        decimal.TryParse(value, NumberStyles.Number, new CultureInfo("tr-TR"), out amount);
+}

@@ -1,0 +1,161 @@
+@page "/activity/{Year:int}/{Month:int}"
+@using CepBankApp.Data
+@using CepBankApp.Models
+@using CepBankApp.Services
+@using System.Globalization
+@inject DatabaseService Database
+@inject RecurringTransactionService RecurringService
+@inject NavigationManager Navigation
+
+<div class="finance-page activity-page">
+    <header class="finance-header activity-header">
+        <div>
+            <NavLink href="@($"/?month={_month:yyyy-MM}")" class="back-link">← Özete dön</NavLink>
+            <h1>Ayın hareketleri</h1>
+            <p class="header-subtitle">@_month.ToString("MMMM yyyy", Turkish) · Beklenen işlemler dahil</p>
+        </div>
+        <button type="button" class="glass-icon-button" aria-label="Filtreleri aç veya kapat" aria-expanded="@_showFilters" aria-controls="activity-filters" @onclick="ToggleFilters">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="3"/><circle cx="15" cy="17" r="3"/></svg>
+            @if (_applied.Count > 0) { <span class="filter-count">@_applied.Count</span> }
+        </button>
+    </header>
+
+    @if (_showFilters)
+    {
+        <section class="filter-panel" id="activity-filters" aria-label="Hareket filtreleri">
+            <div class="section-heading"><h2>Filtrele</h2><button class="text-button" type="button" @onclick="ResetFilters">Temizle</button></div>
+            <div class="form-grid">
+                <TypeToggle @bind-Value="SelectedType" AllowClear="true" />
+                <label>En az tutar<input type="number" min="0" step="0.01" @bind="_minimum" placeholder="Sınır yok" /></label>
+                <label>En çok tutar<input type="number" min="0" step="0.01" @bind="_maximum" placeholder="Sınır yok" /></label>
+                <label>Kategori
+                    <select @bind="_category" disabled="@string.IsNullOrEmpty(_type)">
+                        <option value="">@(string.IsNullOrEmpty(_type) ? "Önce tür seç" : "Tüm kategoriler")</option>
+                        @foreach (var category in Categories) { <option value="@category">@category</option> }
+                    </select>
+                </label>
+                <label>Kredi kartı
+                    <select @bind="_cardId">
+                        <option value="">Tüm kartlar ve kartsız işlemler</option>
+                        @foreach (var card in _cards) { <option value="@card.Id">@card.Name •••• @card.LastFourDigits</option> }
+                    </select>
+                </label>
+            </div>
+            @if (!string.IsNullOrEmpty(_error)) { <p class="error-message" role="alert">@_error</p> }
+            <button type="button" class="primary-button" @onclick="ApplyFilters">Filtreleri uygula</button>
+        </section>
+    }
+
+    <section class="summary-grid" aria-label="Listelenen işlemlerin toplamı">
+        <article class="summary-card income-card"><span>Gelir</span><strong>@Money(_visible.Where(transaction => transaction.Type == TransactionType.Income).Sum(transaction => transaction.Amount))</strong></article>
+        <article class="summary-card expense-card"><span>Gider</span><strong>@Money(_visible.Where(transaction => transaction.Type == TransactionType.Expense).Sum(transaction => transaction.Amount))</strong></article>
+    </section>
+    <section class="transactions-section">
+        <div class="section-heading"><div><p class="section-kicker">İŞLEM TOPLAMLARI</p><h2>@(_applied.Count > 0 ? "Filtrelenen hareketler" : "Tüm hareketler")</h2></div><span>@_visible.Count / @_transactions.Count kayıt</span></div>
+        @if (_loading)
+        {
+            <div class="empty-state" role="status">Hareketler yükleniyor…</div>
+        }
+        else if (_visible.Count == 0)
+        {
+            <div class="empty-state"><strong>@(_applied.Count > 0 ? "Filtreye uygun işlem yok" : "Bu ay işlem yok")</strong><p>@(_applied.Count > 0 ? "Filtreleri değiştirerek tekrar deneyebilirsin." : "Kaydedilen ve beklenen işlemler burada görünecek.")</p></div>
+        }
+        else
+        {
+            @foreach (var day in _visible.GroupBy(transaction => transaction.Date.Date))
+            {
+                <p class="activity-date">@day.Key.ToString("dd MMMM yyyy", Turkish)</p>
+                @foreach (var transaction in day)
+                {
+                    var income = transaction.Type == TransactionType.Income;
+                    <article class="transaction-row">
+                        <div class="transaction-icon @(income ? "income" : "expense")" aria-hidden="true">@(income ? "↗" : "↘")</div>
+                        <div class="transaction-details"><strong>@transaction.Description</strong><span>@Subtitle(transaction)</span></div>
+                        <div class="transaction-actions">
+                            <strong class="@(income ? "positive" : "negative")">@(income ? "+" : "−")@Money(transaction.Amount)</strong>
+                            @if (transaction.IsProjected) { <span class="projected-badge">Beklenen</span> }
+                        </div>
+                    </article>
+                }
+            }
+        }
+    </section>
+</div>
+
+@code {
+    [Parameter] public int Year { get; set; }
+    [Parameter] public int Month { get; set; }
+    private static readonly CultureInfo Turkish = new("tr-TR");
+    private DateTime _month = DateTime.Today;
+    private List<FinancialTransaction> _transactions = new();
+    private List<FinancialTransaction> _visible = new();
+    private List<CreditCard> _cards = new();
+    private TransactionFilter _applied = new();
+    private bool _showFilters;
+    private bool _loading = true;
+    private string _type = "";
+    private string _category = "";
+    private int? _cardId;
+    private decimal? _minimum;
+    private decimal? _maximum;
+    private string _error = "";
+    private string SelectedType
+    {
+        get => _type;
+        set { _type = value; _category = ""; }
+    }
+
+    private IEnumerable<string> Categories
+    {
+        get
+        {
+            if (string.IsNullOrEmpty(_type)) return [];
+            var type = _type == "Income" ? TransactionType.Income : TransactionType.Expense;
+            string[] defaults = type == TransactionType.Income
+                ? ["Gelir", "Maaş", "Kira", "Diğer Gelir"]
+                : ["Kredi Kartı Ödemesi", "Yemek", "Market", "Kıyafet", "Ulaşım", "Fatura", "Sağlık", "Eğlence", "Eğitim", "Diğer", "Kredi Ödemesi", "Dijital Abonelik", "Diğer Giderler"];
+            return defaults.Concat(_transactions.Where(transaction => transaction.Type == type).Select(transaction => transaction.Category))
+                .Where(category => !string.IsNullOrWhiteSpace(category)).Distinct().OrderBy(category => category, StringComparer.Create(Turkish, false));
+        }
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Year is < 1 or > 9998 || Month is < 1 or > 12) { Navigation.NavigateTo("/"); return; }
+        _month = new DateTime(Year, Month, 1);
+        _loading = true;
+        await Database.InitializeAsync();
+        await RecurringService.ProcessAsync();
+        _transactions = await RecurringService.GetMonthTransactionsAsync(_month);
+        _cards = (await Database.GetCreditCardsAsync()).Where(card => card.IsActive || _transactions.Any(transaction => transaction.CardId == card.Id)).ToList();
+        _visible = _applied.Apply(_transactions).ToList();
+        _loading = false;
+    }
+
+    private void ToggleFilters() => _showFilters = !_showFilters;
+    private void ApplyFilters()
+    {
+        _error = "";
+        if (_minimum is < 0 || _maximum is < 0) { _error = "Tutarlar sıfırdan küçük olamaz."; return; }
+        if (_minimum.HasValue && _maximum.HasValue && _minimum > _maximum)
+        { _error = "En az tutar, en çok tutardan büyük olamaz."; return; }
+        TransactionType? type = _type == "Income" ? TransactionType.Income : _type == "Expense" ? TransactionType.Expense : null;
+        _applied = new TransactionFilter(type, _minimum, _maximum, _category, _cardId);
+        _visible = _applied.Apply(_transactions).ToList();
+        _showFilters = false;
+    }
+    private void ResetFilters()
+    {
+        _type = _category = _error = "";
+        _minimum = _maximum = null;
+        _cardId = null;
+        _applied = new();
+        _visible = _transactions.ToList();
+    }
+    private string Subtitle(FinancialTransaction transaction)
+    {
+        var card = _cards.FirstOrDefault(card => card.Id == transaction.CardId);
+        return $"{(transaction.Type == TransactionType.Income ? "Gelir" : "Gider")} · {transaction.Category}" + (card is null ? "" : $" · {card.Name}");
+    }
+    private static string Money(decimal amount) => string.Format(Turkish, "{0:C2}", amount);
+}

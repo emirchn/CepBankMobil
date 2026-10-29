@@ -1,0 +1,15 @@
+<api>
+  <jcw-types>
+    <type name="MainActivity" package="crc64848180a60b4a4406" application_java_class="android.app.Application" mono_runtime_initialization="mono.MonoPackageManager.LoadApplication (context);" extends_type="crc6488302ad6e9e4df1a.MauiAppCompatActivity" partial_assembly_qualified_name="CepBankApp.MainActivity, CepBankApp">
+      <constructors>
+        <constructor name="MainActivity" method="n_.ctor:()V:" jni_signature="()V" managed_parameters="" retval="void" is_dynamically_registered="True" />
+        <constructor name="MainActivity" method="n_.ctor:(I)V:" jni_signature="(I)V" managed_parameters="System.Int32, System.Private.CoreLib" params="int p0" retval="void" is_dynamically_registered="True" super_call="p0" activate_call="p0" />
+      </constructors>
+    </type>
+    <type name="MainApplication" package="crc64848180a60b4a4406" application_java_class="android.app.Application" mono_runtime_initialization="mono.MonoPackageManager.LoadApplication (context);" extends_type="crc6488302ad6e9e4df1a.MauiApplication" is_application="True" partial_assembly_qualified_name="CepBankApp.MainApplication, CepBankApp" application_constructor="MainApplication" />
+  </jcw-types>
+  <acw-types partial-assembly-name="CepBankApp" module-name="CepBankApp.dll">
+    <type assembly-qualified-name="CepBankApp.MainActivity, CepBankApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" compat-jni-name="cepbankapp.MainActivity" java-key="crc64848180a60b4a4406.MainActivity" managed-key="CepBankApp.MainActivity" partial-assembly-qualified-name="CepBankApp.MainActivity, CepBankApp" />
+    <type assembly-qualified-name="CepBankApp.MainApplication, CepBankApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" compat-jni-name="cepbankapp.MainApplication" java-key="crc64848180a60b4a4406.MainApplication" managed-key="CepBankApp.MainApplication" partial-assembly-qualified-name="CepBankApp.MainApplication, CepBankApp" />
+  </acw-types>
+</api>

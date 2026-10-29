@@ -1,0 +1,1 @@
+-v --force --timestamp=none --sign - --entitlements /Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/Debug/net10.0-maccatalyst/maccatalyst-arm64/Entitlements.xcent /Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/bin/Debug/net10.0-maccatalyst/maccatalyst-arm64/CepBankApp.app

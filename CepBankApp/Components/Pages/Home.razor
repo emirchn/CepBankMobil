@@ -1,0 +1,151 @@
+@page "/"
+@using CepBankApp.Data
+@using CepBankApp.Models
+@using System.Globalization
+@inject DatabaseService Database
+@inject CepBankApp.Services.RecurringTransactionService RecurringService
+@inject CepBankApp.Services.NotificationService NotificationService
+
+<div class="finance-page overview-page">
+    <header class="finance-header">
+        <div>
+            <p class="eyebrow">CEPBANK / GENEL BAKIŞ</p>
+            <h1 class="visually-hidden">Genel bakış</h1>
+        </div>
+        <label class="month-picker">
+            <input type="month" aria-label="Özet ayı" @bind="_selectedMonth" @bind:after="ReloadAsync" />
+        </label>
+    </header>
+
+    <section class="overview-hero" aria-label="Aylık durum">
+        <div class="hero-topline"><span>AYLIK DURUM</span>
+            <NavLink href="@($"activity/{_selectedMonth.Year}/{_selectedMonth.Month}")" class="hero-detail-button" aria-label="Ayın tüm hareketlerini aç" title="Ayın hareketleri">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h14v16H5zM8 8h8M8 12h8M8 16h4"/><path d="m15 16 2 2 4-4"/></svg>
+            </NavLink>
+        </div>
+        <span class="hero-caption">Gelir − gider @(_isCurrentMonth ? "ve güncel kart borçları" : "")</span>
+        <strong class="hero-amount">@FormatMoney(_monthlyIncome - TotalExpense)</strong>
+        <div class="hero-footer"><span>@_selectedMonth.ToString("MMMM yyyy", new CultureInfo("tr-TR"))</span><span>@(_transactions.Any(transaction => transaction.IsProjected) ? "Beklenenler dahil" : (_isCurrentMonth ? "Güncel görünüm" : "Geçmiş ay"))</span></div>
+    </section>
+
+    <section class="summary-grid" aria-label="Aylık özet">
+        <article class="summary-card income-card">
+            <span>Gelir</span><strong>@FormatMoney(_monthlyIncome)</strong>
+        </article>
+        <article class="summary-card expense-card">
+            <span>Gider</span><strong>@FormatMoney(TotalExpense)</strong>
+        </article>
+    </section>
+
+    <section class="transactions-section cards-overview">
+        <div class="section-heading">
+            <div><p class="section-kicker">KART DURUMU</p><h2>Kredi kartlarım</h2></div>
+            <NavLink href="cards" class="section-link">Tüm kartlar <span aria-hidden="true">→</span></NavLink>
+        </div>
+        @if (_cards.Count == 0)
+        {
+            <div class="empty-state"><strong>Henüz kart eklenmedi</strong><p>Kartlarını eklediğinde mevcut borçlarını burada görebilirsin.</p><NavLink href="cards" class="inline-link">Kart ekle →</NavLink></div>
+        }
+        else
+        {
+            <div class="cards-overview-list">
+                @foreach (var card in _cards)
+                {
+                    <div class="overview-card-row">
+                        <div class="mini-card-icon" aria-hidden="true"><span></span><span></span></div>
+                        <div class="overview-card-name"><strong>@card.Name</strong><span>•••• @card.LastFourDigits</span></div>
+                        <div class="overview-card-debt"><small>Mevcut borç</small><strong>@FormatMoney(card.CurrentDebt)</strong></div>
+                    </div>
+                }
+            </div>
+            <div class="cards-total"><span>Toplam mevcut borç</span><strong>@FormatMoney(_cardDebt)</strong></div>
+        }
+    </section>
+
+    <section class="transactions-section">
+        <div class="section-heading">
+            <div><p class="section-kicker">HAREKETLER</p><h2>Ayın işlemleri</h2></div>
+            <span>@_transactions.Count kayıt</span>
+        </div>
+        @if (_transactions.Count == 0)
+        {
+            <div class="empty-state"><strong>Henüz işlem yok</strong><p>İlk gelir veya giderini ekleyerek başlayabilirsin.</p><NavLink href="transaction" class="inline-link">Yeni işlem ekle →</NavLink></div>
+        }
+        else
+        {
+            <div class="transaction-list">
+                @foreach (var transaction in _transactions)
+                {
+                    var isIncome = transaction.Type == TransactionType.Income;
+                    <article class="transaction-row">
+                        <div class="transaction-icon @(isIncome ? "income" : "expense")">@(isIncome ? "↗" : "↘")</div>
+                        <div class="transaction-details"><strong>@transaction.Description</strong><span>@GetTransactionSubtitle(transaction)</span></div>
+                        <div class="transaction-actions">
+                            <strong class="@(isIncome ? "positive" : "negative")">@(isIncome ? "+" : "-")@FormatMoney(transaction.Amount)</strong>
+                            @if (transaction.IsProjected)
+                            {
+                                <span class="projected-badge">Beklenen</span>
+                            }
+                            else
+                            {
+                                <button type="button" class="delete-button" title="İşlemi sil" @onclick="() => DeleteTransactionAsync(transaction)">Sil</button>
+                            }
+                        </div>
+                    </article>
+                }
+            </div>
+        }
+    </section>
+</div>
+
+@code {
+    [SupplyParameterFromQuery(Name = "month")] public string? MonthQuery { get; set; }
+    private List<FinancialTransaction> _transactions = new();
+    private List<CreditCard> _cards = new();
+    private Dictionary<int, string> _cardNames = new();
+    private decimal _monthlyIncome;
+    private decimal _monthlyExpense;
+    private decimal _cardDebt;
+    private DateTime _selectedMonth = new(DateTime.Today.Year, DateTime.Today.Month, 1);
+    private bool _isCurrentMonth;
+    private decimal TotalExpense => _monthlyExpense + (_isCurrentMonth ? _cardDebt : 0);
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (DateTime.TryParseExact(MonthQuery, "yyyy-MM", CultureInfo.InvariantCulture, DateTimeStyles.None, out var selected))
+            _selectedMonth = selected;
+        await Database.InitializeAsync();
+        await RecurringService.ProcessAsync();
+        await NotificationService.RequestPermissionAsync();
+        await NotificationService.ScheduleUpcomingPaymentsAsync();
+        await ReloadAsync();
+    }
+
+    private async Task DeleteTransactionAsync(FinancialTransaction transaction)
+    {
+        await Database.DeleteTransactionAsync(transaction);
+        await ReloadAsync();
+    }
+
+    private async Task ReloadAsync()
+    {
+        _isCurrentMonth = _selectedMonth.Year == DateTime.Today.Year && _selectedMonth.Month == DateTime.Today.Month;
+        _transactions = await RecurringService.GetMonthTransactionsAsync(_selectedMonth);
+        var allCards = await Database.GetCreditCardsAsync();
+        _cards = allCards.Where(card => card.IsActive).ToList();
+        _cardNames = allCards.ToDictionary(card => card.Id, card => card.Name);
+        _cardDebt = _cards.Sum(card => card.CurrentDebt);
+        _monthlyIncome = _transactions.Where(transaction => transaction.Type == TransactionType.Income).Sum(transaction => transaction.Amount);
+        _monthlyExpense = _transactions
+            .Where(transaction => transaction.Type == TransactionType.Expense && (!_isCurrentMonth || transaction.CardDebtChange <= 0))
+            .Sum(transaction => transaction.Amount);
+    }
+
+    private static string FormatMoney(decimal amount) => string.Format(new CultureInfo("tr-TR"), "{0:C2}", amount);
+
+    private string GetTransactionSubtitle(FinancialTransaction transaction)
+    {
+        var card = transaction.CardId is int cardId && _cardNames.TryGetValue(cardId, out var name) ? $" · {name}" : "";
+        return $"{transaction.Category}{card} • {transaction.Date.ToString("dd MMM yyyy", new CultureInfo("tr-TR"))}";
+    }
+}
