@@ -377,6 +377,3 @@
 /Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/Debug/net10.0-ios/iossimulator-arm64/resizetizer/r/startup_logo@3x.png
 /Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/Debug/net10.0-ios/iossimulator-arm64/resizetizer/r/startup_logo@2x.png
 /Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/Debug/net10.0-ios/iossimulator-arm64/resizetizer/r/startup_logo.png
-/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/Debug/net10.0-ios/iossimulator-arm64/resourcestamps/Plugin.LocalNotification.Core.stamp
-/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/Debug/net10.0-ios/iossimulator-arm64/resourcestamps/Plugin.LocalNotification.stamp
-/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/Debug/net10.0-ios/iossimulator-arm64/unpack/Plugin.LocalNotification/BundleResource/PrivacyInfo.xcprivacy

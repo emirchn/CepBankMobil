@@ -84743,7 +84743,7 @@ extern "C" {
 	};
 
 	static const MTAssembly __xamarin_registration_assemblies [] = {
-		{ "CepBankApp", "3abc1b5f-e9d8-4a2f-8e49-4be779a0cf6f" }, 
+		{ "CepBankApp", "79a3b9f4-d76d-4d46-9f9c-870a528f19a6" }, 
 		{ "Microsoft.AspNetCore.Authorization", "2a614cb4-328d-413e-89fb-5a03cbc0a67c" }, 
 		{ "Microsoft.AspNetCore.Components", "4fcdbb99-d1f4-47bd-9f52-d0351d6a10be" }, 
 		{ "Microsoft.AspNetCore.Components.Forms", "84b7e2b7-d719-4e64-8634-b066c9469cee" }, 

@@ -138,7 +138,7 @@
             if (_editing) await Database.UpdateCreditCardDetailsAsync(card);
             else await Database.AddCreditCardAsync(card);
         }
-        catch
+        catch (Exception ex)
         {
             if (wroteDetails)
             {
@@ -149,7 +149,7 @@
                 }
                 catch { }
             }
-            _cardError = "Kart kaydedilemedi. Cihazın güvenli saklama alanını kontrol edip tekrar dene.";
+            _cardError = ex is InvalidOperationException ? ex.Message : "Kart kaydedilemedi. Cihazın güvenli saklama alanını kontrol edip tekrar dene.";
             _saving = false;
             return;
         }

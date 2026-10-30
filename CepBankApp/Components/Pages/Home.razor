@@ -11,13 +11,7 @@
 
 <div class="finance-page overview-page">
     <header class="finance-header">
-        <div>
-            <p class="eyebrow">CEPBANK / GENEL BAKIŞ</p>
-            <h1 class="visually-hidden">Genel bakış</h1>
-        </div>
-        <label class="month-picker">
-            <input type="month" aria-label="Özet ayı" @bind="_selectedMonth" @bind:after="ReloadAsync" />
-        </label>
+        <div><p class="eyebrow">CEPBANK / GENEL BAKIŞ</p><h1 class="visually-hidden">Genel bakış</h1></div>
     </header>
 
     <div class="market-ticker" aria-label="Döviz kurları ve altın fiyatları">
@@ -41,21 +35,26 @@
         }
     </div>
 
-    <section class="overview-hero" aria-label="Aylık durum">
-        <div class="hero-topline"><span>AYLIK DURUM</span></div>
-        <span class="hero-caption">Gelir − gider @(_isCurrentMonth ? "ve güncel kart borçları" : "")</span>
-        <strong class="hero-amount @(NetAmount < 0 ? "negative" : "positive")">@FormatMoney(NetAmount)</strong>
-        <div class="hero-footer"><span>@_selectedMonth.ToString("MMMM yyyy", new CultureInfo("tr-TR"))</span><span>@(_transactions.Any(transaction => transaction.IsProjected) ? "Beklenenler dahil" : (_isCurrentMonth ? "Güncel görünüm" : "Geçmiş ay"))</span></div>
-    </section>
-
-    <section class="summary-grid" aria-label="Aylık özet">
-        <article class="summary-card income-card">
-            <span>Gelir</span><strong>@FormatMoney(_monthlyIncome)</strong>
-        </article>
-        <article class="summary-card expense-card">
-            <span>Gider</span><strong>@FormatMoney(TotalExpense)</strong>
-        </article>
-    </section>
+    @if (_homeAccount is null)
+    {
+        <section class="overview-hero account-overview-hero" aria-label="Banka hesabı">
+            <div class="hero-topline"><span>BANKA HESABI</span></div>
+            <strong class="hero-account-name">Henüz hesap seçilmedi</strong>
+            <p class="hero-caption">Bakiyeni görmek için bir banka hesabı ekle.</p>
+            <NavLink href="accounts" class="hero-account-link">Hesaplara git →</NavLink>
+        </section>
+    }
+    else
+    {
+        <section class="overview-hero account-overview-hero" aria-label="Seçili banka hesabı">
+            <div class="hero-topline"><span>BANKA HESABI</span></div>
+            <strong class="hero-account-name">@_homeAccount.Name</strong>
+            <span class="hero-account-iban">@FormatIban(_homeAccount.Iban)</span>
+            <span class="hero-caption">Güncel bakiye</span>
+            <strong class="hero-amount">@FormatMoney(_homeAccount.CurrentBalance)</strong>
+            <NavLink href="@($"accounts/{_homeAccount.Id}")" class="hero-account-link">Hesabı aç →</NavLink>
+        </section>
+    }
 
     <section class="transactions-section cards-overview">
         <div class="section-heading">
@@ -74,83 +73,40 @@
                     <div class="overview-card-row">
                         <CardIcon Color="@card.IconColor" />
                         <div class="overview-card-name"><strong>@card.Name</strong><span>•••• @card.LastFourDigits</span></div>
-                        <div class="overview-card-debt"><small>Mevcut borç</small><strong>@FormatMoney(card.CurrentDebt)</strong></div>
+                        <div class="overview-card-debt">
+                            <small>Güncel borç</small><strong>@FormatMoney(card.CurrentDebt)</strong>
+                            <small>Ekstre: @FormatMoney(card.StatementDebt)</small>
+                            <small>Mevcut dönem: @FormatMoney(card.CurrentPeriodDebt)</small>
+                            @if (card.AvailableLimit.HasValue)
+                            {
+                                <small>Kullanılabilir limit: @FormatMoney(card.AvailableLimit.Value)</small>
+                            }
+                        </div>
                     </div>
                 }
             </div>
-            <div class="cards-total"><span>Toplam mevcut borç</span><strong>@FormatMoney(_cardDebt)</strong></div>
+            <div class="cards-total"><span>Toplam güncel borç</span><strong>@FormatMoney(_cardDebt)</strong></div>
         }
     </section>
 
     <section class="transactions-section benefit-overview" aria-label="Yemek kartı">
         <div class="section-heading"><h2>Yemek Kartı</h2><NavLink href="cards?type=meal" class="section-link">Kartı aç <span aria-hidden="true">→</span></NavLink></div>
-        @if (_mealCard is null)
-        {
-            <div class="benefit-overview-empty">Henüz yemek kartı eklenmedi.</div>
-        }
-        else
-        {
-            <div class="benefit-overview-row"><strong>@_mealCard.Name</strong><div><small>Güncel bakiye</small><strong>@FormatMoney(_mealCard.CurrentBalance)</strong></div></div>
-        }
+        @if (_mealCard is null) { <div class="benefit-overview-empty">Henüz yemek kartı eklenmedi.</div> }
+        else { <div class="benefit-overview-row"><strong>@_mealCard.Name</strong><div><small>Güncel bakiye</small><strong>@FormatMoney(_mealCard.CurrentBalance)</strong></div></div> }
     </section>
 
     <section class="transactions-section benefit-overview" aria-label="Yakıt kartı">
         <div class="section-heading"><h2>Yakıt Kartı</h2><NavLink href="cards?type=fuel" class="section-link">Kartı aç <span aria-hidden="true">→</span></NavLink></div>
-        @if (_fuelCard is null)
-        {
-            <div class="benefit-overview-empty">Henüz yakıt kartı eklenmedi.</div>
-        }
-        else
-        {
-            <div class="benefit-overview-row"><strong>@_fuelCard.Name</strong><div><small>Kullanılabilir bakiye</small><strong>@FormatBenefitBalance(_fuelCard)</strong></div></div>
-        }
-    </section>
-
-    <section class="transactions-section">
-        <div class="section-heading">
-            <div><p class="section-kicker">HAREKETLER</p><h2>Ayın işlemleri</h2></div>
-            <span>@_transactions.Count kayıt</span>
-        </div>
-        @if (_transactions.Count == 0)
-        {
-            <div class="empty-state"><strong>Henüz işlem yok</strong><p>İlk işlemini ekleyerek başlayabilirsin.</p><NavLink href="transaction" class="inline-link">Yeni işlem ekle →</NavLink></div>
-        }
-        else
-        {
-            <div class="transaction-list">
-                @foreach (var transaction in _transactions)
-                {
-                    var isIncome = transaction.Type == TransactionType.Income;
-                    <article class="transaction-row">
-                        <div class="transaction-icon @(isIncome ? "income" : "expense")">@(isIncome ? "↗" : "↘")</div>
-                        <div class="transaction-details"><strong>@transaction.Description</strong><span>@GetTransactionSubtitle(transaction)</span></div>
-                        <div class="transaction-actions">
-                            <strong class="@(isIncome ? "positive" : "negative")">@(isIncome ? "+" : "-")@FormatMoney(transaction.Amount)</strong>
-                            @if (transaction.IsProjected)
-                            {
-                                <span class="projected-badge">Beklenen</span>
-                            }
-                            else
-                            {
-                                <button type="button" class="delete-button" title="İşlemi sil" @onclick="() => DeleteTransactionAsync(transaction)">Sil</button>
-                            }
-                        </div>
-                    </article>
-                }
-            </div>
-        }
+        @if (_fuelCard is null) { <div class="benefit-overview-empty">Henüz yakıt kartı eklenmedi.</div> }
+        else { <div class="benefit-overview-row"><strong>@_fuelCard.Name</strong><div><small>Kullanılabilir bakiye</small><strong>@FormatBenefitBalance(_fuelCard)</strong></div></div> }
     </section>
 </div>
 
 @code {
-    [SupplyParameterFromQuery(Name = "month")] public string? MonthQuery { get; set; }
-    private List<FinancialTransaction> _transactions = new();
     private List<CreditCard> _cards = new();
+    private BankAccount? _homeAccount;
     private BenefitCard? _mealCard;
     private BenefitCard? _fuelCard;
-    private Dictionary<int, string> _cardNames = new();
-    private decimal _monthlyIncome;
-    private decimal _monthlyExpense;
     private decimal _cardDebt;
     private bool _initialDataLoaded;
     private bool _notificationsStarted;
@@ -158,15 +114,9 @@
     private bool _marketLoaded;
     private readonly CancellationTokenSource _marketStop = new();
     private DateTime _lastNotificationDate = DateTime.Today;
-    private DateTime _selectedMonth = new(DateTime.Today.Year, DateTime.Today.Month, 1);
-    private bool _isCurrentMonth;
-    private decimal TotalExpense => _monthlyExpense + (_isCurrentMonth ? _cardDebt : 0);
-    private decimal NetAmount => _monthlyIncome - TotalExpense;
 
     protected override async Task OnInitializedAsync()
     {
-        if (DateTime.TryParseExact(MonthQuery, "yyyy-MM", CultureInfo.InvariantCulture, DateTimeStyles.None, out var selected))
-            _selectedMonth = selected;
         await Database.InitializeAsync();
         await Database.ProcessBenefitRenewalsAsync();
         await RecurringService.ProcessAsync();
@@ -185,9 +135,9 @@
         {
             await NotificationService.RequestPermissionAsync();
             await NotificationService.ScheduleUpcomingPaymentsAsync();
-            await NotificationService.CheckMonthlyBalanceAsync();
+            await NotificationService.ScheduleDailyBalanceAsync();
         }
-        catch { /* Notification errors must not block the overview. */ }
+        catch { }
     }
 
     private async Task LoadMarketRatesAsync()
@@ -207,11 +157,10 @@
                 await LoadMarketRatesAsync();
                 if (_lastNotificationDate == DateTime.Today) continue;
                 _lastNotificationDate = DateTime.Today;
-                try
-                {
-                    await NotificationService.ScheduleUpcomingPaymentsAsync();
-                    await NotificationService.CheckMonthlyBalanceAsync();
-                }
+                await Database.ProcessCardPeriodsAsync();
+                await RecurringService.ProcessAsync();
+                await InvokeAsync(async () => { await ReloadAsync(); StateHasChanged(); });
+                try { await NotificationService.ScheduleUpcomingPaymentsAsync(); await NotificationService.ScheduleDailyBalanceAsync(); }
                 catch { }
             }
         }
@@ -220,40 +169,20 @@
 
     public void Dispose() { _marketStop.Cancel(); _marketStop.Dispose(); }
 
-    private async Task DeleteTransactionAsync(FinancialTransaction transaction)
-    {
-        await Database.DeleteTransactionAsync(transaction);
-        await ReloadAsync();
-        try { await NotificationService.CheckMonthlyBalanceAsync(); }
-        catch { }
-    }
-
     private async Task ReloadAsync()
     {
-        _isCurrentMonth = _selectedMonth.Year == DateTime.Today.Year && _selectedMonth.Month == DateTime.Today.Month;
-        _transactions = await RecurringService.GetMonthTransactionsAsync(_selectedMonth);
-        var allCards = await Database.GetCreditCardsAsync();
-        _cards = allCards.Where(card => card.IsActive).ToList();
+        _homeAccount = await Database.GetHomeBankAccountAsync();
+        _cards = (await Database.GetCreditCardsAsync()).Where(card => card.IsActive).ToList();
         _mealCard = await Database.GetBenefitCardAsync(BenefitCardKind.Meal);
         _fuelCard = await Database.GetBenefitCardAsync(BenefitCardKind.Fuel);
-        _cardNames = allCards.ToDictionary(card => card.Id, card => card.Name);
         _cardDebt = _cards.Sum(card => card.CurrentDebt);
-        _monthlyIncome = _transactions.Where(transaction => transaction.Type == TransactionType.Income).Sum(transaction => transaction.Amount);
-        _monthlyExpense = _transactions
-            .Where(transaction => transaction.Type == TransactionType.Expense && (!_isCurrentMonth || transaction.CardDebtChange <= 0))
-            .Sum(transaction => transaction.Amount);
         await WidgetSummary.TryRefreshAsync();
     }
 
     private static string FormatMoney(decimal amount) => string.Format(new CultureInfo("tr-TR"), "{0:C2}", amount);
-    private static string FormatMarket(decimal amount) => $"{amount.ToString("N2", new CultureInfo("tr-TR"))} ₺";
     private static string FormatBenefitBalance(BenefitCard card) => card.Unit == BenefitUnit.Liter
-        ? $"{card.CurrentBalance.ToString("N2", new CultureInfo("tr-TR"))} L"
-        : FormatMoney(card.CurrentBalance);
-
-    private string GetTransactionSubtitle(FinancialTransaction transaction)
-    {
-        var card = transaction.CardId is int cardId && _cardNames.TryGetValue(cardId, out var name) ? $" · {name}" : "";
-        return $"{transaction.Category}{card} • {transaction.Date.ToString("dd MMM yyyy", new CultureInfo("tr-TR"))}";
-    }
+        ? $"{card.CurrentBalance.ToString("N2", new CultureInfo("tr-TR"))} L" : FormatMoney(card.CurrentBalance);
+    private static string FormatMarket(decimal? amount) => amount?.ToString("N2", new CultureInfo("tr-TR")) ?? "—";
+    private static string FormatIban(string iban) => string.Join(" ", Enumerable.Range(0, (iban.Length + 3) / 4)
+        .Select(index => iban.Substring(index * 4, Math.Min(4, iban.Length - index * 4))));
 }

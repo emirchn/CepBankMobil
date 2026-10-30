@@ -22,7 +22,7 @@
     </header>
 
     <section class="card-debt-banner">
-        <span>TOPLAM MEVCUT BORÇ</span>
+        <span>TOPLAM GÜNCEL BORÇ</span>
         <strong>@FormatMoney(_cards.Sum(card => card.CurrentDebt))</strong>
         <small>@_cards.Count kart</small>
     </section>
@@ -58,14 +58,31 @@
                         </div>
                     </div>
                     <div class="card-list-bottom">
-                        <div><small>Mevcut borç</small><strong>@FormatMoney(card.CurrentDebt)</strong></div>
+                        <div><small>Güncel borç</small><strong>@FormatMoney(card.CurrentDebt)</strong></div>
+                        <div><small>Ekstre borcu</small><strong>@FormatMoney(card.StatementDebt)</strong></div>
+                        <div><small>Mevcut dönem borcu</small><strong>@FormatMoney(card.CurrentPeriodDebt)</strong></div>
+                        @if (card.FutureInstallmentDebt > 0)
+                        {
+                            <div><small>Gelecek taksitler</small><strong>@FormatMoney(card.FutureInstallmentDebt)</strong></div>
+                        }
                         @if (card.CreditLimit.HasValue)
                         {
                             <div><small>Limit</small><strong>@FormatMoney(card.CreditLimit.Value)</strong></div>
+                            <div><small>Kullanılabilir limit</small><strong>@FormatMoney(card.AvailableLimit ?? 0)</strong></div>
                         }
                     </div>
                     <div class="card-period"><span>Hesap Kesim Günü</span><strong>Ayın @card.StatementDay. Günü</strong></div>
                     <div class="card-payment-date"><span>Son Ödeme Günü</span><strong>Ayın @card.PaymentDay. Günü</strong></div>
+                    @if (_movements.TryGetValue(card.Id, out var movements) && movements.Count > 0)
+                    {
+                        <div class="card-recent-movements">
+                            <strong>Mevcut dönem hareketleri</strong>
+                            @foreach (var movement in movements)
+                            {
+                                <div class="card-movement-row"><span>@movement.Description<small>@movement.Date.ToString("dd.MM.yyyy")@(movement.InstallmentCount > 1 ? $" · {movement.InstallmentCount} taksit" : "")</small></span><strong class="@(movement.CardDebtChange < 0 ? "positive" : "negative")">@(movement.CardDebtChange < 0 ? "−" : "+")@FormatMoney(movement.Amount)</strong></div>
+                            }
+                        </div>
+                    }
                 </article>
             }
         </div>
@@ -83,6 +100,7 @@
     private List<CreditCard> _cards = new();
     private string _error = string.Empty;
     private Dictionary<int, CardPrivateDetails> _privateDetails = new();
+    private Dictionary<int, List<FinancialTransaction>> _movements = new();
     private bool _creditLoaded;
 
     protected override async Task OnParametersSetAsync()
@@ -110,6 +128,8 @@
         await WidgetSummary.TryRefreshAsync();
         try { await NotificationService.ScheduleUpcomingPaymentsAsync(); }
         catch { }
+        try { await NotificationService.ScheduleDailyBalanceAsync(); }
+        catch { }
         try { CardDetailsStore.Remove(card.SecureDetailsKey); }
         catch { _error = "Kart listeden kaldırıldı, ancak güvenli bilgileri temizlenemedi. Tüm verileri sıfırlama işlemiyle temizleyebilirsin."; }
         await ReloadAsync();
@@ -118,6 +138,9 @@
     private async Task ReloadAsync()
     {
         _cards = (await Database.GetCreditCardsAsync()).Where(card => card.IsActive).ToList();
+        _movements.Clear();
+        foreach (var card in _cards)
+            _movements[card.Id] = await Database.GetCardTransactionsForCurrentPeriodAsync(card);
         _privateDetails.Clear();
         foreach (var card in _cards.Where(card => card.RevealSensitive))
         {

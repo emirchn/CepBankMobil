@@ -28,6 +28,13 @@ public class FinancialTransaction
     // Positive for a card purchase, negative for a card payment.
     public decimal CardDebtChange { get; set; }
 
+    // Amount assigned to this billing period; later installments do not increase total debt again.
+    public decimal CardPeriodChange { get; set; }
+
+    public int InstallmentCount { get; set; } = 1;
+
+    public int? BankMovementId { get; set; }
+
     public DateTime? CardStatementDate { get; set; }
 
     public string Source { get; set; } = "Manual";

@@ -1,0 +1,111 @@
+@page "/accounts/{Id:int}"
+@using CepBankApp.Data
+@using CepBankApp.Models
+@using CepBankApp.Services
+@using System.Globalization
+@inject DatabaseService Database
+@inject WidgetSummaryService WidgetSummary
+@inject NotificationService NotificationService
+
+<div class="finance-page account-detail-page">
+    <header class="finance-header">
+        <div><NavLink href="accounts" class="back-link">← Hesaplar</NavLink><p class="eyebrow">CEPBANK / BANKA HESABI</p></div>
+    </header>
+    @if (_account is null)
+    {
+        <div class="empty-state"><strong>Hesap bulunamadı</strong><NavLink href="accounts" class="inline-link">Hesaplara dön →</NavLink></div>
+    }
+    else
+    {
+        <section class="overview-hero account-detail-hero">
+            <span class="hero-topline">BANKA HESABI</span>
+            <h1>@_account.Name</h1>
+            <p class="account-iban">@FormatIban(_account.Iban)</p>
+            <span class="hero-caption">Güncel bakiye</span>
+            <strong class="hero-amount">@Money(_account.CurrentBalance)</strong>
+        </section>
+        <div class="benefit-action-buttons">
+            <button type="button" class="benefit-action secondary" @onclick="() => ShowAction(BankMovementKind.Deposit)">Bakiye Ekle</button>
+            <button type="button" class="benefit-action" @onclick="() => ShowAction(BankMovementKind.Spend)">Harcama Yap</button>
+        </div>
+        @if (_action.HasValue)
+        {
+            <section class="add-card benefit-movement-form">
+                <div class="section-heading"><h2>@(_action == BankMovementKind.Deposit ? "Bakiye ekle" : "Harcama yap")</h2><button type="button" class="delete-button" @onclick="CloseAction">Vazgeç</button></div>
+                <div class="form-grid"><label>Tutar (TL)<input type="number" min="0.01" step="0.01" @bind="_amountText" placeholder="0,00" /></label></div>
+                @if (!string.IsNullOrWhiteSpace(_error)) { <p class="error-message">@_error</p> }
+                <button type="button" class="primary-button" disabled="@_saving" @onclick="SaveMovementAsync">@(_saving ? "Kaydediliyor…" : "Kaydet")</button>
+            </section>
+        }
+        <section class="transactions-section">
+            <div class="section-heading"><div><p class="section-kicker">BU AY</p><h2>Son hareketler</h2></div><span>@_movements.Count kayıt</span></div>
+            @if (_movements.Count == 0)
+            {
+                <div class="empty-state"><strong>Bu ay hareket yok</strong><p>Bakiye eklediğinde veya harcama yaptığında burada görünür.</p></div>
+            }
+            else
+            {
+                <div class="transaction-list">
+                    @foreach (var movement in _movements)
+                    {
+                        var deposit = movement.Kind == BankMovementKind.Deposit;
+                        <article class="transaction-row" @key="movement.Id">
+                            <div class="transaction-icon @(deposit ? "income" : "expense")">@(deposit ? "↗" : "↘")</div>
+                            <div class="transaction-details"><strong>@(string.IsNullOrWhiteSpace(movement.Description) ? (deposit ? "Bakiye eklendi" : "Harcama") : movement.Description)</strong><span>@movement.Date.ToString("dd.MM.yyyy HH:mm") · İşlem sonrası @Money(movement.BalanceAfter)</span></div>
+                            <div class="transaction-actions"><strong class="@(deposit ? "positive" : "negative")">@(deposit ? "+" : "-")@Money(movement.Amount)</strong></div>
+                        </article>
+                    }
+                </div>
+            }
+        </section>
+    }
+</div>
+
+@code {
+    [Parameter] public int Id { get; set; }
+    private BankAccount? _account;
+    private List<BankAccountMovement> _movements = new();
+    private BankMovementKind? _action;
+    private string _amountText = string.Empty;
+    private string _error = string.Empty;
+    private bool _saving;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await Database.InitializeAsync();
+        await ReloadAsync();
+    }
+
+    private async Task ReloadAsync()
+    {
+        _account = await Database.GetBankAccountAsync(Id);
+        _movements = _account is null ? new() : await Database.GetBankMovementsForMonthAsync(Id, DateTime.Today);
+    }
+
+    private void ShowAction(BankMovementKind kind) { _action = kind; _amountText = _error = string.Empty; }
+    private void CloseAction() => _action = null;
+
+    private async Task SaveMovementAsync()
+    {
+        if (_action is null || _account is null) return;
+        _error = string.Empty;
+        if (!decimal.TryParse(_amountText, NumberStyles.Number, CultureInfo.InvariantCulture, out var amount) &&
+            !decimal.TryParse(_amountText, NumberStyles.Number, new CultureInfo("tr-TR"), out amount))
+        { _error = "Geçerli bir tutar girin."; return; }
+        _saving = true;
+        try
+        {
+            await Database.AddBankMovementAsync(_account.Id, _action.Value, amount);
+            _action = null;
+            await ReloadAsync();
+            await WidgetSummary.TryRefreshAsync();
+            try { await NotificationService.ScheduleDailyBalanceAsync(); } catch { }
+        }
+        catch (InvalidOperationException ex) { _error = ex.Message; }
+        finally { _saving = false; }
+    }
+
+    private static string Money(decimal amount) => string.Format(new CultureInfo("tr-TR"), "{0:C2}", amount);
+    private static string FormatIban(string iban) => string.Join(" ", Enumerable.Range(0, (iban.Length + 3) / 4)
+        .Select(index => iban.Substring(index * 4, Math.Min(4, iban.Length - index * 4))));
+}

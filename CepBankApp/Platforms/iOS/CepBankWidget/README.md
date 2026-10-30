@@ -17,7 +17,7 @@ Regenerate the provisioning profiles for both IDs after enabling the group. The 
 
 The MAUI app writes `widget-summary.json` atomically to the App Group container after relevant changes and when the overview loads. The widget reads only that summary. The private SQLite database and SecureStorage card details stay in the app's own container.
 
-The summary follows the overview calculation for the current month, including projected recurring transactions. Card-linked purchases are excluded from the transaction expense subtotal because their debt is included separately. The widget shows an empty state if the summary is absent or belongs to an earlier month. WidgetKit controls actual refresh timing; the timeline requests a refresh after 30 minutes, but this is not a guaranteed interval.
+The summary contains the bank account selected for the home screen, its current balance, and the separate total credit-card debt. If no account is selected, the widget shows an account-selection prompt. WidgetKit controls actual refresh timing; the timeline requests a refresh after 30 minutes, but this is not a guaranteed interval.
 
 ## Build and verify
 

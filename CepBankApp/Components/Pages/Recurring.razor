@@ -10,35 +10,24 @@
 
 <div class="finance-page">
     <header class="finance-header">
-        <div><p class="eyebrow">CEPBANK / AYLIK PLAN</p><h1>Aylık Tekrarlanan İşlemler</h1><p class="header-subtitle">Her ay tekrarlanan gelir ve ödemelerin burada.</p></div>
+        <div><p class="eyebrow">CEPBANK / AYLIK PLAN</p><h1>Aylık Tekrarlanan İşlemler</h1><p class="header-subtitle">Her ay tekrarlanan giderlerin burada.</p></div>
     </header>
 
     <section class="add-card">
         <div class="section-heading"><h2>Yeni aylık tekrarlanan işlem</h2><span>Her ay otomatik kaydedilir</span></div>
         <div class="form-grid">
             <label>İşlem adı
-                <input @bind="_name" placeholder="Örn. Maaş, Netflix, Kredi" />
+                <input @bind="_name" placeholder="Örn. Netflix, Kredi" />
             </label>
             <label>Tutar
                 <input type="number" step="0.01" @bind="_amountText" placeholder="0,00" />
             </label>
-            <TypeToggle @bind-Value="TypeValue" />
             <label>Kategori
                 <select @bind="_category">
-                    @if (TypeValue == "Income")
-                    {
-                        <option>Maaş</option>
-                        <option>Kira</option>
-                        <option>Diğer Gelir</option>
-                    }
-                    else
-                    {
-                        <option>Kredi Ödemesi</option>
-                        <option>Fatura</option>
-                        <option>Dijital Abonelik</option>
-                        <option>Alışveriş Taksidi</option>
-                        <option>Diğer Giderler</option>
-                    }
+                    <option>Kredi Ödemesi</option>
+                    <option>Fatura</option>
+                    <option>Dijital Abonelik</option>
+                    <option>Diğer Giderler</option>
                 </select>
             </label>
             <div class="recurring-dates">
@@ -49,7 +38,7 @@
                     <input type="date" @bind="_endDate" />
                 </label>
             </div>
-            @if (TypeValue == "Expense" && _category == "Kredi Ödemesi")
+            @if (_category == "Kredi Ödemesi")
             {
                 <label>Kalan taksit (isteğe bağlı)
                     <input type="number" min="1" @bind="_installments" />
@@ -64,20 +53,17 @@
                     </div>
                 </div>
             }
-            @if (TypeValue == "Expense")
-            {
-                <label>Kart (isteğe bağlı)
-                    <select @bind="_cardId">
-                        <option value="">Kart seçme</option>
-                        @foreach (var card in _cards)
-                        {
-                            <option value="@card.Id">@card.Name •••• @card.LastFourDigits</option>
-                        }
-                    </select>
-                </label>
-            }
+            <label>Kart (isteğe bağlı)
+                <select @bind="_cardId">
+                    <option value="">Kart seçme</option>
+                    @foreach (var card in _cards)
+                    {
+                        <option value="@card.Id">@card.Name •••• @card.LastFourDigits</option>
+                    }
+                </select>
+            </label>
         </div>
-        @if (TypeValue == "Expense" && _cardId.HasValue)
+        @if (_cardId.HasValue)
         {
             <p class="field-hint">Beklenen gider seçilen kartla gösterilir; işlem günü geldiğinde tutar kartın borcuna ve ilgili kesim dönemine eklenir.</p>
         }
@@ -91,19 +77,22 @@
         <div class="section-heading"><h2>Kayıtlı işlemler</h2><span>@_items.Count kayıt</span></div>
         @if (!_items.Any())
         {
-            <div class="empty-state"><strong>Aylık tekrarlanan işlem yok</strong><p>Maaş veya abonelik ekleyebilirsin.</p></div>
+            <div class="empty-state"><strong>Aylık tekrarlanan işlem yok</strong><p>Fatura veya abonelik ekleyebilirsin.</p></div>
         }
         else
         {
             <div class="transaction-list">
                 @foreach (var item in _items)
                 {
-                    var income = item.TransactionType == TransactionType.Income;
                     <article class="transaction-row" @key="item.Id">
-                        <div class="transaction-icon @(income ? "income" : "expense")">@(income ? "↗" : "↘")</div>
-                        <div class="transaction-details"><strong>@item.Name</strong><span>@item.Category • Her ay @item.DayOfMonth. gün</span></div>
+                        <div class="transaction-icon expense">↘</div>
+                        <div class="transaction-details">
+                            <strong>@item.Name</strong>
+                            <span>@item.Category • Her ay @item.DayOfMonth. gün</span>
+                            <span>Başlangıç: @item.StartDate.ToString("dd.MM.yyyy") · Bitiş: @(item.EndDate?.ToString("dd.MM.yyyy") ?? "Belirtilmedi")</span>
+                        </div>
                         <div class="transaction-actions">
-                            <strong class="@(income ? "positive" : "negative")">@FormatMoney(item.Amount)</strong>
+                            <strong class="negative">-@FormatMoney(item.Amount)</strong>
                             @if (_confirmDeleteId == item.Id)
                             {
                                 <div class="recurring-delete-actions"><button class="delete-button confirm-delete" @onclick="() => ConfirmDeleteAsync(item)">Evet, sil</button><button class="delete-button" @onclick="CancelDelete">Vazgeç</button></div>
@@ -113,7 +102,7 @@
                                 <button class="delete-button" @onclick="() => RequestDelete(item)">Sil</button>
                             }
                         </div>
-                        @if (item.TransactionType == TransactionType.Expense && item.Category == "Kredi Ödemesi")
+                        @if (item.Category == "Kredi Ödemesi")
                         {
                             <div class="loan-reminder-row">
                                 <span>Ödeme bildirimi</span>
@@ -138,18 +127,6 @@
     private int? _cardId;
     private string _name = string.Empty;
     private string _amountText = string.Empty;
-    private string _typeValue = "Expense";
-    private string TypeValue
-    {
-        get => _typeValue;
-        set
-        {
-            if (_typeValue == value) return;
-            _typeValue = value;
-            _category = value == "Income" ? "Maaş" : "Fatura";
-            if (value == "Income") _cardId = null;
-        }
-    }
     private DateTime _startDate = DateTime.Today;
     private DateTime? _endDate;
     private int? _installments;
@@ -186,13 +163,11 @@
         if (!decimal.TryParse(_amountText, NumberStyles.Number, CultureInfo.InvariantCulture, out var amount))
             decimal.TryParse(_amountText, NumberStyles.Number, new CultureInfo("tr-TR"), out amount);
         if (amount <= 0) { _error = "Tutar sıfırdan büyük olmalıdır."; return; }
-        if (TypeValue == "Expense" && _category == "Kredi Ödemesi" && _installments is <= 0)
+        if (_category == "Kredi Ödemesi" && _installments is <= 0)
         { _error = "Taksit sayısını boş bırakın veya sıfırdan büyük bir değer girin."; return; }
 
         var type = _category switch
         {
-            "Maaş" => RecurringType.Salary,
-            "Kira" or "Diğer Gelir" => RecurringType.Income,
             "Kredi Ödemesi" => RecurringType.Loan,
             "Dijital Abonelik" => RecurringType.Subscription,
             _ => RecurringType.OtherExpense
@@ -202,13 +177,13 @@
         {
             Name = _name.Trim(),
             Amount = amount,
-            TransactionType = TypeValue == "Income" ? TransactionType.Income : TransactionType.Expense,
+            TransactionType = TransactionType.Expense,
             RecurringType = type,
             DayOfMonth = _startDate.Day,
             StartDate = _startDate,
             EndDate = _endDate ?? _startDate.AddYears(1),
             Category = _category,
-            CardId = TypeValue == "Expense" ? _cardId : null,
+            CardId = _cardId,
             RemainingInstallments = type == RecurringType.Loan ? _installments ?? 0 : 0,
             LoanReminderDaysMask = type == RecurringType.Loan ? _loanReminderDaysMask : 0
         });
@@ -218,7 +193,7 @@
         try
         {
             await NotificationService.ScheduleUpcomingPaymentsAsync();
-            await NotificationService.CheckMonthlyBalanceAsync();
+            await NotificationService.ScheduleDailyBalanceAsync();
         }
         catch { _notificationWarning = "Kayıt eklendi; bildirimler sonraki açılışta tekrar planlanacak."; }
         _name = _amountText = string.Empty;
@@ -238,6 +213,8 @@
         await WidgetSummary.TryRefreshAsync();
         try { await NotificationService.ScheduleUpcomingPaymentsAsync(); }
         catch { _notificationWarning = "Kayıt silindi; bildirimler sonraki açılışta tekrar planlanacak."; }
+        try { await NotificationService.ScheduleDailyBalanceAsync(); }
+        catch { }
         await ReloadAsync();
     }
 
@@ -250,7 +227,8 @@
 
     private async Task ReloadAsync()
     {
-        _items = await Database.GetRecurringItemsAsync();
+        _items = (await Database.GetRecurringItemsAsync())
+            .Where(item => item.TransactionType == TransactionType.Expense && item.Category != "Alışveriş Taksidi").ToList();
         _cards = (await Database.GetCreditCardsAsync()).Where(card => card.IsActive).ToList();
     }
 

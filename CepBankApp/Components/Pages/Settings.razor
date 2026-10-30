@@ -17,7 +17,7 @@
 
     <section class="transactions-section">
         <div class="section-heading"><h2>Yerel veriler</h2><span>Bu cihazda saklanır</span></div>
-        <p class="settings-copy">Gelir, gider, aylık tekrarlanan işlemler ve kartlar yalnızca telefonunuzdaki yerel veritabanında tutulur.</p>
+        <p class="settings-copy">Banka hesapları, giderler, aylık tekrarlanan işlemler ve kartlar yalnızca telefonundaki yerel veritabanında tutulur.</p>
         <button class="primary-button" @onclick="ExportAsync">Verileri yedek olarak dışa aktar</button>
         @if (!string.IsNullOrWhiteSpace(_message)) { <p class="settings-message">@_message</p> }
     </section>
@@ -55,12 +55,11 @@
             </div>
         </div>
         <div class="notification-setting-group">
-            <strong>Aylık gelirin harcanan oranı</strong>
-            <div class="notification-options" role="group" aria-label="Aylık harcama bildirim eşikleri">
-                @foreach (var percent in NotificationSettings.BalancePercents)
-                {
-                    <button type="button" class="@NotificationOptionClass(NotificationSettings.HasThreshold(_balanceThresholds, percent))" aria-pressed="@NotificationSettings.HasThreshold(_balanceThresholds, percent)" @onclick="() => ToggleThresholdAsync(percent)">%@percent</button>
-                }
+            <strong>Günlük kalan bakiye</strong>
+            <p class="settings-copy">Açıkken her gün saat 16:00'da ana sayfada seçili banka hesabının bakiyesini TL olarak bildirir.</p>
+            <div class="notification-options" role="group" aria-label="Günlük bakiye bildirimi">
+                <button type="button" class="@NotificationOptionClass(_dailyBalanceEnabled)" aria-pressed="@_dailyBalanceEnabled" @onclick="() => SetDailyBalanceAsync(true)">Açık</button>
+                <button type="button" class="@NotificationOptionClass(!_dailyBalanceEnabled)" aria-pressed="@(!_dailyBalanceEnabled)" @onclick="() => SetDailyBalanceAsync(false)">Kapalı</button>
             </div>
         </div>
         @if (!string.IsNullOrWhiteSpace(_notificationMessage)) { <p class="settings-message">@_notificationMessage</p> }
@@ -68,7 +67,7 @@
 
     <section class="transactions-section danger-section">
         <div class="section-heading"><div><p class="section-kicker">VERİ YÖNETİMİ</p><h2>Tüm verileri sıfırla</h2></div></div>
-        <p class="settings-copy">Kayıtlı işlemler, aylık tekrarlanan işlemler ve kartlar silinir.</p>
+        <p class="settings-copy">Banka hesapları, hareketleri, kayıtlı işlemler, aylık tekrarlanan işlemler ve kartlar silinir.</p>
         @if (!_showResetConfirm)
         {
             <button type="button" class="danger-button" @onclick="ShowResetConfirm">Tüm verileri sıfırla</button>
@@ -95,7 +94,7 @@
     private bool _showResetConfirm;
     private int _statementDays;
     private int _paymentDays;
-    private int _balanceThresholds;
+    private bool _dailyBalanceEnabled;
     private string _notificationMessage = string.Empty;
 
     protected override void OnInitialized()
@@ -103,13 +102,13 @@
         _themeMode = Preferences.Default.Get("theme_mode", "device");
         _statementDays = NotificationSettings.StatementDays;
         _paymentDays = NotificationSettings.PaymentDays;
-        _balanceThresholds = NotificationSettings.BalanceThresholds;
+        _dailyBalanceEnabled = NotificationSettings.DailyBalanceEnabled;
     }
 
     private static string NotificationOptionClass(bool selected) => selected ? "notification-option selected" : "notification-option";
     private Task ToggleStatementAsync(int day) { _statementDays = NotificationSettings.ToggleDay(_statementDays, day); NotificationSettings.StatementDays = _statementDays; return RefreshNotificationsAsync(); }
     private Task TogglePaymentAsync(int day) { _paymentDays = NotificationSettings.ToggleDay(_paymentDays, day); NotificationSettings.PaymentDays = _paymentDays; return RefreshNotificationsAsync(); }
-    private Task ToggleThresholdAsync(int percent) { _balanceThresholds = NotificationSettings.ToggleThreshold(_balanceThresholds, percent); NotificationSettings.BalanceThresholds = _balanceThresholds; return RefreshNotificationsAsync(); }
+    private Task SetDailyBalanceAsync(bool enabled) { _dailyBalanceEnabled = NotificationSettings.DailyBalanceEnabled = enabled; return RefreshNotificationsAsync(); }
 
     private async Task RefreshNotificationsAsync()
     {
@@ -120,7 +119,7 @@
             if (!await LocalNotificationCenter.Current.AreNotificationsEnabled(new NotificationPermission { AskPermission = false }))
             { _notificationMessage = "Bildirim izni kapalı. Cihaz ayarlarından CepBank bildirimlerine izin verin."; return; }
             await NotificationService.ScheduleUpcomingPaymentsAsync();
-            await NotificationService.CheckMonthlyBalanceAsync();
+            await NotificationService.ScheduleDailyBalanceAsync();
         }
         catch (Exception ex) { _notificationMessage = $"Bildirimler güncellenemedi: {ex.Message}"; }
     }
@@ -156,10 +155,9 @@
             await WidgetSummary.TryRefreshAsync();
             SecureStorage.Default.RemoveAll();
             LocalNotificationCenter.Current.CancelAll();
-            NotificationService.ResetCurrentBalanceAlerts();
             _statementDays = NotificationSettings.StatementDays = 1 << 3;
             _paymentDays = NotificationSettings.PaymentDays = 1 << 3;
-            _balanceThresholds = NotificationSettings.BalanceThresholds = 1 << 1;
+            _dailyBalanceEnabled = NotificationSettings.DailyBalanceEnabled = true;
             await SetThemeAsync("device");
             _showResetConfirm = false;
             _resetMessage = "Tüm veriler silindi.";

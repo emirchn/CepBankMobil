@@ -1,11 +1,10 @@
-using System.Globalization;
 using System.Text.Json;
 using CepBankApp.Data;
 using CepBankApp.Models;
 
 namespace CepBankApp.Services;
 
-public sealed class WidgetSummaryService(DatabaseService database, RecurringTransactionService recurring)
+public sealed class WidgetSummaryService(DatabaseService database)
 {
     private readonly SemaphoreSlim _writeGate = new(1, 1);
 
@@ -24,21 +23,13 @@ public sealed class WidgetSummaryService(DatabaseService database, RecurringTran
         await _writeGate.WaitAsync();
         try
         {
-            var month = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
-            var transactions = await recurring.GetMonthTransactionsAsync(month);
+            var account = await database.GetHomeBankAccountAsync();
             var cardDebt = (await database.GetCreditCardsAsync()).Where(card => card.IsActive).Sum(card => card.CurrentDebt);
-            var income = transactions.Where(item => item.Type == TransactionType.Income).Sum(item => item.Amount);
-            var expense = transactions.Where(item => item.Type == TransactionType.Expense && item.CardDebtChange <= 0)
-                .Sum(item => item.Amount);
-            var totalExpense = expense + cardDebt;
             var snapshot = new
             {
-                month = month.ToString("MMMM yyyy", new CultureInfo("tr-TR")),
-                monthKey = month.ToString("yyyy-MM", CultureInfo.InvariantCulture),
-                income,
-                expense = totalExpense,
+                accountName = account?.Name,
+                accountBalance = account?.CurrentBalance,
                 cardDebt,
-                net = income - totalExpense,
                 updatedAt = DateTimeOffset.Now.ToString("O")
             };
             var path = Path.Combine(directory, "widget-summary.json");

@@ -3,7 +3,6 @@ using CepBankApp.Data;
 using CepBankApp.Models;
 using Plugin.LocalNotification;
 using Plugin.LocalNotification.Core.Models;
-using Microsoft.Maui.Storage;
 
 namespace CepBankApp.Services;
 
@@ -13,6 +12,7 @@ public class NotificationService
     private readonly SemaphoreSlim _scheduleGate = new(1, 1);
     private readonly SemaphoreSlim _balanceGate = new(1, 1);
     private static readonly CultureInfo Turkish = new("tr-TR");
+    private static readonly int DailyBalanceId = StableId("balance:daily");
 
     public NotificationService(DatabaseService database) => _database = database;
 
@@ -27,14 +27,9 @@ public class NotificationService
         {
             await _database.InitializeAsync();
             var today = DateTime.Today;
-            var protectedBalanceIds = new[] { today.AddMonths(-1), today }
-                .SelectMany(month => NotificationSettings.BalancePercents
-                    .Where(percent => NotificationSettings.HasThreshold(NotificationSettings.BalanceThresholds, percent))
-                    .Select(percent => StableId($"balance:{month:yyyyMM}:{percent}")))
-                .ToHashSet();
             var pending = await LocalNotificationCenter.Current.GetPendingNotificationList();
             var oldReminderIds = pending.Select(item => item.NotificationId)
-                .Where(id => !protectedBalanceIds.Contains(id)).ToArray();
+                .Where(id => id != DailyBalanceId).ToArray();
             if (oldReminderIds.Length > 0) LocalNotificationCenter.Current.Cancel(oldReminderIds);
             var horizon = today.AddDays(60);
             var planned = new List<(DateTime When, NotificationRequest Request)>();
@@ -49,7 +44,7 @@ public class NotificationService
                     AddSchedule(planned, $"statement:{card.Id}:{statement:yyyyMMdd}:tomorrow",
                         "Yarın hesap kesimi", $"Yarın {card.Name} kartınızın hesap kesimi var.", statement.AddDays(-1), horizon);
                     AddSchedule(planned, $"statement:{card.Id}:{statement:yyyyMMdd}:today",
-                        "Hesap kesimi bugün", $"Bugün {card.Name} kartınızın hesabı kesildi; yeni döneme geçildi.", statement, horizon);
+                        "Hesap kesimi bugün", $"Bugün {card.Name} kartınızın hesap kesim günü.", statement, horizon);
                     AddSchedule(planned, $"payment:{card.Id}:{payment:yyyyMMdd}:tomorrow",
                         "Yarın son ödeme günü", $"Yarın {card.Name} kartınızın son ödeme günü.", payment.AddDays(-1), horizon);
                     AddSchedule(planned, $"payment:{card.Id}:{payment:yyyyMMdd}:today",
@@ -101,44 +96,37 @@ public class NotificationService
         finally { _scheduleGate.Release(); }
     }
 
-    public async Task CheckMonthlyBalanceAsync()
+    public async Task ScheduleDailyBalanceAsync()
     {
         await _balanceGate.WaitAsync();
         try
         {
-            if (!await LocalNotificationCenter.Current.AreNotificationsEnabled(new NotificationPermission { AskPermission = false })) return;
+            var pending = await LocalNotificationCenter.Current.GetPendingNotificationList();
+            var oldBalanceIds = new[] { DateTime.Today.AddMonths(-1), DateTime.Today }
+                .SelectMany(month => new[] { 50, 75, 90 }
+                    .Select(percent => StableId($"balance:{month:yyyyMM}:{percent}")))
+                .Append(DailyBalanceId)
+                .Where(id => pending.Any(item => item.NotificationId == id))
+                .ToArray();
+            if (oldBalanceIds.Length > 0) LocalNotificationCenter.Current.Cancel(oldBalanceIds);
+            if (!NotificationSettings.DailyBalanceEnabled ||
+                !await LocalNotificationCenter.Current.AreNotificationsEnabled(new NotificationPermission { AskPermission = false })) return;
             await _database.InitializeAsync();
-            var month = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
-            var transactions = await _database.GetTransactionsForMonthAsync(month);
-            var income = transactions.Where(item => item.Type == TransactionType.Income).Sum(item => item.Amount);
-            if (income <= 0) return;
-            var expense = transactions.Where(item => item.Type == TransactionType.Expense && item.CardDebtChange <= 0).Sum(item => item.Amount);
-            var cardDebt = (await _database.GetCreditCardsAsync()).Where(card => card.IsActive).Sum(card => card.CurrentDebt);
-            var spent = expense + cardDebt;
-            var remaining = income - spent;
-            foreach (var percent in NotificationSettings.BalancePercents)
+            var account = await _database.GetHomeBankAccountAsync();
+            if (account is null) return;
+            await LocalNotificationCenter.Current.Show(new NotificationRequest
             {
-                if (!NotificationSettings.HasThreshold(NotificationSettings.BalanceThresholds, percent) || spent < income * percent / 100) continue;
-                var marker = $"notify_balance_sent_{month:yyyyMM}_{percent}";
-                if (Preferences.Default.Get(marker, false)) continue;
-                await LocalNotificationCenter.Current.Show(new NotificationRequest
+                NotificationId = DailyBalanceId,
+                Title = "Günlük bakiye",
+                Description = $"{account.Name} güncel bakiyesi: {account.CurrentBalance.ToString("N2", Turkish)} TL",
+                Schedule = new NotificationRequestSchedule
                 {
-                    NotificationId = StableId($"balance:{month:yyyyMM}:{percent}"),
-                    Title = "Aylık durum",
-                    Description = $"Aylık gelirinizin %{percent}'ini harcadınız, kalan bakiye: {remaining.ToString("N2", Turkish)} TL",
-                    Schedule = new NotificationRequestSchedule { NotifyTime = NextDeliveryTime() }
-                });
-                Preferences.Default.Set(marker, true);
-            }
+                    NotifyTime = NextDeliveryTime(),
+                    RepeatType = NotificationRepeat.Daily
+                }
+            });
         }
         finally { _balanceGate.Release(); }
-    }
-
-    public static void ResetCurrentBalanceAlerts()
-    {
-        var month = DateTime.Today.ToString("yyyyMM", CultureInfo.InvariantCulture);
-        foreach (var percent in NotificationSettings.BalancePercents)
-            Preferences.Default.Remove($"notify_balance_sent_{month}_{percent}");
     }
 
     private static void AddSchedule(List<(DateTime When, NotificationRequest Request)> planned,

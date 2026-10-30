@@ -4,23 +4,15 @@ import WidgetKit
 private let appGroup = "group.com.emir.cepbankapp.cepbankapp"
 
 private struct FinanceSnapshot: Decodable {
-    let month: String
-    let monthKey: String
-    let income: Double
-    let expense: Double
+    let accountName: String?
+    let accountBalance: Double?
     let cardDebt: Double
-    let net: Double
     let updatedAt: String
 
     static func load() -> FinanceSnapshot? {
         guard let directory = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroup),
               let data = try? Data(contentsOf: directory.appendingPathComponent("widget-summary.json")) else { return nil }
-        guard let snapshot = try? JSONDecoder().decode(FinanceSnapshot.self, from: data) else { return nil }
-        let currentMonth = DateFormatter()
-        currentMonth.calendar = Calendar(identifier: .gregorian)
-        currentMonth.locale = Locale(identifier: "en_US_POSIX")
-        currentMonth.dateFormat = "yyyy-MM"
-        return snapshot.monthKey == currentMonth.string(from: .now) ? snapshot : nil
+        return try? JSONDecoder().decode(FinanceSnapshot.self, from: data)
     }
 }
 
@@ -55,28 +47,17 @@ private struct FinanceWidgetView: View {
                 HStack {
                     Text("CEPBANK").font(.system(size: 11, weight: .bold, design: .rounded)).tracking(1.6)
                     Spacer()
-                    Text(entry.snapshot?.month ?? "AYLIK DURUM").font(.system(size: 10, weight: .medium))
+                    Text("HESAP ÖZETİ").font(.system(size: 10, weight: .medium))
                 }.foregroundStyle(.white.opacity(0.78))
                 Spacer(minLength: 9)
                 if let snapshot = entry.snapshot {
-                    Text("Aylık durum").font(.system(size: 12)).foregroundStyle(.white.opacity(0.72))
-                    Text(money(snapshot.net))
+                    Text(snapshot.accountName ?? "Banka hesabı seçilmedi")
+                        .font(.system(size: 12)).foregroundStyle(.white.opacity(0.72)).lineLimit(1)
+                    Text(snapshot.accountBalance.map(money) ?? "—")
                         .font(.system(size: family == .systemSmall ? 23 : 30, weight: .bold, design: .rounded))
-                        .minimumScaleFactor(0.65).lineLimit(1)
-                        .foregroundStyle(snapshot.net < 0 ? Color(red: 1, green: 0.55, blue: 0.55) : .white)
+                        .minimumScaleFactor(0.65).lineLimit(1).foregroundStyle(.white)
                     Spacer(minLength: 10)
-                    if family == .systemSmall {
-                        HStack(spacing: 8) {
-                            summary("Gelir", money(snapshot.income), .green)
-                            summary("Gider", money(snapshot.expense), Color(red: 1, green: 0.55, blue: 0.55))
-                        }
-                    } else {
-                        HStack(spacing: 16) {
-                            summary("Gelir", money(snapshot.income), .green)
-                            summary("Gider", money(snapshot.expense), Color(red: 1, green: 0.55, blue: 0.55))
-                            summary("Kart borcu", money(snapshot.cardDebt), .white)
-                        }
-                    }
+                    summary("Kart borcu", money(snapshot.cardDebt), Color(red: 1, green: 0.70, blue: 0.70))
                 } else {
                     Text("Özet hazır değil").font(.system(size: 17, weight: .semibold)).foregroundStyle(.white)
                     Text("CepBank’ı açarak verileri güncelle.").font(.system(size: 11)).foregroundStyle(.white.opacity(0.7))
@@ -103,8 +84,8 @@ struct CepBankWidget: Widget {
         StaticConfiguration(kind: kind, provider: FinanceProvider()) { entry in
             FinanceWidgetView(entry: entry)
         }
-        .configurationDisplayName("CepBank Aylık Özet")
-        .description("Bu ayın gelir, gider ve kart borcunu gösterir.")
+        .configurationDisplayName("CepBank Hesap Özeti")
+        .description("Seçili banka hesabının bakiyesini ve kart borcunu gösterir.")
         .supportedFamilies([.systemSmall, .systemMedium])
     }
 }

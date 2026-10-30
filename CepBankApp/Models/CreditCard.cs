@@ -32,9 +32,37 @@ public class CreditCard
 
     public decimal CurrentDebt { get; set; }
 
+    public decimal CurrentPeriodDebt { get; set; }
+
+    public decimal StatementDebt { get; set; }
+
+    [Ignore]
+    public decimal FutureInstallmentDebt => Math.Max(0, CurrentDebt - StatementDebt - CurrentPeriodDebt);
+
+    [Ignore]
+    public decimal? AvailableLimit => CreditLimit.HasValue
+        ? Math.Max(0, CreditLimit.Value - CurrentDebt)
+        : null;
+
+    public DateTime LastStatementDate { get; set; }
+
     public bool IsActive { get; set; } = true;
 
     public DateTime CreatedAt { get; set; } = DateTime.Now;
+}
+
+public class CardInstallment
+{
+    [PrimaryKey, AutoIncrement]
+    public int Id { get; set; }
+    [Indexed]
+    public int CardId { get; set; }
+    public int PurchaseTransactionId { get; set; }
+    public DateTime StatementDate { get; set; }
+    public decimal Amount { get; set; }
+    public int Number { get; set; }
+    public int TotalCount { get; set; }
+    public bool IsApplied { get; set; }
 }
 
 public class CardStatement
