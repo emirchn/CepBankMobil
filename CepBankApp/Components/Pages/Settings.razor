@@ -3,7 +3,10 @@
 @using Microsoft.Maui.ApplicationModel.DataTransfer
 @using Microsoft.Maui.Storage
 @using Plugin.LocalNotification
+@using Plugin.LocalNotification.Core.Models
+@using CepBankApp.Services
 @inject DatabaseService Database
+@inject NotificationService NotificationService
 @inject IJSRuntime JS
 
 <div class="finance-page">
@@ -25,7 +28,41 @@
             <button type="button" class="@ThemeClass("light")" aria-pressed="@(_themeMode == "light")" @onclick="SelectLightAsync">Gündüz</button>
             <button type="button" class="@ThemeClass("dark")" aria-pressed="@(_themeMode == "dark")" @onclick="SelectDarkAsync">Gece</button>
             <button type="button" class="@ThemeClass("device")" aria-pressed="@(_themeMode == "device")" @onclick="SelectDeviceAsync">Cihaz</button>
+            <button type="button" class="@ThemeClass("glassy")" aria-pressed="@(_themeMode == "glassy")" @onclick="SelectGlassyAsync">Glassy</button>
         </div>
+    </section>
+
+    <section class="transactions-section notification-settings">
+        <div class="section-heading"><h2>Bildirimler</h2></div>
+        <p class="settings-copy">İstediğin uyarı zamanlarının hepsini seçebilirsin.</p>
+        <div class="notification-setting-group">
+            <strong>Hesap kesiminden önce</strong>
+            <div class="notification-options" role="group" aria-label="Hesap kesim bildirim günleri">
+                @foreach (var day in NotificationSettings.ReminderDays)
+                {
+                    <button type="button" class="@NotificationOptionClass(NotificationSettings.HasDay(_statementDays, day))" aria-pressed="@NotificationSettings.HasDay(_statementDays, day)" @onclick="() => ToggleStatementAsync(day)">@day gün</button>
+                }
+            </div>
+        </div>
+        <div class="notification-setting-group">
+            <strong>Son ödeme tarihinden önce</strong>
+            <div class="notification-options" role="group" aria-label="Son ödeme bildirim günleri">
+                @foreach (var day in NotificationSettings.ReminderDays)
+                {
+                    <button type="button" class="@NotificationOptionClass(NotificationSettings.HasDay(_paymentDays, day))" aria-pressed="@NotificationSettings.HasDay(_paymentDays, day)" @onclick="() => TogglePaymentAsync(day)">@day gün</button>
+                }
+            </div>
+        </div>
+        <div class="notification-setting-group">
+            <strong>Aylık gelirin harcanan oranı</strong>
+            <div class="notification-options" role="group" aria-label="Aylık harcama bildirim eşikleri">
+                @foreach (var percent in NotificationSettings.BalancePercents)
+                {
+                    <button type="button" class="@NotificationOptionClass(NotificationSettings.HasThreshold(_balanceThresholds, percent))" aria-pressed="@NotificationSettings.HasThreshold(_balanceThresholds, percent)" @onclick="() => ToggleThresholdAsync(percent)">%@percent</button>
+                }
+            </div>
+        </div>
+        @if (!string.IsNullOrWhiteSpace(_notificationMessage)) { <p class="settings-message">@_notificationMessage</p> }
     </section>
 
     <section class="transactions-section danger-section">
@@ -55,14 +92,43 @@
     private string _resetMessage = string.Empty;
     private string _themeMode = "device";
     private bool _showResetConfirm;
+    private int _statementDays;
+    private int _paymentDays;
+    private int _balanceThresholds;
+    private string _notificationMessage = string.Empty;
 
-    protected override void OnInitialized() =>
+    protected override void OnInitialized()
+    {
         _themeMode = Preferences.Default.Get("theme_mode", "device");
+        _statementDays = NotificationSettings.StatementDays;
+        _paymentDays = NotificationSettings.PaymentDays;
+        _balanceThresholds = NotificationSettings.BalanceThresholds;
+    }
+
+    private static string NotificationOptionClass(bool selected) => selected ? "notification-option selected" : "notification-option";
+    private Task ToggleStatementAsync(int day) { _statementDays = NotificationSettings.ToggleDay(_statementDays, day); NotificationSettings.StatementDays = _statementDays; return RefreshNotificationsAsync(); }
+    private Task TogglePaymentAsync(int day) { _paymentDays = NotificationSettings.ToggleDay(_paymentDays, day); NotificationSettings.PaymentDays = _paymentDays; return RefreshNotificationsAsync(); }
+    private Task ToggleThresholdAsync(int percent) { _balanceThresholds = NotificationSettings.ToggleThreshold(_balanceThresholds, percent); NotificationSettings.BalanceThresholds = _balanceThresholds; return RefreshNotificationsAsync(); }
+
+    private async Task RefreshNotificationsAsync()
+    {
+        _notificationMessage = string.Empty;
+        try
+        {
+            await NotificationService.RequestPermissionAsync();
+            if (!await LocalNotificationCenter.Current.AreNotificationsEnabled(new NotificationPermission { AskPermission = false }))
+            { _notificationMessage = "Bildirim izni kapalı. Cihaz ayarlarından CepBank bildirimlerine izin verin."; return; }
+            await NotificationService.ScheduleUpcomingPaymentsAsync();
+            await NotificationService.CheckMonthlyBalanceAsync();
+        }
+        catch (Exception ex) { _notificationMessage = $"Bildirimler güncellenemedi: {ex.Message}"; }
+    }
 
     private string ThemeClass(string mode) => _themeMode == mode ? "theme-option active" : "theme-option";
     private Task SelectLightAsync() => SetThemeAsync("light");
     private Task SelectDarkAsync() => SetThemeAsync("dark");
     private Task SelectDeviceAsync() => SetThemeAsync("device");
+    private Task SelectGlassyAsync() => SetThemeAsync("glassy");
 
     private async Task SetThemeAsync(string mode)
     {
@@ -88,6 +154,10 @@
             await Database.ClearAllDataAsync();
             SecureStorage.Default.RemoveAll();
             LocalNotificationCenter.Current.CancelAll();
+            NotificationService.ResetCurrentBalanceAlerts();
+            _statementDays = NotificationSettings.StatementDays = 1 << 3;
+            _paymentDays = NotificationSettings.PaymentDays = 1 << 3;
+            _balanceThresholds = NotificationSettings.BalanceThresholds = 1 << 1;
             await SetThemeAsync("device");
             _showResetConfirm = false;
             _resetMessage = "Tüm veriler silindi.";

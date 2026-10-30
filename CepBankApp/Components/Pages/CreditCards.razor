@@ -4,10 +4,19 @@
 @using CepBankApp.Services
 @using System.Globalization
 @inject DatabaseService Database
+@inject NavigationManager Navigation
+@inject NotificationService NotificationService
 
 <div class="finance-page">
+    <nav class="card-type-tabs" aria-label="Kart türü">
+        <button type="button" class="@TabClass("credit")" aria-pressed="@(_tab == "credit")" @onclick="SelectCredit">Kredi</button>
+        <button type="button" class="@TabClass("fuel")" aria-pressed="@(_tab == "fuel")" @onclick="SelectFuel">Yakıt</button>
+        <button type="button" class="@TabClass("meal")" aria-pressed="@(_tab == "meal")" @onclick="SelectMeal">Yemek</button>
+    </nav>
+    @if (_tab == "credit")
+    {
     <header class="finance-header card-list-header">
-        <div><p class="eyebrow">CEPBANK / KARTLAR</p><h1>Kredi kartları</h1><p class="header-subtitle">Kartlarını ve güncel borçlarını takip et.</p></div>
+        <h1>Kredi Kartları</h1>
         <NavLink href="cards/new" class="header-action">+ Kart ekle</NavLink>
     </header>
 
@@ -29,8 +38,19 @@
             {
                 <article class="card-list-item">
                     <div class="card-list-top">
-                        <div class="mini-card-icon" aria-hidden="true"><span></span><span></span></div>
-                        <div class="card-list-title"><strong>@card.Name</strong><span>•••• @card.LastFourDigits</span></div>
+                        <CardIcon Color="@card.IconColor" />
+                        <div class="card-list-title">
+                            <strong>@card.Name</strong>
+                            @if (card.RevealSensitive && _privateDetails.TryGetValue(card.Id, out var details) && !string.IsNullOrWhiteSpace(details.Number))
+                            {
+                                <span class="card-full-number">@FormatCardNumber(details.Number)</span>
+                                <small class="card-cvv-expiry">CVV @details.Cvv  ·  Son kullanım @card.ExpirationMonth.ToString("00")/@(card.ExpirationYear.ToString().Length >= 2 ? card.ExpirationYear.ToString()[^2..] : card.ExpirationYear.ToString("00"))</small>
+                            }
+                            else
+                            {
+                                <span>•••• @card.LastFourDigits</span>
+                            }
+                        </div>
                         <div class="card-list-actions">
                             <NavLink href="@($"cards/edit/{card.Id}")" class="section-link">Düzenle</NavLink>
                             <button class="delete-button" type="button" title="Kartı listeden kaldır" @onclick="() => ArchiveCardAsync(card)">Kaldır</button>
@@ -43,32 +63,51 @@
                             <div><small>Limit</small><strong>@FormatMoney(card.CreditLimit.Value)</strong></div>
                         }
                     </div>
-                    <div class="card-period"><span>Bu dönem harcaması</span><strong>@FormatMoney(PeriodSpending(card))</strong></div>
-                    <p class="card-list-dates">@PeriodLabel(card) · Son ödeme günü: @card.PaymentDay</p>
-                    @if (card.ExpirationMonth > 0)
-                    {
-                        <p class="card-expiry">Son kullanma: @card.ExpirationMonth.ToString("00")/@card.ExpirationYear</p>
-                    }
+                    <div class="card-period"><span>Hesap Kesim Günü</span><strong>Ayın @card.StatementDay. Günü</strong></div>
+                    <div class="card-payment-date"><span>Son Ödeme Günü</span><strong>Ayın @card.PaymentDay. Günü</strong></div>
                 </article>
             }
         </div>
     }
+    }
+    else
+    {
+        <BenefitCardPanel Kind="@(_tab == "fuel" ? BenefitCardKind.Fuel : BenefitCardKind.Meal)" />
+    }
 </div>
 
 @code {
+    [SupplyParameterFromQuery(Name = "type")] public string? TypeQuery { get; set; }
+    private string _tab = "credit";
     private List<CreditCard> _cards = new();
-    private List<FinancialTransaction> _transactions = new();
     private string _error = string.Empty;
+    private Dictionary<int, CardPrivateDetails> _privateDetails = new();
+    private bool _creditLoaded;
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnParametersSetAsync()
     {
+        _tab = TypeQuery is "fuel" or "meal" ? TypeQuery : "credit";
+        if (_tab != "credit" || _creditLoaded) return;
         await Database.InitializeAsync();
         await ReloadAsync();
+        _creditLoaded = true;
+    }
+
+    private string TabClass(string tab) => _tab == tab ? "card-type-tab active" : "card-type-tab";
+    private void SelectCredit() => SelectTab("credit");
+    private void SelectFuel() => SelectTab("fuel");
+    private void SelectMeal() => SelectTab("meal");
+    private void SelectTab(string tab)
+    {
+        _tab = tab;
+        Navigation.NavigateTo($"cards?type={tab}");
     }
 
     private async Task ArchiveCardAsync(CreditCard card)
     {
         await Database.ArchiveCreditCardAsync(card);
+        try { await NotificationService.ScheduleUpcomingPaymentsAsync(); }
+        catch { }
         try { CardDetailsStore.Remove(card.SecureDetailsKey); }
         catch { _error = "Kart listeden kaldırıldı, ancak güvenli bilgileri temizlenemedi. Tüm verileri sıfırlama işlemiyle temizleyebilirsin."; }
         await ReloadAsync();
@@ -77,24 +116,25 @@
     private async Task ReloadAsync()
     {
         _cards = (await Database.GetCreditCardsAsync()).Where(card => card.IsActive).ToList();
-        _transactions = await Database.GetTransactionsAsync();
-    }
-
-    private decimal PeriodSpending(CreditCard card)
-    {
-        var cutoff = DatabaseService.GetCardStatementDate(DateTime.Today, card.StatementDay);
-        return _transactions.Where(transaction => transaction.CardId == card.Id && transaction.CardDebtChange > 0 &&
-            (transaction.CardStatementDate ?? DatabaseService.GetCardStatementDate(transaction.Date, card.StatementDay)) == cutoff)
-            .Sum(transaction => transaction.Amount);
-    }
-
-    private static string PeriodLabel(CreditCard card)
-    {
-        var end = DatabaseService.GetCardStatementDate(DateTime.Today, card.StatementDay);
-        var previousMonth = end.AddMonths(-1);
-        var previousEnd = new DateTime(previousMonth.Year, previousMonth.Month, Math.Clamp(card.StatementDay, 1, DateTime.DaysInMonth(previousMonth.Year, previousMonth.Month)));
-        return $"{previousEnd.AddDays(1):dd.MM} – {end:dd.MM.yyyy}";
+        _privateDetails.Clear();
+        foreach (var card in _cards.Where(card => card.RevealSensitive))
+        {
+            try
+            {
+                var details = await CardDetailsStore.GetAsync(card.SecureDetailsKey);
+                if (details is not null) _privateDetails[card.Id] = details;
+            }
+            catch { }
+        }
     }
 
     private static string FormatMoney(decimal amount) => string.Format(new CultureInfo("tr-TR"), "{0:C2}", amount);
+
+    private static string FormatCardNumber(string number)
+    {
+        var digits = new string(number.Where(char.IsDigit).ToArray());
+        return string.Join(" ", Enumerable.Range(0, (digits.Length + 3) / 4)
+            .Select(index => digits.Substring(index * 4, Math.Min(4, digits.Length - index * 4))));
+    }
+
 }

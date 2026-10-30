@@ -7,16 +7,22 @@ public class RecurringTransactionService
 {
     private readonly DatabaseService _database;
     private readonly SemaphoreSlim _processingGate = new(1, 1);
+    private DateTime? _lastProcessedDate;
 
     public RecurringTransactionService(DatabaseService database)
     {
         _database = database;
     }
 
-    public async Task ProcessAsync()
+    public async Task ProcessAsync(bool force = false)
     {
         await _processingGate.WaitAsync();
-        try { await ProcessDueTransactionsAsync(); }
+        try
+        {
+            if (!force && _lastProcessedDate == DateTime.Today) return;
+            await ProcessDueTransactionsAsync();
+            _lastProcessedDate = DateTime.Today;
+        }
         finally { _processingGate.Release(); }
     }
 
@@ -25,6 +31,8 @@ public class RecurringTransactionService
         await _database.InitializeAsync();
         var items = await _database.GetRecurringItemsAsync();
         var transactions = await _database.GetTransactionsAsync();
+        var existingMonths = transactions.Where(transaction => transaction.Source.StartsWith("Recurring:"))
+            .Select(transaction => (transaction.Source, transaction.Date.Year, transaction.Date.Month)).ToHashSet();
         var today = DateTime.Today;
 
         foreach (var item in items.Where(item => item.IsActive))
@@ -56,10 +64,7 @@ public class RecurringTransactionService
                     }
 
                     var source = $"Recurring:{item.Id}";
-                    var alreadyExists = transactions.Any(transaction =>
-                        transaction.Source == source &&
-                        transaction.Date.Year == candidate.Year &&
-                        transaction.Date.Month == candidate.Month);
+                    var alreadyExists = existingMonths.Contains((source, candidate.Year, candidate.Month));
 
                     if (!alreadyExists)
                     {
@@ -77,7 +82,7 @@ public class RecurringTransactionService
                             IsRecurring = true
                         });
                         createdCount++;
-                        transactions = await _database.GetTransactionsAsync();
+                        existingMonths.Add((source, candidate.Year, candidate.Month));
                     }
                 }
 
@@ -119,7 +124,7 @@ public class RecurringTransactionService
     {
         var start = new DateTime(month.Year, month.Month, 1);
         var end = start.AddMonths(1);
-        var recorded = await _database.GetTransactionsAsync();
+        var recorded = await _database.GetTransactionsForMonthAsync(start);
         var projected = await GetProjectedTransactionsAsync(start, recorded);
         return recorded.Concat(projected).Where(transaction => transaction.Date >= start && transaction.Date < end)
             .OrderByDescending(transaction => transaction.Date).ThenByDescending(transaction => transaction.Id).ToList();

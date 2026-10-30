@@ -38,5 +38,7 @@ public class RecurringItem
 
     public int RemainingInstallments { get; set; }
 
+    public int LoanReminderDaysMask { get; set; }
+
     public DateTime CreatedAt { get; set; } = DateTime.Now;
 }

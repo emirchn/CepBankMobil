@@ -12,12 +12,12 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>iru6jmh30t</Fingerprint>
-      <Integrity>PrwUvU5DNEYVABu6IiBGe4/SuEPcEuI15slqttrAMRE=</Integrity>
+      <Fingerprint>qo96k8mpyb</Fingerprint>
+      <Integrity>ispXOBSrjWFrEN5Z/5/VmYiRSNYgeqyj2mP/eybZtoQ=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <FileLength>8382</FileLength>
-      <LastWriteTime>Wed, 28 Oct 2026 22:27:12 GMT</LastWriteTime>
+      <FileLength>33723</FileLength>
+      <LastWriteTime>Thu, 29 Oct 2026 20:43:58 GMT</LastWriteTime>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\app.css'))</OriginalItemSpec>
     </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\CepBankApp.styles.css'))">
@@ -32,12 +32,12 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName>ScopedCss</AssetTraitName>
       <AssetTraitValue>ApplicationBundle</AssetTraitValue>
-      <Fingerprint>scm9idynid</Fingerprint>
-      <Integrity>bF+siPi27iR/ZjeoGO3Tzh2NlXKbVvo+jbc1x22uQP0=</Integrity>
+      <Fingerprint>bah57o3tzc</Fingerprint>
+      <Integrity>wx0UV/YeV7AFJLZ44er+UIZT8zpR5M6oeGrR4e11Lio=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <FileLength>6214</FileLength>
-      <LastWriteTime>Wed, 28 Oct 2026 23:13:27 GMT</LastWriteTime>
+      <FileLength>6822</FileLength>
+      <LastWriteTime>Thu, 29 Oct 2026 20:15:11 GMT</LastWriteTime>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\CepBankApp.styles.css'))</OriginalItemSpec>
     </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\index.html'))">
@@ -52,12 +52,12 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>2cv6lvo5q6</Fingerprint>
-      <Integrity>IrXLYQCTzV4rCvXjqoUQ7+M5IOmfQBblscpLF2nuvTU=</Integrity>
+      <Fingerprint>lzp2w8gx4e</Fingerprint>
+      <Integrity>748h4FfwVb3SqZ+sbuLcfzgp1wisruf1kmwDH6MAesk=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <FileLength>880</FileLength>
-      <LastWriteTime>Wed, 28 Oct 2026 21:37:34 GMT</LastWriteTime>
+      <FileLength>953</FileLength>
+      <LastWriteTime>Thu, 29 Oct 2026 00:06:18 GMT</LastWriteTime>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\index.html'))</OriginalItemSpec>
     </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\lib\bootstrap\dist\css\bootstrap.min.css'))">
@@ -99,6 +99,26 @@
       <FileLength>589893</FileLength>
       <LastWriteTime>Wed, 28 Oct 2026 21:37:34 GMT</LastWriteTime>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\lib\bootstrap\dist\css\bootstrap.min.css.map'))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\theme.js'))">
+      <SourceType>Package</SourceType>
+      <SourceId>CepBankApp</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>/</BasePath>
+      <RelativePath>theme.js</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>tjy26ovkbz</Fingerprint>
+      <Integrity>l84Nkn9DElCm1wAvnODDMI+QHPJEx/7mC+7furPWTP4=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <FileLength>609</FileLength>
+      <LastWriteTime>Thu, 29 Oct 2026 00:07:16 GMT</LastWriteTime>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\theme.js'))</OriginalItemSpec>
     </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\_framework\blazor.modules.json'))">
       <SourceType>Package</SourceType>

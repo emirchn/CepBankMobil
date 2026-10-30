@@ -1,6 +1,6 @@
 /* /Components/Layout/MainLayout.razor.rz.scp.css */
 main[b-3o0sclnggo] { min-height: 100vh; }
-.content[b-3o0sclnggo] { width: 100%; padding: 0 0 calc(92px + env(safe-area-inset-bottom)); }
+.content[b-3o0sclnggo] { width: 100%; padding: env(safe-area-inset-top, 0px) 0 calc(92px + env(safe-area-inset-bottom)); }
 .bottom-nav[b-3o0sclnggo] {
     position: fixed; inset: auto 0 0; z-index: 20;
     display: grid; grid-template-columns: repeat(5, minmax(0, 1fr));

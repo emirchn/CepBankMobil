@@ -1,0 +1,103 @@
+@page "/cards/benefit/{KindName}"
+@using CepBankApp.Data
+@using CepBankApp.Models
+@using System.Globalization
+@inject DatabaseService Database
+@inject NavigationManager Navigation
+
+<div class="finance-page">
+    <header class="finance-header">
+        <div><p class="eyebrow">KARTLAR / @KindLabel.ToUpperInvariant()</p><h1>@(_existing is null ? $"{KindLabel} kartı ekle" : $"{KindLabel} kartını düzenle")</h1></div>
+    </header>
+    <section class="add-card benefit-form">
+        <div class="section-heading"><h2>Kart bilgileri</h2></div>
+        <div class="form-grid"><label>Kart adı<input @bind="_name" placeholder="Kart adı" /></label></div>
+        <div class="benefit-expiry-row">
+            <label>Son kullanma ayı<select @bind="_expirationMonth">@for (var month = 1; month <= 12; month++) { <option value="@month">@month.ToString("00")</option> }</select></label>
+            <label>Son kullanma yılı<select @bind="_expirationYear">@for (var year = DateTime.Today.Year - 10; year <= DateTime.Today.Year + 20; year++) { <option value="@year">@year</option> }</select></label>
+        </div>
+        @if (_kind == BenefitCardKind.Fuel)
+        {
+            <fieldset class="type-toggle benefit-unit-toggle">
+                <legend>Limit cinsi</legend>
+                <label class="type-choice @(_unit == BenefitUnit.Money ? "selected" : "")"><input type="checkbox" checked="@(_unit == BenefitUnit.Money)" @onclick="() => SetUnit(BenefitUnit.Money)" @onclick:preventDefault="true" />Bakiye (TL)</label>
+                <label class="type-choice @(_unit == BenefitUnit.Liter ? "selected" : "")"><input type="checkbox" checked="@(_unit == BenefitUnit.Liter)" @onclick="() => SetUnit(BenefitUnit.Liter)" @onclick:preventDefault="true" />Litre</label>
+            </fieldset>
+        }
+        <div class="benefit-setting-row">
+            <label>@(_kind == BenefitCardKind.Meal ? "Aylık yükleme tutarı (TL)" : _unit == BenefitUnit.Liter ? "Kart limiti (L)" : "Kart limiti (TL)")
+                <input type="number" min="0" step="0.01" @bind="_monthlyAmountText" placeholder="0,00" />
+            </label>
+            @if (_kind == BenefitCardKind.Fuel)
+            {
+                <label>Limit yenileme günü
+                    <select @bind="_renewalDay">@for (var day = 1; day <= 31; day++) { <option value="@day">Ayın @day. günü</option> }</select>
+                </label>
+            }
+        </div>
+        <p class="field-hint">@(_kind == BenefitCardKind.Meal
+            ? "Bakiye düzenlenmez. Her ayın 1. günü aylık tutar bakiyeye eklenir; ayrıca Bakiye ekle ile yükleme yapabilirsin."
+            : "Limit seçilen günde yeniden belirlediğin tutara sıfırlanır; önceki aydan kalan miktar eklenmez.")</p>
+        @if (!string.IsNullOrWhiteSpace(_error)) { <p class="error-message">@_error</p> }
+        <button class="primary-button" type="button" disabled="@_saving" @onclick="SaveAsync">@(_saving ? "Kaydediliyor…" : "Kartı kaydet")</button>
+        <button class="benefit-cancel" type="button" @onclick="BackToCards">Vazgeç</button>
+    </section>
+</div>
+
+@code {
+    [Parameter] public string KindName { get; set; } = string.Empty;
+    private BenefitCardKind _kind;
+    private BenefitCard? _existing;
+    private string _name = string.Empty;
+    private int _expirationMonth = DateTime.Today.Month;
+    private int _expirationYear = DateTime.Today.Year;
+    private BenefitUnit _unit = BenefitUnit.Money;
+    private string _monthlyAmountText = string.Empty;
+    private int _renewalDay = 1;
+    private string _error = string.Empty;
+    private bool _saving;
+    private string KindLabel => _kind == BenefitCardKind.Fuel ? "Yakıt" : "Yemek";
+    private string ReturnUrl => $"cards?type={KindName.ToLowerInvariant()}";
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (KindName is not ("fuel" or "meal")) { Navigation.NavigateTo("cards"); return; }
+        _kind = KindName == "fuel" ? BenefitCardKind.Fuel : BenefitCardKind.Meal;
+        await Database.InitializeAsync();
+        await Database.ProcessBenefitRenewalsAsync();
+        _existing = await Database.GetBenefitCardAsync(_kind);
+        if (_existing is null) return;
+        _name = _existing.Name;
+        _expirationMonth = _existing.ExpirationMonth;
+        _expirationYear = _existing.ExpirationYear;
+        _unit = _existing.Unit;
+        _monthlyAmountText = _existing.MonthlyAmount.ToString(CultureInfo.InvariantCulture);
+        _renewalDay = _existing.RenewalDay;
+    }
+
+    private void SetUnit(BenefitUnit unit) => _unit = unit;
+    private void BackToCards() => Navigation.NavigateTo(ReturnUrl);
+
+    private async Task SaveAsync()
+    {
+        if (_saving) return;
+        _error = string.Empty;
+        if (string.IsNullOrWhiteSpace(_name)) { _error = "Kart adı girin."; return; }
+        if (!decimal.TryParse(_monthlyAmountText, NumberStyles.Number, CultureInfo.InvariantCulture, out var amount) &&
+            !decimal.TryParse(_monthlyAmountText, NumberStyles.Number, new CultureInfo("tr-TR"), out amount) || amount <= 0)
+        { _error = "Sıfırdan büyük geçerli bir tutar girin."; return; }
+        _saving = true;
+        try
+        {
+            await Database.SaveBenefitCardAsync(new BenefitCard
+            {
+                Id = _existing?.Id ?? 0, Kind = _kind, Name = _name.Trim(),
+                ExpirationMonth = _expirationMonth, ExpirationYear = _expirationYear,
+                Unit = _kind == BenefitCardKind.Meal ? BenefitUnit.Money : _unit,
+                MonthlyAmount = amount, RenewalDay = _kind == BenefitCardKind.Meal ? 1 : _renewalDay
+            });
+            Navigation.NavigateTo(ReturnUrl);
+        }
+        catch (Exception ex) { _error = ex.Message; _saving = false; }
+    }
+}

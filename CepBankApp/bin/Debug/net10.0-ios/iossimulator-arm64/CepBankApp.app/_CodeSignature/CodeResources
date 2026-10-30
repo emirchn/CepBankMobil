@@ -10,19 +10,19 @@
 		</data>
 		<key>Assets.car</key>
 		<data>
-		Y6UVF5E7TSf9Kb/UKj577ui7Rpk=
+		97QIfmynYHBvKPVzZABmpNxV568=
 		</data>
 		<key>CepBankApp.dll</key>
 		<data>
-		++QiymIOoe45CHGIBdBefmjLwZ8=
+		zbksn4H5nxunGUlPKc8u5ybalwc=
 		</data>
 		<key>CepBankApp.pdb</key>
 		<data>
-		n/go6PLsfoqEd94xEXh5VZ6lxy0=
+		d5Mkf7tedf334Mn0xA0Se+Ze7mg=
 		</data>
 		<key>Info.plist</key>
 		<data>
-		XDgjFhl14bt57+a4bR6tAbxZEQU=
+		eX7MBd7hlitOMy8X8nZu5AX7RQI=
 		</data>
 		<key>MauiInfo.plist</key>
 		<data>
@@ -30,7 +30,7 @@
 		</data>
 		<key>MauiSplash.storyboardc/01J-lp-oVM-view-Ze5-6b-2t3.nib</key>
 		<data>
-		Y78DTyz7+rkuDbhphGJe+YK2rLQ=
+		may+9E4Lx4OGTirwAMnhjO2f8ZE=
 		</data>
 		<key>MauiSplash.storyboardc/Info.plist</key>
 		<data>
@@ -914,11 +914,11 @@
 		</data>
 		<key>appicon60x60@2x.png</key>
 		<data>
-		t4umfOZFumJ7QmzKhGEnyAcUk+s=
+		3M1ySX6ZcuVy+RqKhAsb9tNpOFQ=
 		</data>
 		<key>appicon76x76@2x~ipad.png</key>
 		<data>
-		DWMNKrxV/bN2DZXE4IIeRSflUEM=
+		3Ki3Tzm/mZ3giQCvzULcxM3EeE8=
 		</data>
 		<key>ar/Microsoft.Maui.Controls.resources.dll</key>
 		<data>
@@ -1104,6 +1104,18 @@
 		<data>
 		V9uL2U0a2H/Rg28AStjUugC+RP4=
 		</data>
+		<key>splash_E9DF7C44A9A8B6B3150A3D403549BB4D52CFB4F7A5D913DFFD04312EFBAD3877.png</key>
+		<data>
+		Q1jR6MRcvAdQCldrHvTtGg877n8=
+		</data>
+		<key>splash_E9DF7C44A9A8B6B3150A3D403549BB4D52CFB4F7A5D913DFFD04312EFBAD3877@2x.png</key>
+		<data>
+		4Wqg2ZKexSaXoJO5bmLatmStuD4=
+		</data>
+		<key>splash_E9DF7C44A9A8B6B3150A3D403549BB4D52CFB4F7A5D913DFFD04312EFBAD3877@3x.png</key>
+		<data>
+		h+QA1TG9kWKEMHtmLVt5Vhl9TZc=
+		</data>
 		<key>sv/Microsoft.Maui.Controls.resources.dll</key>
 		<data>
 		sBKvnk7eElDfoxRVJxey1HPd9jI=
@@ -1124,6 +1136,10 @@
 		<data>
 		q0Q0GZp7YrERJ+3t3OVCHrHw/wA=
 		</data>
+		<key>wwwroot/CepBankApp.bah57o3tzc.bundle.scp.css</key>
+		<data>
+		ghpyGkwNwwvsX8nBnDXCg1ETG5Q=
+		</data>
 		<key>wwwroot/CepBankApp.jxh52crhnj.bundle.scp.css</key>
 		<data>
 		kjJuOh8Xp14H78ax6ByTMuPHTyo=
@@ -1134,7 +1150,7 @@
 		</data>
 		<key>wwwroot/CepBankApp.styles.css</key>
 		<data>
-		pONw3RxyrP3YgEYMpll3AdVEong=
+		ghpyGkwNwwvsX8nBnDXCg1ETG5Q=
 		</data>
 		<key>wwwroot/_framework/blazor.modules.json</key>
 		<data>
@@ -1146,11 +1162,11 @@
 		</data>
 		<key>wwwroot/app.css</key>
 		<data>
-		D7gDrBcv0uHHKLe+NAUP6DKdD64=
+		p0t++JI/alFzPuNRoWVZHSiCX4E=
 		</data>
 		<key>wwwroot/index.html</key>
 		<data>
-		gw6YiMKZH7z9PnNI6g0ip/133Bo=
+		QAQk6JHN/Xp1BlRs0/xXmYIh6iE=
 		</data>
 		<key>wwwroot/lib/bootstrap/dist/css/bootstrap.min.css</key>
 		<data>
@@ -1159,6 +1175,10 @@
 		<key>wwwroot/lib/bootstrap/dist/css/bootstrap.min.css.map</key>
 		<data>
 		8FELN4/El8aW3HAYSomSCkWBVBY=
+		</data>
+		<key>wwwroot/theme.js</key>
+		<data>
+		nco3w2JpYS9uLyMdCTH0jCuU5ck=
 		</data>
 		<key>zh-HK/Microsoft.Maui.Controls.resources.dll</key>
 		<data>
@@ -1186,21 +1206,21 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			D6/LT5fInmVppMelPLO4RU8Uw1McdsCjnURQDc0+yQc=
+			Pbi+ja79DNOsgNMo0CkGFzTEFUH7stwfIorfai18fu0=
 			</data>
 		</dict>
 		<key>CepBankApp.dll</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			TqvJRH74EJ0kCM8P/mL+UMt2Hk2Ga6O6n021HatZsQo=
+			QQisx47tedtBevFt1NsMDg++X9tQyk4G/bFzp7vDZNs=
 			</data>
 		</dict>
 		<key>CepBankApp.pdb</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			njF0TCwxk+MqnZ8d8kDjfqBr+5Ck4azV5ocEjrwHmdE=
+			YS5YjWRBHB/WbOpik6ASeeaOGlYqPnIF8nFUAd/80EI=
 			</data>
 		</dict>
 		<key>MauiInfo.plist</key>
@@ -1214,7 +1234,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			PD0GUDDeE5JffNIPVoucOIHmED6dLPnIxI/a9Oh8ADc=
+			thvdQQLf+xuC8zOeETYaae0PHQoA5QE67O6SC/lELPk=
 			</data>
 		</dict>
 		<key>MauiSplash.storyboardc/Info.plist</key>
@@ -2754,14 +2774,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			BVwdas5bRZ6MRI591V+nnhG4tlScHZgO+REraaP+2mw=
+			JRSoQ3Ae4I5/EkXyDOLJ6g5rT+E9UgF06+vEMZdwbsc=
 			</data>
 		</dict>
 		<key>appicon76x76@2x~ipad.png</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			+qXcBrRB1S2uCBkXBJMcvDN7zD/xF3IhRUfUyZiz4ek=
+			8uIuMHbDbZtK46RPWcMbTUKcLMLiC0JyVUcNZwW935I=
 			</data>
 		</dict>
 		<key>ar/Microsoft.Maui.Controls.resources.dll</key>
@@ -3086,6 +3106,27 @@
 			TR5wkKzih6lYQ3pqkvy+F+ZIOuoGZ1uEfeG93l0BSfE=
 			</data>
 		</dict>
+		<key>splash_E9DF7C44A9A8B6B3150A3D403549BB4D52CFB4F7A5D913DFFD04312EFBAD3877.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			ZipBzagDXl+D4Wr61eVvDS3N93msAqmfEaM6Ds4/FTQ=
+			</data>
+		</dict>
+		<key>splash_E9DF7C44A9A8B6B3150A3D403549BB4D52CFB4F7A5D913DFFD04312EFBAD3877@2x.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			Mlykrfs/NmCU89Lopwj9HogqGqf1OoTkRrFsiRt5ogE=
+			</data>
+		</dict>
+		<key>splash_E9DF7C44A9A8B6B3150A3D403549BB4D52CFB4F7A5D913DFFD04312EFBAD3877@3x.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			vqMG6UlFbs00MkFRH61grmxN+e89ng856Mvqv06kjOk=
+			</data>
+		</dict>
 		<key>sv/Microsoft.Maui.Controls.resources.dll</key>
 		<dict>
 			<key>hash2</key>
@@ -3121,6 +3162,13 @@
 			Wf9q44Kvhilmt2Ye+a3VrOjp5IjJBJpLZzzwW2ZDyPw=
 			</data>
 		</dict>
+		<key>wwwroot/CepBankApp.bah57o3tzc.bundle.scp.css</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			wx0UV/YeV7AFJLZ44er+UIZT8zpR5M6oeGrR4e11Lio=
+			</data>
+		</dict>
 		<key>wwwroot/CepBankApp.jxh52crhnj.bundle.scp.css</key>
 		<dict>
 			<key>hash2</key>
@@ -3139,7 +3187,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			bF+siPi27iR/ZjeoGO3Tzh2NlXKbVvo+jbc1x22uQP0=
+			wx0UV/YeV7AFJLZ44er+UIZT8zpR5M6oeGrR4e11Lio=
 			</data>
 		</dict>
 		<key>wwwroot/_framework/blazor.modules.json</key>
@@ -3160,14 +3208,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			PrwUvU5DNEYVABu6IiBGe4/SuEPcEuI15slqttrAMRE=
+			ispXOBSrjWFrEN5Z/5/VmYiRSNYgeqyj2mP/eybZtoQ=
 			</data>
 		</dict>
 		<key>wwwroot/index.html</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			IrXLYQCTzV4rCvXjqoUQ7+M5IOmfQBblscpLF2nuvTU=
+			748h4FfwVb3SqZ+sbuLcfzgp1wisruf1kmwDH6MAesk=
 			</data>
 		</dict>
 		<key>wwwroot/lib/bootstrap/dist/css/bootstrap.min.css</key>
@@ -3182,6 +3230,13 @@
 			<key>hash2</key>
 			<data>
 			dLjmWc4YRAp7XkxEmYm7/xV1ebW+YQ0LrlrrKVB8kXY=
+			</data>
+		</dict>
+		<key>wwwroot/theme.js</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			l84Nkn9DElCm1wAvnODDMI+QHPJEx/7mC+7furPWTP4=
 			</data>
 		</dict>
 		<key>zh-HK/Microsoft.Maui.Controls.resources.dll</key>

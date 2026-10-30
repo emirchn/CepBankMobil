@@ -3,10 +3,10 @@
 <plist version="1.0">
 <dict>
 	<key>application-identifier</key>
-	<string>com.companyname.cepbankapp</string>
+	<string>com.emir.cepbankapp.cepbankapp</string>
 	<key>keychain-access-groups</key>
 	<array>
-		<string>com.companyname.cepbankapp</string>
+		<string>com.emir.cepbankapp.cepbankapp</string>
 	</array>
 </dict>
 </plist>

@@ -12,13 +12,33 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>x0wqlfyruw</Fingerprint>
-      <Integrity>odWr4Q1Uy/4LMnMtWZ1bLnwC1HrtbhLN+51QwCFKv3Y=</Integrity>
+      <Fingerprint>0p3pofs82v</Fingerprint>
+      <Integrity>DK0xAntY/NXH/FJLXUw9KDyZzfv0ck1zw2eThEr3rCo=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <FileLength>28903</FileLength>
-      <LastWriteTime>Thu, 29 Oct 2026 00:41:57 GMT</LastWriteTime>
+      <FileLength>49295</FileLength>
+      <LastWriteTime>Fri, 30 Oct 2026 01:17:02 GMT</LastWriteTime>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\app.css'))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\brand-mark.svg'))">
+      <SourceType>Package</SourceType>
+      <SourceId>CepBankApp</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>/</BasePath>
+      <RelativePath>brand-mark.svg</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>jnai2x0zbx</Fingerprint>
+      <Integrity>byxBUnC+h3AINRkAoHXXoRJHKGlgPJVGA/sTvesfN8c=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <FileLength>996</FileLength>
+      <LastWriteTime>Thu, 29 Oct 2026 22:32:44 GMT</LastWriteTime>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\brand-mark.svg'))</OriginalItemSpec>
     </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\CepBankApp.styles.css'))">
       <SourceType>Package</SourceType>
@@ -32,13 +52,33 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName>ScopedCss</AssetTraitName>
       <AssetTraitValue>ApplicationBundle</AssetTraitValue>
-      <Fingerprint>bah57o3tzc</Fingerprint>
-      <Integrity>wx0UV/YeV7AFJLZ44er+UIZT8zpR5M6oeGrR4e11Lio=</Integrity>
+      <Fingerprint>e1qejl5m86</Fingerprint>
+      <Integrity>UrJVhCcskgRsVTrMhuYRDOlTP6yXVG294rC7uSogLBw=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <FileLength>6822</FileLength>
-      <LastWriteTime>Thu, 29 Oct 2026 00:51:11 GMT</LastWriteTime>
+      <FileLength>6850</FileLength>
+      <LastWriteTime>Thu, 29 Oct 2026 22:53:25 GMT</LastWriteTime>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\CepBankApp.styles.css'))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\glassy-wallpaper.png'))">
+      <SourceType>Package</SourceType>
+      <SourceId>CepBankApp</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>/</BasePath>
+      <RelativePath>glassy-wallpaper.png</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>vpgqhb0zjw</Fingerprint>
+      <Integrity>3atul+fg0O+/LZksi3fGfp56cNGMuqCpJ1dq44kfF34=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <FileLength>1934222</FileLength>
+      <LastWriteTime>Thu, 29 Oct 2026 22:45:18 GMT</LastWriteTime>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\glassy-wallpaper.png'))</OriginalItemSpec>
     </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\index.html'))">
       <SourceType>Package</SourceType>
@@ -52,12 +92,12 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>lzp2w8gx4e</Fingerprint>
-      <Integrity>748h4FfwVb3SqZ+sbuLcfzgp1wisruf1kmwDH6MAesk=</Integrity>
+      <Fingerprint>i3pvelg8x4</Fingerprint>
+      <Integrity>Mi1vp3GpEEGT2P+xhVZirL45zTIzWLc/zcKqyu7Cna4=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <FileLength>953</FileLength>
-      <LastWriteTime>Thu, 29 Oct 2026 00:06:18 GMT</LastWriteTime>
+      <FileLength>1162</FileLength>
+      <LastWriteTime>Fri, 30 Oct 2026 00:22:26 GMT</LastWriteTime>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\index.html'))</OriginalItemSpec>
     </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\lib\bootstrap\dist\css\bootstrap.min.css'))">
@@ -100,6 +140,26 @@
       <LastWriteTime>Wed, 28 Oct 2026 21:37:34 GMT</LastWriteTime>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\lib\bootstrap\dist\css\bootstrap.min.css.map'))</OriginalItemSpec>
     </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\startup.js'))">
+      <SourceType>Package</SourceType>
+      <SourceId>CepBankApp</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>/</BasePath>
+      <RelativePath>startup.js</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>yv6l96rwyw</Fingerprint>
+      <Integrity>4riJzxgn0cehzcYt/y+taCrBnY3fvd50rV9JWq8wC2c=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <FileLength>544</FileLength>
+      <LastWriteTime>Fri, 30 Oct 2026 01:28:49 GMT</LastWriteTime>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\startup.js'))</OriginalItemSpec>
+    </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\theme.js'))">
       <SourceType>Package</SourceType>
       <SourceId>CepBankApp</SourceId>
@@ -112,12 +172,12 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>tjy26ovkbz</Fingerprint>
-      <Integrity>l84Nkn9DElCm1wAvnODDMI+QHPJEx/7mC+7furPWTP4=</Integrity>
+      <Fingerprint>7vct6wpa9g</Fingerprint>
+      <Integrity>ncP8dXGyGcSWOeHEPjkwI5L5kzbweffx1vnocwB8wo4=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <FileLength>609</FileLength>
-      <LastWriteTime>Thu, 29 Oct 2026 00:07:16 GMT</LastWriteTime>
+      <FileLength>619</FileLength>
+      <LastWriteTime>Thu, 29 Oct 2026 20:55:30 GMT</LastWriteTime>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\theme.js'))</OriginalItemSpec>
     </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\_framework\blazor.modules.json'))">

@@ -10,13 +10,18 @@
     <link rel="stylesheet" href="CepBankApp.styles.css" />
     <link rel="icon" href="data:,">
     <script src="theme.js"></script>
+    <script src="startup.js"></script>
 </head>
 
 <body>
 
-    <div class="status-bar-safe-area"></div>
-
-    <div id="app"><div class="startup-placeholder">CepBank</div></div>
+    <div id="startup-screen" role="status" aria-label="CepBank açılıyor">
+        <div class="startup-glow"></div>
+        <img class="startup-mark" src="brand-mark.svg" alt="" />
+        <strong>CepBank</strong>
+        <span class="startup-progress" aria-hidden="true"></span>
+    </div>
+    <div id="app"></div>
 
     <div id="blazor-error-ui" data-nosnippet>
         An unhandled error has occurred.

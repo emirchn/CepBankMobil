@@ -1,0 +1,14 @@
+@using System.Text.RegularExpressions
+
+<span class="mini-card-icon" style="@IconStyle" aria-hidden="true">
+    <span class="mini-card-stripe"></span>
+    <span class="mini-card-chip"></span>
+</span>
+
+@code {
+    [Parameter] public string? Color { get; set; }
+
+    private string IconStyle => Regex.IsMatch(Color ?? "", "^#[0-9a-fA-F]{6}$")
+        ? $"--card-icon-color: {Color}"
+        : "--card-icon-color: #6477dc";
+}

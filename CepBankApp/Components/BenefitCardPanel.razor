@@ -1,0 +1,152 @@
+@implements IDisposable
+@using CepBankApp.Data
+@using CepBankApp.Models
+@using System.Globalization
+@inject DatabaseService Database
+
+<header class="finance-header card-list-header">
+    <h1>@KindLabel Kartı</h1>
+    @if (_card is not null) { <NavLink class="header-action" href="@FormUrl">Düzenle</NavLink> }
+</header>
+
+@if (_card is null)
+{
+    <div class="empty-state benefit-empty"><strong>Henüz @KindLabel.ToLowerInvariant() kartı eklenmedi</strong><p>Bu türde tek kart oluşturabilirsin.</p><NavLink href="@FormUrl" class="inline-link">+ @KindLabel kartı ekle →</NavLink></div>
+}
+else
+{
+    <article class="benefit-card-summary">
+        <div class="benefit-card-identity">
+            <div><small>KART ADI</small><strong>@_card.Name</strong></div>
+            <div><small>SON KULLANMA</small><strong>@_card.ExpirationMonth.ToString("00")/@_card.ExpirationYear</strong></div>
+        </div>
+        <div class="benefit-card-stats">
+            <div><small>@(_kind == BenefitCardKind.Fuel ? "Kart limiti" : "Aylık yükleme")</small><strong>@FormatQuantity(_card.MonthlyAmount, _card.Unit)</strong></div>
+            <div><small>@(_kind == BenefitCardKind.Fuel ? "Kullanılabilir" : "Bakiye")</small><strong>@FormatQuantity(_card.CurrentBalance, _card.Unit)</strong></div>
+            <div><small>Kullanılan</small><strong>@FormatQuantity(_card.UsedThisCycle, _card.Unit)</strong></div>
+        </div>
+        <p class="benefit-renewal-hint">@(_kind == BenefitCardKind.Fuel ? $"Ayın {_card.RenewalDay}. günü limit sıfırlanır." : "Her ayın 1. günü aylık tutar bakiyeye eklenir.")</p>
+        <p class="benefit-renewal-hint">Bu kartın hareketleri genel gelir ve gider hesabını etkilemez.</p>
+    </article>
+
+    <div class="benefit-action-buttons">
+        @if (_kind == BenefitCardKind.Meal)
+        {
+            <button type="button" class="benefit-action secondary" @onclick="() => ShowAction(BenefitMovementKind.Credit)">+ Bakiye ekle</button>
+        }
+        <button type="button" class="benefit-action" @onclick="() => ShowAction(BenefitMovementKind.Spend)">+ Harcama ekle</button>
+    </div>
+
+    @if (_action.HasValue)
+    {
+        <section class="add-card benefit-movement-form">
+            <div class="section-heading"><h2>@(_action == BenefitMovementKind.Credit ? "Bakiye ekle" : "Harcama ekle")</h2><button type="button" class="delete-button" @onclick="HideAction">Vazgeç</button></div>
+            <div class="form-grid">
+                <label>Miktar (@(_card.Unit == BenefitUnit.Liter ? "L" : "TL"))<input type="number" min="0" step="0.01" @bind="_amountText" placeholder="0,00" /></label>
+                <label>Açıklama (isteğe bağlı)<input @bind="_description" placeholder="Örn. Market, istasyon" /></label>
+            </div>
+            @if (!string.IsNullOrWhiteSpace(_error)) { <p class="error-message">@_error</p> }
+            <button type="button" class="primary-button" disabled="@_saving" @onclick="SaveMovementAsync">@(_saving ? "Kaydediliyor…" : "İşlemi kaydet")</button>
+        </section>
+    }
+
+    <section class="transactions-section benefit-history">
+        <div class="section-heading"><h2>Geçmiş işlemler</h2><span>@_movements.Count kayıt</span></div>
+        <div class="transaction-list">
+            @foreach (var movement in _movements)
+            {
+                var incoming = movement.Kind != BenefitMovementKind.Spend && movement.Amount >= 0;
+                <article class="transaction-row" @key="movement.Id">
+                    <div class="transaction-icon @(incoming ? "income" : "expense")">@(movement.Kind == BenefitMovementKind.Renewal ? "↻" : incoming ? "↗" : "↘")</div>
+                    <div class="transaction-details"><strong>@movement.Description</strong><span>@movement.Date.ToString("dd MMM yyyy", TrCulture)</span></div>
+                    <div class="transaction-actions"><strong class="@(incoming ? "positive" : "negative")">@MovementAmount(movement)</strong></div>
+                </article>
+            }
+        </div>
+    </section>
+}
+
+@code {
+    [Parameter] public BenefitCardKind Kind { get; set; }
+    private BenefitCardKind _kind;
+    private BenefitCard? _card;
+    private List<BenefitCardMovement> _movements = new();
+    private BenefitMovementKind? _action;
+    private string _amountText = string.Empty;
+    private string _description = string.Empty;
+    private string _error = string.Empty;
+    private bool _saving;
+    private DateTime _lastCheckedDate = DateTime.Today;
+    private readonly CancellationTokenSource _stop = new();
+    private static readonly CultureInfo TrCulture = new("tr-TR");
+    private string KindLabel => _kind == BenefitCardKind.Fuel ? "Yakıt" : "Yemek";
+    private string FormUrl => $"cards/benefit/{(_kind == BenefitCardKind.Fuel ? "fuel" : "meal")}";
+
+    protected override void OnInitialized() => _ = WatchDateAsync();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        _kind = Kind;
+        _action = null;
+        await Database.InitializeAsync();
+        await Database.ProcessBenefitRenewalsAsync();
+        await ReloadAsync();
+        _lastCheckedDate = DateTime.Today;
+    }
+
+    private async Task ReloadAsync()
+    {
+        _card = await Database.GetBenefitCardAsync(_kind);
+        _movements = _card is null ? new() : await Database.GetBenefitMovementsAsync(_card.Id);
+    }
+
+    private async Task WatchDateAsync()
+    {
+        using var timer = new PeriodicTimer(TimeSpan.FromMinutes(1));
+        try
+        {
+            while (await timer.WaitForNextTickAsync(_stop.Token))
+            {
+                if (_lastCheckedDate == DateTime.Today) continue;
+                await InvokeAsync(async () =>
+                {
+                    await Database.ProcessBenefitRenewalsAsync();
+                    await ReloadAsync();
+                    _lastCheckedDate = DateTime.Today;
+                    StateHasChanged();
+                });
+            }
+        }
+        catch (OperationCanceledException) { }
+    }
+
+    private void ShowAction(BenefitMovementKind kind) { _action = kind; _amountText = _description = _error = string.Empty; }
+    private void HideAction() { _action = null; _error = string.Empty; }
+
+    private async Task SaveMovementAsync()
+    {
+        if (_saving || _card is null || !_action.HasValue) return;
+        _error = string.Empty;
+        if ((!decimal.TryParse(_amountText, NumberStyles.Number, CultureInfo.InvariantCulture, out var amount) &&
+             !decimal.TryParse(_amountText, NumberStyles.Number, TrCulture, out amount)) || amount <= 0)
+        { _error = "Sıfırdan büyük geçerli bir miktar girin."; return; }
+        _saving = true;
+        try
+        {
+            await Database.AddBenefitMovementAsync(_card.Id, _action.Value, amount, _description);
+            await ReloadAsync();
+            HideAction();
+        }
+        catch (InvalidOperationException ex) { _error = ex.Message; }
+        finally { _saving = false; }
+    }
+
+    private static string FormatQuantity(decimal amount, BenefitUnit unit) =>
+        unit == BenefitUnit.Money ? string.Format(TrCulture, "{0:C2}", amount) : $"{amount.ToString("N2", TrCulture)} L";
+
+    private static string MovementAmount(BenefitCardMovement item) =>
+        (item.Kind == BenefitMovementKind.Renewal ? "↻ " : item.Kind == BenefitMovementKind.Spend || item.Amount < 0 ? "−" : "+") +
+        FormatQuantity(Math.Abs(item.Amount), item.Unit);
+
+    public void Dispose() { _stop.Cancel(); _stop.Dispose(); }
+}

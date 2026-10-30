@@ -1,7 +1,7 @@
 AppBundleName=CepBankApp
 ApplicationDisplayVersion=1.0
-ApplicationId=com.companyname.cepbankapp
-ApplicationTitle=CepBankApp
+ApplicationId=com.emir.cepbankapp.cepbankapp
+ApplicationTitle=CepBank
 ApplicationVersion=1
 AppManifest=Platforms/iOS/Info.plist
 CompiledAppManifest=obj/Debug/net10.0-ios/iossimulator-arm64/AppManifest.plist

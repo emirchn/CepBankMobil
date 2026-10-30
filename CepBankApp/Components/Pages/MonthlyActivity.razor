@@ -11,8 +11,8 @@
     <header class="finance-header activity-header">
         <div>
             <NavLink href="@($"/?month={_month:yyyy-MM}")" class="back-link">← Özete dön</NavLink>
-            <h1>Ayın hareketleri</h1>
-            <p class="header-subtitle">@_month.ToString("MMMM yyyy", Turkish) · Beklenen işlemler dahil</p>
+            <h1>Hareketler</h1>
+            <p class="header-subtitle">@_month.ToString("MMMM yyyy", Turkish) seçili · Beklenen işlemler dahil</p>
         </div>
         <button type="button" class="glass-icon-button" aria-label="Filtreleri aç veya kapat" aria-expanded="@_showFilters" aria-controls="activity-filters" @onclick="ToggleFilters">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="3"/><circle cx="15" cy="17" r="3"/></svg>
@@ -26,6 +26,8 @@
             <div class="section-heading"><h2>Filtrele</h2><button class="text-button" type="button" @onclick="ResetFilters">Temizle</button></div>
             <div class="form-grid">
                 <TypeToggle @bind-Value="SelectedType" AllowClear="true" />
+                <label>Başlangıç tarihi<input type="date" @bind="_startDate" /></label>
+                <label>Bitiş tarihi<input type="date" @bind="_endDate" /></label>
                 <label>En az tutar<input type="number" min="0" step="0.01" @bind="_minimum" placeholder="Sınır yok" /></label>
                 <label>En çok tutar<input type="number" min="0" step="0.01" @bind="_maximum" placeholder="Sınır yok" /></label>
                 <label>Kategori
@@ -98,6 +100,8 @@
     private int? _cardId;
     private decimal? _minimum;
     private decimal? _maximum;
+    private DateTime? _startDate;
+    private DateTime? _endDate;
     private string _error = "";
     private string SelectedType
     {
@@ -123,10 +127,18 @@
     {
         if (Year is < 1 or > 9998 || Month is < 1 or > 12) { Navigation.NavigateTo("/"); return; }
         _month = new DateTime(Year, Month, 1);
+        _type = _category = _error = "";
+        _minimum = _maximum = null;
+        _cardId = null;
+        _startDate = _month;
+        _endDate = _month.AddMonths(1).AddDays(-1);
+        _applied = new TransactionFilter(StartDate: _startDate, EndDate: _endDate);
         _loading = true;
         await Database.InitializeAsync();
         await RecurringService.ProcessAsync();
-        _transactions = await RecurringService.GetMonthTransactionsAsync(_month);
+        _transactions = await Database.GetTransactionsAsync();
+        _transactions.AddRange(await RecurringService.GetProjectedTransactionsAsync(_month, _transactions));
+        _transactions = _transactions.OrderByDescending(transaction => transaction.Date).ThenByDescending(transaction => transaction.Id).ToList();
         _cards = (await Database.GetCreditCardsAsync()).Where(card => card.IsActive || _transactions.Any(transaction => transaction.CardId == card.Id)).ToList();
         _visible = _applied.Apply(_transactions).ToList();
         _loading = false;
@@ -139,8 +151,10 @@
         if (_minimum is < 0 || _maximum is < 0) { _error = "Tutarlar sıfırdan küçük olamaz."; return; }
         if (_minimum.HasValue && _maximum.HasValue && _minimum > _maximum)
         { _error = "En az tutar, en çok tutardan büyük olamaz."; return; }
+        if (_startDate.HasValue && _endDate.HasValue && _startDate > _endDate)
+        { _error = "Başlangıç tarihi bitiş tarihinden sonra olamaz."; return; }
         TransactionType? type = _type == "Income" ? TransactionType.Income : _type == "Expense" ? TransactionType.Expense : null;
-        _applied = new TransactionFilter(type, _minimum, _maximum, _category, _cardId);
+        _applied = new TransactionFilter(type, _minimum, _maximum, _category, _cardId, _startDate, _endDate);
         _visible = _applied.Apply(_transactions).ToList();
         _showFilters = false;
     }
@@ -148,6 +162,7 @@
     {
         _type = _category = _error = "";
         _minimum = _maximum = null;
+        _startDate = _endDate = null;
         _cardId = null;
         _applied = new();
         _visible = _transactions.ToList();

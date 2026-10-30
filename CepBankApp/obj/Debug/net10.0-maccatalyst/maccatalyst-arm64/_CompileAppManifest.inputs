@@ -1,7 +1,7 @@
-AppBundleName=CepBankApp
+AppBundleName=CepBank
 ApplicationDisplayVersion=1.0
-ApplicationId=com.companyname.cepbankapp
-ApplicationTitle=CepBankApp
+ApplicationId=com.emir.cepbankapp.cepbankapp
+ApplicationTitle=CepBank
 ApplicationVersion=1
 AppManifest=Platforms/MacCatalyst/Info.plist
 CompiledAppManifest=obj/Debug/net10.0-maccatalyst/maccatalyst-arm64/AppManifest.plist

@@ -26,6 +26,10 @@ public class CreditCard
 
     public decimal? CreditLimit { get; set; }
 
+    public string IconColor { get; set; } = "#465267";
+
+    public bool RevealSensitive { get; set; }
+
     public decimal CurrentDebt { get; set; }
 
     public bool IsActive { get; set; } = true;

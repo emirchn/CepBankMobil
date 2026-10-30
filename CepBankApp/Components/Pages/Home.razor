@@ -1,10 +1,13 @@
 @page "/"
+@implements IDisposable
 @using CepBankApp.Data
 @using CepBankApp.Models
 @using System.Globalization
 @inject DatabaseService Database
 @inject CepBankApp.Services.RecurringTransactionService RecurringService
 @inject CepBankApp.Services.NotificationService NotificationService
+@inject CepBankApp.Services.MarketRatesService MarketRatesService
+@inject IJSRuntime JS
 
 <div class="finance-page overview-page">
     <header class="finance-header">
@@ -17,6 +20,27 @@
         </label>
     </header>
 
+    <div class="market-ticker" aria-label="Döviz kurları ve altın fiyatları">
+        @if (_marketRates is null)
+        {
+            <span>@(_marketLoaded ? "Piyasa verileri şu anda alınamıyor" : "Piyasa verileri yükleniyor…")</span>
+        }
+        else
+        {
+            <div class="market-ticker-track">
+                @for (var repeat = 0; repeat < 2; repeat++)
+                {
+                    <div class="market-ticker-group" aria-hidden="@(repeat == 1 ? "true" : "false")">
+                        <span>USD satış <strong>@FormatMarket(_marketRates.Usd)</strong></span>
+                        <span>EUR satış <strong>@FormatMarket(_marketRates.Eur)</strong></span>
+                        <span>Gram altın <strong>@FormatMarket(_marketRates.GramGold)</strong></span>
+                        <span>Çeyrek altın <strong>@FormatMarket(_marketRates.QuarterGold)</strong></span>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+
     <section class="overview-hero" aria-label="Aylık durum">
         <div class="hero-topline"><span>AYLIK DURUM</span>
             <NavLink href="@($"activity/{_selectedMonth.Year}/{_selectedMonth.Month}")" class="hero-detail-button" aria-label="Ayın tüm hareketlerini aç" title="Ayın hareketleri">
@@ -24,7 +48,7 @@
             </NavLink>
         </div>
         <span class="hero-caption">Gelir − gider @(_isCurrentMonth ? "ve güncel kart borçları" : "")</span>
-        <strong class="hero-amount">@FormatMoney(_monthlyIncome - TotalExpense)</strong>
+        <strong class="hero-amount @(NetAmount < 0 ? "negative" : "positive")">@FormatMoney(NetAmount)</strong>
         <div class="hero-footer"><span>@_selectedMonth.ToString("MMMM yyyy", new CultureInfo("tr-TR"))</span><span>@(_transactions.Any(transaction => transaction.IsProjected) ? "Beklenenler dahil" : (_isCurrentMonth ? "Güncel görünüm" : "Geçmiş ay"))</span></div>
     </section>
 
@@ -52,13 +76,37 @@
                 @foreach (var card in _cards)
                 {
                     <div class="overview-card-row">
-                        <div class="mini-card-icon" aria-hidden="true"><span></span><span></span></div>
+                        <CardIcon Color="@card.IconColor" />
                         <div class="overview-card-name"><strong>@card.Name</strong><span>•••• @card.LastFourDigits</span></div>
                         <div class="overview-card-debt"><small>Mevcut borç</small><strong>@FormatMoney(card.CurrentDebt)</strong></div>
                     </div>
                 }
             </div>
             <div class="cards-total"><span>Toplam mevcut borç</span><strong>@FormatMoney(_cardDebt)</strong></div>
+        }
+    </section>
+
+    <section class="transactions-section benefit-overview" aria-label="Yemek kartı">
+        <div class="section-heading"><h2>Yemek Kartı</h2><NavLink href="cards?type=meal" class="section-link">Kartı aç <span aria-hidden="true">→</span></NavLink></div>
+        @if (_mealCard is null)
+        {
+            <div class="benefit-overview-empty">Henüz yemek kartı eklenmedi.</div>
+        }
+        else
+        {
+            <div class="benefit-overview-row"><strong>@_mealCard.Name</strong><div><small>Güncel bakiye</small><strong>@FormatMoney(_mealCard.CurrentBalance)</strong></div></div>
+        }
+    </section>
+
+    <section class="transactions-section benefit-overview" aria-label="Yakıt kartı">
+        <div class="section-heading"><h2>Yakıt Kartı</h2><NavLink href="cards?type=fuel" class="section-link">Kartı aç <span aria-hidden="true">→</span></NavLink></div>
+        @if (_fuelCard is null)
+        {
+            <div class="benefit-overview-empty">Henüz yakıt kartı eklenmedi.</div>
+        }
+        else
+        {
+            <div class="benefit-overview-row"><strong>@_fuelCard.Name</strong><div><small>Kullanılabilir bakiye</small><strong>@FormatBenefitBalance(_fuelCard)</strong></div></div>
         }
     </section>
 
@@ -69,7 +117,7 @@
         </div>
         @if (_transactions.Count == 0)
         {
-            <div class="empty-state"><strong>Henüz işlem yok</strong><p>İlk gelir veya giderini ekleyerek başlayabilirsin.</p><NavLink href="transaction" class="inline-link">Yeni işlem ekle →</NavLink></div>
+            <div class="empty-state"><strong>Henüz işlem yok</strong><p>İlk işlemini ekleyerek başlayabilirsin.</p><NavLink href="transaction" class="inline-link">Yeni işlem ekle →</NavLink></div>
         }
         else
         {
@@ -102,29 +150,87 @@
     [SupplyParameterFromQuery(Name = "month")] public string? MonthQuery { get; set; }
     private List<FinancialTransaction> _transactions = new();
     private List<CreditCard> _cards = new();
+    private BenefitCard? _mealCard;
+    private BenefitCard? _fuelCard;
     private Dictionary<int, string> _cardNames = new();
     private decimal _monthlyIncome;
     private decimal _monthlyExpense;
     private decimal _cardDebt;
+    private bool _initialDataLoaded;
+    private bool _notificationsStarted;
+    private CepBankApp.Services.MarketRates? _marketRates;
+    private bool _marketLoaded;
+    private readonly CancellationTokenSource _marketStop = new();
+    private DateTime _lastNotificationDate = DateTime.Today;
     private DateTime _selectedMonth = new(DateTime.Today.Year, DateTime.Today.Month, 1);
     private bool _isCurrentMonth;
     private decimal TotalExpense => _monthlyExpense + (_isCurrentMonth ? _cardDebt : 0);
+    private decimal NetAmount => _monthlyIncome - TotalExpense;
 
     protected override async Task OnInitializedAsync()
     {
         if (DateTime.TryParseExact(MonthQuery, "yyyy-MM", CultureInfo.InvariantCulture, DateTimeStyles.None, out var selected))
             _selectedMonth = selected;
         await Database.InitializeAsync();
+        await Database.ProcessBenefitRenewalsAsync();
         await RecurringService.ProcessAsync();
-        await NotificationService.RequestPermissionAsync();
-        await NotificationService.ScheduleUpcomingPaymentsAsync();
         await ReloadAsync();
+        _initialDataLoaded = true;
     }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!_initialDataLoaded || _notificationsStarted) return;
+        _notificationsStarted = true;
+        await JS.InvokeVoidAsync("cepbankStartup.ready");
+        await CepBankApp.MainPage.CompleteStartupAsync();
+        _ = LoadMarketRatesAsync();
+        _ = WatchMarketAsync();
+        try
+        {
+            await NotificationService.RequestPermissionAsync();
+            await NotificationService.ScheduleUpcomingPaymentsAsync();
+            await NotificationService.CheckMonthlyBalanceAsync();
+        }
+        catch { /* Notification errors must not block the overview. */ }
+    }
+
+    private async Task LoadMarketRatesAsync()
+    {
+        var rates = await MarketRatesService.GetAsync();
+        if (!_marketStop.IsCancellationRequested)
+            await InvokeAsync(() => { _marketRates = rates; _marketLoaded = true; StateHasChanged(); });
+    }
+
+    private async Task WatchMarketAsync()
+    {
+        using var timer = new PeriodicTimer(TimeSpan.FromMinutes(15));
+        try
+        {
+            while (await timer.WaitForNextTickAsync(_marketStop.Token))
+            {
+                await LoadMarketRatesAsync();
+                if (_lastNotificationDate == DateTime.Today) continue;
+                _lastNotificationDate = DateTime.Today;
+                try
+                {
+                    await NotificationService.ScheduleUpcomingPaymentsAsync();
+                    await NotificationService.CheckMonthlyBalanceAsync();
+                }
+                catch { }
+            }
+        }
+        catch (OperationCanceledException) { }
+    }
+
+    public void Dispose() { _marketStop.Cancel(); _marketStop.Dispose(); }
 
     private async Task DeleteTransactionAsync(FinancialTransaction transaction)
     {
         await Database.DeleteTransactionAsync(transaction);
         await ReloadAsync();
+        try { await NotificationService.CheckMonthlyBalanceAsync(); }
+        catch { }
     }
 
     private async Task ReloadAsync()
@@ -133,6 +239,8 @@
         _transactions = await RecurringService.GetMonthTransactionsAsync(_selectedMonth);
         var allCards = await Database.GetCreditCardsAsync();
         _cards = allCards.Where(card => card.IsActive).ToList();
+        _mealCard = await Database.GetBenefitCardAsync(BenefitCardKind.Meal);
+        _fuelCard = await Database.GetBenefitCardAsync(BenefitCardKind.Fuel);
         _cardNames = allCards.ToDictionary(card => card.Id, card => card.Name);
         _cardDebt = _cards.Sum(card => card.CurrentDebt);
         _monthlyIncome = _transactions.Where(transaction => transaction.Type == TransactionType.Income).Sum(transaction => transaction.Amount);
@@ -142,6 +250,10 @@
     }
 
     private static string FormatMoney(decimal amount) => string.Format(new CultureInfo("tr-TR"), "{0:C2}", amount);
+    private static string FormatMarket(decimal amount) => $"{amount.ToString("N2", new CultureInfo("tr-TR"))} ₺";
+    private static string FormatBenefitBalance(BenefitCard card) => card.Unit == BenefitUnit.Liter
+        ? $"{card.CurrentBalance.ToString("N2", new CultureInfo("tr-TR"))} L"
+        : FormatMoney(card.CurrentBalance);
 
     private string GetTransactionSubtitle(FinancialTransaction transaction)
     {

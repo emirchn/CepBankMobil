@@ -29,6 +29,10 @@
       "PackagePath": "staticwebassets/lib/bootstrap/dist/css/bootstrap.min.css.map"
     },
     {
+      "Id": "/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/wwwroot/theme.js",
+      "PackagePath": "staticwebassets/theme.js"
+    },
+    {
       "Id": "obj/Debug/net10.0-maccatalyst/maccatalyst-arm64/staticwebassets/msbuild.CepBankApp.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",
       "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssetEndpoints.props"
     },

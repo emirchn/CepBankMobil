@@ -354,3 +354,4 @@
 /Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/Debug/net10.0-maccatalyst/maccatalyst-arm64/CepBankApp.pdb
 /Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/Debug/net10.0-maccatalyst/maccatalyst-arm64/CepBankApp.genruntimeconfig.cache
 /Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/Debug/net10.0-maccatalyst/maccatalyst-arm64/ref/CepBankApp.dll
+/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/Debug/net10.0-maccatalyst/maccatalyst-arm64/CepBankApp.sourcelink.json

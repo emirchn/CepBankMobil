@@ -17,6 +17,14 @@
       "PackagePath": "staticwebassets/app.css"
     },
     {
+      "Id": "/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/wwwroot/brand-mark.svg",
+      "PackagePath": "staticwebassets/brand-mark.svg"
+    },
+    {
+      "Id": "/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/wwwroot/glassy-wallpaper.png",
+      "PackagePath": "staticwebassets/glassy-wallpaper.png"
+    },
+    {
       "Id": "/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/wwwroot/index.html",
       "PackagePath": "staticwebassets/index.html"
     },
@@ -27,6 +35,10 @@
     {
       "Id": "/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/wwwroot/lib/bootstrap/dist/css/bootstrap.min.css.map",
       "PackagePath": "staticwebassets/lib/bootstrap/dist/css/bootstrap.min.css.map"
+    },
+    {
+      "Id": "/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/wwwroot/startup.js",
+      "PackagePath": "staticwebassets/startup.js"
     },
     {
       "Id": "/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/wwwroot/theme.js",

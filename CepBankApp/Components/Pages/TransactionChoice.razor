@@ -1,0 +1,16 @@
+@page "/transaction"
+
+<div class="finance-page">
+    <header class="finance-header"><h1>Yeni İşlem</h1></header>
+    <nav class="transaction-choice-list" aria-label="İşlem türü">
+        <NavLink href="transaction/standard" class="transaction-choice">
+            <span><strong>Standart İşlem</strong><small>Gelir veya gider ekle</small></span><span aria-hidden="true">→</span>
+        </NavLink>
+        <NavLink href="cards?type=meal" class="transaction-choice">
+            <span><strong>Yemek Kartı İşlemi</strong><small>Bakiye veya harcama ekle</small></span><span aria-hidden="true">→</span>
+        </NavLink>
+        <NavLink href="cards?type=fuel" class="transaction-choice">
+            <span><strong>Yakıt Kartı İşlemi</strong><small>Harcama ekle</small></span><span aria-hidden="true">→</span>
+        </NavLink>
+    </nav>
+</div>

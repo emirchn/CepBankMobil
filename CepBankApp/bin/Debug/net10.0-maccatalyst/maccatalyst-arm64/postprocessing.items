@@ -1,15 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <_PostProcessingItem Include="CepBankApp.app/Contents/MacOS/CepBankApp">
+    <_PostProcessingItem Include="CepBank.app/Contents/MacOS/CepBankApp">
       <IsAppExtension>false</IsAppExtension>
       <BCSymbolMapName>CepBankApp.bcsymbolmap</BCSymbolMapName>
       <NoDSymUtil>true</NoDSymUtil>
       <dSYMSourcePathExists>false</dSYMSourcePathExists>
       <NoSymbolStrip>true</NoSymbolStrip>
-      <dSYMInfoPlistRelativePath>CepBankApp.app.dSYM\Contents\Info.plist</dSYMInfoPlistRelativePath>
+      <dSYMInfoPlistRelativePath>CepBank.app.dSYM\Contents\Info.plist</dSYMInfoPlistRelativePath>
       <SymbolFile>/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/Debug/net10.0-maccatalyst/maccatalyst-arm64/mtouch-symbols.list</SymbolFile>
-      <DSymName>CepBankApp.app.dSYM</DSymName>
+      <DSymName>CepBank.app.dSYM</DSymName>
       <SourceProjectPath>/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp</SourceProjectPath>
       <IsXPCService></IsXPCService>
     </_PostProcessingItem>

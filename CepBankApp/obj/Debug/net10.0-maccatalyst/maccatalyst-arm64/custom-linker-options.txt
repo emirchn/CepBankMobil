@@ -4,7 +4,7 @@ AreAnyAssembliesTrimmed=false
 				AOTCompiler=/usr/local/share/dotnet/packs/Microsoft.NETCore.App.Runtime.AOT.osx-arm64.Cross.maccatalyst-arm64/10.0.3/Sdk/../tools/mono-aot-cross
 				AOTOutputDirectory=obj/Debug/net10.0-maccatalyst/maccatalyst-arm64/nativelibraries/aot-output/
 				DedupAssembly=
-				AppBundleManifestPath=bin/Debug/net10.0-maccatalyst/maccatalyst-arm64/CepBankApp.app/Contents/Info.plist
+				AppBundleManifestPath=bin/Debug/net10.0-maccatalyst/maccatalyst-arm64/CepBank.app/Contents/Info.plist
 				CacheDirectory=/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/Debug/net10.0-maccatalyst/maccatalyst-arm64/linker-cache
 				
 				Debug=true
@@ -218,7 +218,7 @@ MonoLibrary=/usr/local/share/dotnet/packs/Microsoft.NETCore.App.Runtime.Mono.mac
 				PartialStaticRegistrarLibrary=/usr/local/share/dotnet/packs/Microsoft.MacCatalyst.Runtime.maccatalyst-arm64.net10.0_26.2/26.2.10197/runtimes/maccatalyst-arm64/native/Microsoft.MacCatalyst.registrar.a
 				Platform=MacCatalyst
 				PlatformAssembly=Microsoft.MacCatalyst.dll
-				RelativeAppBundlePath=../CepBankApp.app/
+				RelativeAppBundlePath=../CepBank.app/
 				Registrar=partial-static
 				
 				RequireLinkWithAttributeForObjectiveCClassSearch=

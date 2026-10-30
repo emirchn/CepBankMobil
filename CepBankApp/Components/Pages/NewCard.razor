@@ -6,32 +6,37 @@
 @using System.Globalization
 @inject DatabaseService Database
 @inject NavigationManager Navigation
+@inject NotificationService NotificationService
 
 <div class="finance-page">
     <header class="finance-header">
         <div><p class="eyebrow">KARTLAR / @(_editing ? "DÜZENLE" : "YENİ KART")</p><h1>@(_editing ? "Kartı düzenle" : "Kart ekle")</h1></div>
     </header>
     <section class="add-card">
-        <div class="section-heading"><h2>Kart bilgileri</h2></div>
+        <div class="section-heading card-form-heading"><h2>Kart bilgileri</h2><input type="color" @bind="_iconColor" aria-label="Kart simgesi rengi" title="Kart simgesi rengi" /></div>
         <div class="form-grid">
             <label>Kart adı<input @bind="_name" placeholder="Örn. Bonus" /></label>
             <label>Kart sahibi<input @bind="_cardholder" autocomplete="off" /></label>
             <label>Kart numarası<input type="@(_showSensitive ? "text" : "password")" maxlength="23" inputmode="numeric" autocomplete="off" @bind="_number" placeholder="@(_editing ? "Değiştirmek için tam numarayı gir" : "Kartın üzerindeki numara")" /></label>
-            <label>CVV / CVC<input type="@(_showSensitive ? "text" : "password")" maxlength="4" inputmode="numeric" autocomplete="off" @bind="_cvv" /></label>
-            <label>Son kullanma ayı
+        </div>
+        <div class="expiry-row">
+            <label>Ay
                 <select @bind="_expiryMonth">
                     @for (var month = 1; month <= 12; month++) { <option value="@month">@month.ToString("00")</option> }
                 </select>
             </label>
-            <label>Son kullanma yılı
+            <label>Yıl
                 <select @bind="_expiryYear">
                     @for (var year = DateTime.Today.Year - 10; year <= DateTime.Today.Year + 20; year++) { <option value="@year">@year</option> }
                 </select>
             </label>
+            <label>CVV<input type="@(_showSensitive ? "text" : "password")" maxlength="4" inputmode="numeric" autocomplete="off" @bind="_cvv" /></label>
+        </div>
+        <div class="billing-row">
             <label>Kesim günü<input type="number" min="1" max="31" @bind="_statementDay" /></label>
             <label>Son ödeme günü<input type="number" min="1" max="31" @bind="_paymentDay" /></label>
-            <label>Kart limiti (isteğe bağlı)<input type="number" min="0" step="0.01" @bind="_limitText" /></label>
         </div>
+        <div class="limit-row"><label>Kart limiti (isteğe bağlı)<input type="number" min="0" step="0.01" @bind="_limitText" /></label></div>
         <label class="reveal-card-details"><input type="checkbox" @bind="_showSensitive" /> Kart numarası ve CVV’yi göster</label>
         <p class="field-hint">Kart numarası ve CVV güvenli alanda tutulur; dışa aktarılan yedeğe eklenmez. iPhone’da cihaz parolası gereklidir.</p>
         @if (!string.IsNullOrWhiteSpace(_cardError)) { <p class="error-message">@_cardError</p> }
@@ -56,6 +61,7 @@
     private string _cardError = string.Empty;
     private bool _showSensitive;
     private bool _saving;
+    private string _iconColor = "#465267";
 
     protected override async Task OnParametersSetAsync()
     {
@@ -70,6 +76,8 @@
         _expiryMonth = _card.ExpirationMonth is >= 1 and <= 12 ? _card.ExpirationMonth : DateTime.Today.Month;
         _expiryYear = _card.ExpirationYear > 0 ? _card.ExpirationYear : DateTime.Today.Year;
         _limitText = _card.CreditLimit?.ToString(CultureInfo.InvariantCulture) ?? "";
+        _iconColor = string.IsNullOrWhiteSpace(_card.IconColor) ? "#465267" : _card.IconColor;
+        _showSensitive = _card.RevealSensitive;
         try
         {
             _originalDetails = await CardDetailsStore.GetAsync(_card.SecureDetailsKey);
@@ -124,6 +132,8 @@
             card.StatementDay = _statementDay;
             card.PaymentDay = _paymentDay;
             card.CreditLimit = limit;
+            card.IconColor = _iconColor;
+            card.RevealSensitive = _showSensitive;
             if (_editing) await Database.UpdateCreditCardDetailsAsync(card);
             else await Database.AddCreditCardAsync(card);
         }
@@ -143,6 +153,8 @@
             return;
         }
         _number = _cvv = string.Empty;
+        try { await NotificationService.ScheduleUpcomingPaymentsAsync(); }
+        catch { /* Card details were saved; reminders will be retried on the next launch. */ }
         Navigation.NavigateTo("cards");
     }
 

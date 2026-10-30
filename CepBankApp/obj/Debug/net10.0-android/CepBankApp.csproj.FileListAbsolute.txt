@@ -2,11 +2,6 @@
 /Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/bin/Debug/net10.0-android/CepBankApp.runtimeconfig.json
 /Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/bin/Debug/net10.0-android/CepBankApp.dll
 /Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/bin/Debug/net10.0-android/CepBankApp.pdb
-/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/bin/Debug/net10.0-android/com.companyname.cepbankapp.apk
-/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/bin/Debug/net10.0-android/com.companyname.cepbankapp.aab
-/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/bin/Debug/net10.0-android/com.companyname.cepbankapp-Signed.aab
-/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/bin/Debug/net10.0-android/com.companyname.cepbankapp-Signed.apk
-/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/bin/Debug/net10.0-android/com.companyname.cepbankapp-Signed.apk.idsig
 /Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/Debug/net10.0-android/.NETCoreApp,Version=v10.0.AssemblyAttributes.cs
 /Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/Debug/net10.0-android/build.props
 /Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/Debug/net10.0-android/adb.props
@@ -154,10 +149,7 @@
 /Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/Debug/net10.0-android/CepBankApp.pdb
 /Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/Debug/net10.0-android/CepBankApp.genruntimeconfig.cache
 /Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/Debug/net10.0-android/CepBankApp.runtimeconfig.json.bin
-/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/Debug/net10.0-android/android/bin/com.companyname.cepbankapp.apk
 /Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/Debug/net10.0-android/android/bin/base.zip
-/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/Debug/net10.0-android/android/bin/com.companyname.cepbankapp.aab
-/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/Debug/net10.0-android/android/bin/com.companyname.cepbankapp.apks
 /Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/Debug/net10.0-android/res/values/colors.xml
 /Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/Debug/net10.0-android/uploadflags.txt
 /Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/Debug/net10.0-android/resolvedassemblies.hash
@@ -2817,7 +2809,6 @@
 /Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/Debug/net10.0-android/assets/wwwroot/_framework/blazor.modules.json
 /Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/Debug/net10.0-android/assets/wwwroot/_framework/blazor.webview.js
 /Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/Debug/net10.0-android/assets/wwwroot/CepBankApp.styles.css
-/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/Debug/net10.0-android/assets/wwwroot/CepBankApp.scm9idynid.bundle.scp.css
 /Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/Debug/net10.0-android/assets/wwwroot/app.css
 /Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/Debug/net10.0-android/assets/wwwroot/index.html
 /Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/Debug/net10.0-android/assets/wwwroot/lib/bootstrap/dist/css/bootstrap.min.css
@@ -2850,3 +2841,15 @@
 /Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/Debug/net10.0-android/stamp/_GenerateJavaStubs.stamp
 /Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/Debug/net10.0-android/stamp/_GeneratePackageManagerJava.stamp
 /Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/Debug/net10.0-android/stamp/_ResolveLibraryProjectImports.stamp
+/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/bin/Debug/net10.0-android/com.emir.cepbankapp.cepbankapp.apk
+/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/bin/Debug/net10.0-android/com.emir.cepbankapp.cepbankapp.aab
+/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/bin/Debug/net10.0-android/com.emir.cepbankapp.cepbankapp-Signed.aab
+/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/bin/Debug/net10.0-android/com.emir.cepbankapp.cepbankapp-Signed.apk
+/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/bin/Debug/net10.0-android/com.emir.cepbankapp.cepbankapp-Signed.apk.idsig
+/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/Debug/net10.0-android/CepBankApp.sourcelink.json
+/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/Debug/net10.0-android/android/bin/com.emir.cepbankapp.cepbankapp.apk
+/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/Debug/net10.0-android/android/bin/com.emir.cepbankapp.cepbankapp.aab
+/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/Debug/net10.0-android/android/bin/com.emir.cepbankapp.cepbankapp.apks
+/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/Debug/net10.0-android/assets/wwwroot/CepBankApp.bah57o3tzc.bundle.scp.css
+/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/Debug/net10.0-android/assets/wwwroot/theme.js
+/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/Debug/net10.0-android/android/src/com/emir/cepbankapp/cepbankapp/R.java
