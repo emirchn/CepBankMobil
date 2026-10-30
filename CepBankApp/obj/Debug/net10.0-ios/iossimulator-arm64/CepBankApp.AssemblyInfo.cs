@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CepBankApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+f0cbb32fa506294662e7504b064043ea4161b317")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+b3c3d7103e215cc695400258bcddff83e1bece90")]
 [assembly: System.Reflection.AssemblyProductAttribute("CepBankApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CepBankApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

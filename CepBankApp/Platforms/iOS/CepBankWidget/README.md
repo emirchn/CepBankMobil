@@ -1,6 +1,6 @@
 # CepBank iOS widget
 
-The native WidgetKit extension is built by `xcodebuild` during an iOS MAUI build and embedded through `AdditionalAppExtensions` in `CepBankApp.csproj`.
+The native WidgetKit extension is kept in the repository but is disabled for normal builds (`EnableCepBankWidget=false`). After App Groups provisioning is available, build with `-p:EnableCepBankWidget=true` to build and embed the extension. The app entitlement file is `App.entitlements` in this folder; it is intentionally outside the auto-detected `Platforms/iOS/Entitlements.plist` location so normal device builds do not request App Groups.
 
 ## Apple signing setup
 
@@ -26,4 +26,4 @@ dotnet restore CepBankApp/CepBankApp.csproj -p:TargetFramework=net10.0-ios -p:Ru
 dotnet build CepBankApp/CepBankApp.csproj -f net10.0-ios -r iossimulator-arm64 -p:EnableCodeSigning=false --no-restore
 ```
 
-After installation, open CepBank once to write the summary, then add “CepBank Aylık Özet” from the iPhone Home Screen widget gallery. Check the small and medium sizes, a transaction change, a card debt change, and a month rollover. A successful build alone does not confirm that the widget appeared on a device.
+When provisioning is ready, add `-p:EnableCepBankWidget=true` to restore and build commands. After installation, open CepBank once to write the summary, then add “CepBank Aylık Özet” from the iPhone Home Screen widget gallery. Check the small and medium sizes, a transaction change, a card debt change, and a month rollover. A successful build alone does not confirm that the widget appeared on a device.

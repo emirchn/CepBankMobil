@@ -14,11 +14,11 @@
 		</data>
 		<key>CepBankApp.dll</key>
 		<data>
-		UNSFPfOIB/8qtNkiAcNv+yI2E08=
+		e69KBW4cfqv4hekEIx0v28LnzxY=
 		</data>
 		<key>CepBankApp.pdb</key>
 		<data>
-		Ipnpnj4J/YxSXFolaO/OwkGAGxE=
+		te02r49eTIj4H4L6SY8PofbsLSA=
 		</data>
 		<key>Info.plist</key>
 		<data>
@@ -235,26 +235,6 @@
 		<key>PkgInfo</key>
 		<data>
 		n57qDP4tZfLD1rCS43W0B4LQjzE=
-		</data>
-		<key>PlugIns/CepBankWidget.appex/CepBankWidget</key>
-		<data>
-		VdVSZHH/6l1OYZ/K+eUEGr2q46Y=
-		</data>
-		<key>PlugIns/CepBankWidget.appex/CepBankWidget.debug.dylib</key>
-		<data>
-		MQR2ikyI8V2pHAcT760/0EV1qj8=
-		</data>
-		<key>PlugIns/CepBankWidget.appex/Info.plist</key>
-		<data>
-		fynbBiIxhlxNHIWNnRjr4OpRVIA=
-		</data>
-		<key>PlugIns/CepBankWidget.appex/_CodeSignature/CodeResources</key>
-		<data>
-		dKt9simjhchgdf/JLU6qhgezt0Y=
-		</data>
-		<key>PlugIns/CepBankWidget.appex/__preview.dylib</key>
-		<data>
-		FAGwcRrmu8mGOc8xS6AAFpCateI=
 		</data>
 		<key>Plugin.LocalNotification.Core.dll</key>
 		<data>
@@ -962,7 +942,7 @@
 		</data>
 		<key>archived-expanded-entitlements.xcent</key>
 		<data>
-		RWgyyCuCxggFMtlZRWoESXdVzB8=
+		dBDLSbErjJmFVZhYq7etINPpXvQ=
 		</data>
 		<key>ca/Microsoft.Maui.Controls.resources.dll</key>
 		<data>
@@ -1293,14 +1273,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			hAM7k8ov00os7Z3XLobHeYKaRdazTN8Gbeubk2ALQvU=
+			9e3JFj/eg3/DC88jMVdjBm3VwM7oat35fJ+LYDC2ejo=
 			</data>
 		</dict>
 		<key>CepBankApp.pdb</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			AV/LbDkT+qccTFmffZ6jpl6MC/Uq9m7jZ/+VEYXEp5Y=
+			uTHvg2BC5DT64VmY1sxwfz6CPMi2wd7sPUNlezJfUCU=
 			</data>
 		</dict>
 		<key>MauiInfo.plist</key>
@@ -1665,41 +1645,6 @@
 			<key>hash2</key>
 			<data>
 			M1Mm1d+KqXBMBGbyx3Kr8qjGXQBG8ZIb1GaNRjMbI6s=
-			</data>
-		</dict>
-		<key>PlugIns/CepBankWidget.appex/CepBankWidget</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			rpJP54lkGeIrq5762oueq1k6eAXaYkm1oVvxXwXtynM=
-			</data>
-		</dict>
-		<key>PlugIns/CepBankWidget.appex/CepBankWidget.debug.dylib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			kofoIHcFd6KuXlcaxMvTuFWH5lGyriCET8i2sOTPJjs=
-			</data>
-		</dict>
-		<key>PlugIns/CepBankWidget.appex/Info.plist</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			2AizwVpuifXnQNJkYGGTM8jjnTeDzbdPBgZpG4Z01Y8=
-			</data>
-		</dict>
-		<key>PlugIns/CepBankWidget.appex/_CodeSignature/CodeResources</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			gfEEiL9PkvYQDoKPpGPG6BXC93+muATGRZPIdq18/es=
-			</data>
-		</dict>
-		<key>PlugIns/CepBankWidget.appex/__preview.dylib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			onsd6H6LsD6Oe3hToaDPwusaNk1B/GBRdEwxZcacYVE=
 			</data>
 		</dict>
 		<key>Plugin.LocalNotification.Core.dll</key>
@@ -2938,7 +2883,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			iSGoHcz3KtDIoCUn+fFzWgB3fTVJj6sEPdqIVS2iY5Y=
+			AF7U2/HgZYLH1rvXv8c0MLfrcfsdlcxLLw8QawTYV+w=
 			</data>
 		</dict>
 		<key>ca/Microsoft.Maui.Controls.resources.dll</key>
