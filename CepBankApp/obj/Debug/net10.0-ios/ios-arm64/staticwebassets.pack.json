@@ -37,10 +37,6 @@
       "PackagePath": "staticwebassets/lib/bootstrap/dist/css/bootstrap.min.css.map"
     },
     {
-      "Id": "/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/wwwroot/startup.js",
-      "PackagePath": "staticwebassets/startup.js"
-    },
-    {
       "Id": "/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/wwwroot/theme.js",
       "PackagePath": "staticwebassets/theme.js"
     },

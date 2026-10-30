@@ -5,10 +5,13 @@ window.cepbankStartup = {
         startupReadyPromise = new Promise(resolve => {
             const overlay = document.getElementById("startup-screen");
             if (!overlay) { resolve(); return; }
-            overlay.classList.add("is-ready");
-            window.setTimeout(() => { overlay.remove(); resolve(); }, 400);
+            const visibleFor = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 1200;
+            window.setTimeout(() => {
+                overlay.classList.add("is-ready");
+                window.setTimeout(() => { overlay.remove(); resolve(); }, 400);
+            }, visibleFor);
         });
         return startupReadyPromise;
     }
 };
-window.setTimeout(() => window.cepbankStartup.ready(), 8000);
+window.setTimeout(() => window.cepbankStartup.ready(), 20000);

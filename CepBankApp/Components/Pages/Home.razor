@@ -7,7 +7,6 @@
 @inject CepBankApp.Services.RecurringTransactionService RecurringService
 @inject CepBankApp.Services.NotificationService NotificationService
 @inject CepBankApp.Services.MarketRatesService MarketRatesService
-@inject IJSRuntime JS
 
 <div class="finance-page overview-page">
     <header class="finance-header">
@@ -182,7 +181,6 @@
     {
         if (!_initialDataLoaded || _notificationsStarted) return;
         _notificationsStarted = true;
-        await JS.InvokeVoidAsync("cepbankStartup.ready");
         await CepBankApp.MainPage.CompleteStartupAsync();
         _ = LoadMarketRatesAsync();
         _ = WatchMarketAsync();

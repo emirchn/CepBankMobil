@@ -26,8 +26,16 @@ public class NotificationService
         try
         {
             await _database.InitializeAsync();
-            LocalNotificationCenter.Current.CancelAll();
             var today = DateTime.Today;
+            var protectedBalanceIds = new[] { today.AddMonths(-1), today }
+                .SelectMany(month => NotificationSettings.BalancePercents
+                    .Where(percent => NotificationSettings.HasThreshold(NotificationSettings.BalanceThresholds, percent))
+                    .Select(percent => StableId($"balance:{month:yyyyMM}:{percent}")))
+                .ToHashSet();
+            var pending = await LocalNotificationCenter.Current.GetPendingNotificationList();
+            var oldReminderIds = pending.Select(item => item.NotificationId)
+                .Where(id => !protectedBalanceIds.Contains(id)).ToArray();
+            if (oldReminderIds.Length > 0) LocalNotificationCenter.Current.Cancel(oldReminderIds);
             var horizon = today.AddDays(60);
             var planned = new List<(DateTime When, NotificationRequest Request)>();
             var cards = (await _database.GetCreditCardsAsync()).Where(card => card.IsActive).ToList();
@@ -38,6 +46,14 @@ public class NotificationService
                     var month = new DateTime(today.Year, today.Month, 1).AddMonths(offset);
                     var statement = RecurringSchedule.MonthlyDate(month.Year, month.Month, card.StatementDay);
                     var payment = RecurringSchedule.MonthlyDate(month.Year, month.Month, card.PaymentDay);
+                    AddSchedule(planned, $"statement:{card.Id}:{statement:yyyyMMdd}:tomorrow",
+                        "Yarın hesap kesimi", $"Yarın {card.Name} kartınızın hesap kesimi var.", statement.AddDays(-1), horizon);
+                    AddSchedule(planned, $"statement:{card.Id}:{statement:yyyyMMdd}:today",
+                        "Hesap kesimi bugün", $"Bugün {card.Name} kartınızın hesabı kesildi; yeni döneme geçildi.", statement, horizon);
+                    AddSchedule(planned, $"payment:{card.Id}:{payment:yyyyMMdd}:tomorrow",
+                        "Yarın son ödeme günü", $"Yarın {card.Name} kartınızın son ödeme günü.", payment.AddDays(-1), horizon);
+                    AddSchedule(planned, $"payment:{card.Id}:{payment:yyyyMMdd}:today",
+                        "Son ödeme günü bugün", $"Bugün {card.Name} kartınızın son ödeme günü.", payment, horizon);
                     foreach (var days in NotificationSettings.ReminderDays)
                     {
                         if (NotificationSettings.HasDay(NotificationSettings.StatementDays, days))
@@ -50,24 +66,36 @@ public class NotificationService
                 }
             }
 
-            var recurringItems = (await _database.GetRecurringItemsAsync()).Where(item => item.IsActive).ToList();
+            var recordedToday = (await _database.GetTransactionsForMonthAsync(new DateTime(today.Year, today.Month, 1)))
+                .Where(item => item.Date.Date == today).Select(item => item.Source).ToHashSet();
+            var recurringItems = (await _database.GetRecurringItemsAsync())
+                .Where(item => item.IsActive ||
+                    (item.TransactionType == TransactionType.Expense && item.Category == "Kredi Ödemesi" &&
+                     recordedToday.Contains($"Recurring:{item.Id}"))).ToList();
             foreach (var item in recurringItems)
             {
                 for (var offset = 0; offset <= 2; offset++)
                 {
                     var month = new DateTime(today.Year, today.Month, 1).AddMonths(offset);
                     var due = RecurringSchedule.MonthlyDate(month.Year, month.Month, item.DayOfMonth);
+                    if (!item.IsActive && due.Date != today) continue;
                     if (due < item.StartDate.Date || due > (item.EndDate?.Date ?? item.StartDate.Date.AddYears(1))) continue;
-                    AddSchedule(planned, $"recurring:{item.Id}:{due:yyyyMMdd}",
-                        item.TransactionType == TransactionType.Income ? "Düzenli gelir günü" : "Düzenli ödeme günü",
-                        $"{item.Name}: {item.Amount.ToString("N2", Turkish)} TL", due, horizon);
-                    if (item.TransactionType != TransactionType.Expense || item.Category != "Kredi Ödemesi") continue;
+                    var isLoan = item.TransactionType == TransactionType.Expense && item.Category == "Kredi Ödemesi";
+                    if (!isLoan)
+                        AddSchedule(planned, $"recurring:{item.Id}:{due:yyyyMMdd}",
+                            item.TransactionType == TransactionType.Income ? "Düzenli gelir günü" : "Düzenli ödeme günü",
+                            $"{item.Name}: {item.Amount.ToString("N2", Turkish)} TL", due, horizon);
+                    if (!isLoan) continue;
+                    AddSchedule(planned, $"loan:{item.Id}:{due:yyyyMMdd}:tomorrow",
+                        "Yarın kredi ödemesi", $"Yarın {item.Name} kredinizin ödeme günü.", due.AddDays(-1), horizon);
+                    AddSchedule(planned, $"loan:{item.Id}:{due:yyyyMMdd}:today",
+                        "Kredi ödemesi bugün", $"Bugün {item.Name} kredinizin ödeme günü.", due, horizon);
                     foreach (var days in NotificationSettings.ReminderDays.Where(day => NotificationSettings.HasDay(item.LoanReminderDaysMask, day)))
                         AddSchedule(planned, $"loan:{item.Id}:{due:yyyyMMdd}:{days}", "Yaklaşan kredi ödemesi",
                             $"{item.Name} ödemesine {days} gün kaldı: {item.Amount.ToString("N2", Turkish)} TL", due.AddDays(-days), horizon);
                 }
             }
-            foreach (var reminder in planned.OrderBy(item => item.When).Take(60))
+            foreach (var reminder in planned.OrderBy(item => item.When).Take(58))
                 await LocalNotificationCenter.Current.Show(reminder.Request);
         }
         finally { _scheduleGate.Release(); }
@@ -97,7 +125,8 @@ public class NotificationService
                 {
                     NotificationId = StableId($"balance:{month:yyyyMM}:{percent}"),
                     Title = "Aylık durum",
-                    Description = $"Aylık gelirinizin %{percent}'ini harcadınız, kalan bakiye: {remaining.ToString("N2", Turkish)} TL"
+                    Description = $"Aylık gelirinizin %{percent}'ini harcadınız, kalan bakiye: {remaining.ToString("N2", Turkish)} TL",
+                    Schedule = new NotificationRequestSchedule { NotifyTime = NextDeliveryTime() }
                 });
                 Preferences.Default.Set(marker, true);
             }
@@ -116,13 +145,19 @@ public class NotificationService
         string key, string title, string description, DateTime day, DateTime horizon)
     {
         if (day.Date < DateTime.Today || day.Date > horizon) return;
-        var notifyAt = day.Date.AddHours(9);
-        if (notifyAt <= DateTime.Now) notifyAt = DateTime.Now.AddSeconds(5);
+        var notifyAt = day.Date.AddHours(16);
+        if (notifyAt <= DateTime.Now) return;
         planned.Add((notifyAt, new NotificationRequest
         {
             NotificationId = StableId(key), Title = title, Description = description,
             Schedule = new NotificationRequestSchedule { NotifyTime = notifyAt }
         }));
+    }
+
+    private static DateTime NextDeliveryTime()
+    {
+        var atFour = DateTime.Today.AddHours(16);
+        return atFour > DateTime.Now ? atFour : atFour.AddDays(1);
     }
 
     private static int StableId(string key)

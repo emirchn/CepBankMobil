@@ -24,7 +24,6 @@
             await JS.InvokeVoidAsync("cepbankTheme.apply", Preferences.Default.Get("theme_mode", "device"));
             if (Navigation.ToBaseRelativePath(Navigation.Uri).Split('?')[0].Trim('/') != "")
             {
-                await JS.InvokeVoidAsync("cepbankStartup.ready");
                 await CepBankApp.MainPage.CompleteStartupAsync();
             }
         }

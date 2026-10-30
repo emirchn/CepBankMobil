@@ -12,12 +12,12 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>0p3pofs82v</Fingerprint>
-      <Integrity>DK0xAntY/NXH/FJLXUw9KDyZzfv0ck1zw2eThEr3rCo=</Integrity>
+      <Fingerprint>oewczyvsqt</Fingerprint>
+      <Integrity>8BUc68gkNeq+d3sr4G6zUWgSK1bHFitvvmHvQqEWRsI=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <FileLength>49295</FileLength>
-      <LastWriteTime>Fri, 30 Oct 2026 01:17:02 GMT</LastWriteTime>
+      <FileLength>47315</FileLength>
+      <LastWriteTime>Fri, 30 Oct 2026 02:08:58 GMT</LastWriteTime>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\app.css'))</OriginalItemSpec>
     </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\brand-mark.svg'))">
@@ -92,12 +92,12 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>i3pvelg8x4</Fingerprint>
-      <Integrity>Mi1vp3GpEEGT2P+xhVZirL45zTIzWLc/zcKqyu7Cna4=</Integrity>
+      <Fingerprint>twbzm3jryd</Fingerprint>
+      <Integrity>DdlBX6CTTDhz4orWVPhghiRg9AQr9jdZJlXGSemj+Rc=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <FileLength>1162</FileLength>
-      <LastWriteTime>Fri, 30 Oct 2026 00:22:26 GMT</LastWriteTime>
+      <FileLength>830</FileLength>
+      <LastWriteTime>Fri, 30 Oct 2026 02:08:14 GMT</LastWriteTime>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\index.html'))</OriginalItemSpec>
     </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\lib\bootstrap\dist\css\bootstrap.min.css'))">
@@ -139,26 +139,6 @@
       <FileLength>589893</FileLength>
       <LastWriteTime>Wed, 28 Oct 2026 21:37:34 GMT</LastWriteTime>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\lib\bootstrap\dist\css\bootstrap.min.css.map'))</OriginalItemSpec>
-    </StaticWebAsset>
-    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\startup.js'))">
-      <SourceType>Package</SourceType>
-      <SourceId>CepBankApp</SourceId>
-      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>/</BasePath>
-      <RelativePath>startup.js</RelativePath>
-      <AssetKind>All</AssetKind>
-      <AssetMode>All</AssetMode>
-      <AssetRole>Primary</AssetRole>
-      <RelatedAsset></RelatedAsset>
-      <AssetTraitName></AssetTraitName>
-      <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>yv6l96rwyw</Fingerprint>
-      <Integrity>4riJzxgn0cehzcYt/y+taCrBnY3fvd50rV9JWq8wC2c=</Integrity>
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <FileLength>544</FileLength>
-      <LastWriteTime>Fri, 30 Oct 2026 01:28:49 GMT</LastWriteTime>
-      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\startup.js'))</OriginalItemSpec>
     </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\theme.js'))">
       <SourceType>Package</SourceType>

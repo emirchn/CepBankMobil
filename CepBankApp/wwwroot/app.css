@@ -253,7 +253,6 @@ body { min-width: 320px; background: var(--background); color: var(--text); font
 .card-debt-banner small { color: #727e91; font-size: .76rem; }
 .card-detail-section .section-heading h2 { overflow-wrap: anywhere; }
 .card-meta { margin: .2rem 0 1rem; padding: .75rem .85rem; border-radius: 12px; background: #edf0f5; color: #4a576d; font-weight: 700; line-height: 1.5; }
-.startup-placeholder { display: grid; min-height: 100vh; place-items: center; color: var(--primary); font-size: 1.3rem; font-weight: 800; letter-spacing: -.03em; }
 
 /* Native date controls have a large intrinsic width on iPhone. */
 .form-grid > label { min-width: 0; }
@@ -643,29 +642,6 @@ body {
 @media (max-width: 480px) {
   .expiry-row { gap: .45rem; }
   .expiry-row select, .expiry-row input { padding-left: .55rem; padding-right: .55rem; }
-}
-
-#startup-screen {
-  position: fixed; inset: 0; z-index: 1000; display: flex; flex-direction: column;
-  align-items: center; justify-content: center; overflow: hidden;
-  background: radial-gradient(circle at 54% 38%,rgba(113,116,222,.58),transparent 39%),
-    linear-gradient(145deg,#20245f,#32377f 60%,#1a315e);
-  color: #f4f7ff; transition: opacity .38s ease, visibility .38s ease;
-}
-#startup-screen.is-ready { opacity: 0; visibility: hidden; pointer-events: none; }
-:root[data-theme="glassy"] #startup-screen {
-  background: linear-gradient(rgba(28,33,94,.6),rgba(31,38,102,.68)), url("glassy-wallpaper.png") center / cover no-repeat;
-}
-.startup-glow { position: absolute; width: 300px; height: 300px; border-radius: 50%; background: #97cce9; filter: blur(75px); opacity: .2; transform: translate(90px,-100px); }
-.startup-mark { position: relative; width: 126px; height: 126px; filter: drop-shadow(0 17px 28px rgba(8,15,60,.35)); animation: startup-float 1.7s ease-in-out infinite alternate; }
-#startup-screen strong { position: relative; margin-top: 1.2rem; font-size: 1.45rem; letter-spacing: -.035em; }
-.startup-progress { width: 86px; height: 3px; overflow: hidden; margin-top: 1.4rem; border-radius: 3px; background: rgba(255,255,255,.27); }
-.startup-progress::after { content: ""; display: block; width: 42px; height: 100%; border-radius: inherit; background: #c9e7ff; animation: startup-load 1.1s ease-in-out infinite alternate; }
-@keyframes startup-float { from { transform: translateY(4px) scale(.97); } to { transform: translateY(-5px) scale(1.02); } }
-@keyframes startup-load { from { transform: translateX(-43px); } to { transform: translateX(87px); } }
-@media (prefers-reduced-motion: reduce) {
-  .startup-mark, .startup-progress::after { animation: none; }
-  #startup-screen { transition: none; }
 }
 
 .card-type-tabs { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: .45rem; margin: 0 0 1.1rem; padding: .3rem; border: 1px solid var(--border); border-radius: 16px; background: var(--surface); }

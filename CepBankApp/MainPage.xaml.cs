@@ -12,8 +12,6 @@ public partial class MainPage : ContentPage
 	{
 		base.OnAppearing();
 		if (!NativeStartup.IsVisible) return;
-		new Animation(value => NativeStartupLogo.Scale = value, .95, 1.05)
-			.Commit(NativeStartupLogo, "startup-pulse", 16, 1200, Easing.SinInOut, repeat: () => true);
 		_ = HideAfterTimeoutAsync();
 	}
 
@@ -23,11 +21,9 @@ public partial class MainPage : ContentPage
 		await CompleteStartupAsync();
 	}
 
-	public static Task CompleteStartupAsync() => MainThread.InvokeOnMainThreadAsync(async () =>
+	public static Task CompleteStartupAsync() => MainThread.InvokeOnMainThreadAsync(() =>
 	{
 		if (Application.Current?.Windows.FirstOrDefault()?.Page is not MainPage page || !page.NativeStartup.IsVisible) return;
-		page.NativeStartupLogo.AbortAnimation("startup-pulse");
-		await page.NativeStartup.FadeToAsync(0, 220);
 		page.NativeStartup.IsVisible = false;
 	});
 

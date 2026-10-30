@@ -16,11 +16,7 @@
             </BlazorWebView.RootComponents>
         </BlazorWebView>
         <Grid x:Name="NativeStartup" SafeAreaEdges="None" BackgroundColor="#20245F" InputTransparent="True" ZIndex="1">
-            <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="15">
-                <Image x:Name="NativeStartupLogo" Source="startup_logo.svg" WidthRequest="126" HeightRequest="126" HorizontalOptions="Center" />
-                <Label Text="CepBank" TextColor="#F4F7FF" FontSize="24" FontAttributes="Bold" HorizontalTextAlignment="Center" />
-                <ActivityIndicator IsRunning="True" Color="#C9E7FF" WidthRequest="28" HeightRequest="28" HorizontalOptions="Center" />
-            </VerticalStackLayout>
+            <Image Source="startup_logo.svg" WidthRequest="128" HeightRequest="128" HorizontalOptions="Center" VerticalOptions="Center" />
         </Grid>
     </Grid>
 
