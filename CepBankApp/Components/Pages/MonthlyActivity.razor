@@ -1,3 +1,4 @@
+@page "/activity"
 @page "/activity/{Year:int}/{Month:int}"
 @using CepBankApp.Data
 @using CepBankApp.Models
@@ -125,8 +126,9 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        if (Year is < 1 or > 9998 || Month is < 1 or > 12) { Navigation.NavigateTo("/"); return; }
-        _month = new DateTime(Year, Month, 1);
+        var currentMonth = Navigation.ToBaseRelativePath(Navigation.Uri).Split('?')[0].Trim('/') == "activity";
+        if (!currentMonth && (Year is < 1 or > 9998 || Month is < 1 or > 12)) { Navigation.NavigateTo("/"); return; }
+        _month = currentMonth ? new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1) : new DateTime(Year, Month, 1);
         _type = _category = _error = "";
         _minimum = _maximum = null;
         _cardId = null;

@@ -30,6 +30,7 @@ public static class MauiProgram
 		builder.Services.AddSingleton<RecurringTransactionService>();
 		builder.Services.AddSingleton<NotificationService>();
 		builder.Services.AddSingleton<MarketRatesService>();
+		builder.Services.AddSingleton<WidgetSummaryService>();
 
 #if DEBUG
 		builder.Services.AddBlazorWebViewDeveloperTools();

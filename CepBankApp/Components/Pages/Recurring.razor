@@ -6,14 +6,15 @@
 @inject DatabaseService Database
 @inject CepBankApp.Services.RecurringTransactionService RecurringService
 @inject NotificationService NotificationService
+@inject WidgetSummaryService WidgetSummary
 
 <div class="finance-page">
     <header class="finance-header">
-        <div><p class="eyebrow">CEPBANK / DÜZENLİ</p><h1>Düzenli işlemler</h1><p class="header-subtitle">Düzenli gelir ve ödemelerin burada.</p></div>
+        <div><p class="eyebrow">CEPBANK / AYLIK PLAN</p><h1>Aylık Tekrarlanan İşlemler</h1><p class="header-subtitle">Her ay tekrarlanan gelir ve ödemelerin burada.</p></div>
     </header>
 
     <section class="add-card">
-        <div class="section-heading"><h2>Yeni düzenli işlem</h2><span>Her ay otomatik kaydedilir</span></div>
+        <div class="section-heading"><h2>Yeni aylık tekrarlanan işlem</h2><span>Her ay otomatik kaydedilir</span></div>
         <div class="form-grid">
             <label>İşlem adı
                 <input @bind="_name" placeholder="Örn. Maaş, Netflix, Kredi" />
@@ -83,14 +84,14 @@
         <p class="field-hint">Her ay başlangıç tarihinin gününde eklenir. Bitiş seçilmezse bir yıl sonra sona erer.</p>
         @if (!string.IsNullOrWhiteSpace(_error)) { <p class="error-message">@_error</p> }
         @if (!string.IsNullOrWhiteSpace(_notificationWarning)) { <p class="field-hint">@_notificationWarning</p> }
-        <button class="primary-button" @onclick="AddAsync">Düzenli işlemi kaydet</button>
+        <button class="primary-button" @onclick="AddAsync">Aylık tekrarlanan işlemi kaydet</button>
     </section>
 
     <section class="transactions-section">
         <div class="section-heading"><h2>Kayıtlı işlemler</h2><span>@_items.Count kayıt</span></div>
         @if (!_items.Any())
         {
-            <div class="empty-state"><strong>Düzenli işlem yok</strong><p>Maaş veya abonelik ekleyebilirsin.</p></div>
+            <div class="empty-state"><strong>Aylık tekrarlanan işlem yok</strong><p>Maaş veya abonelik ekleyebilirsin.</p></div>
         }
         else
         {
@@ -213,6 +214,7 @@
         });
 
         await RecurringService.ProcessAsync(force: true);
+        await WidgetSummary.TryRefreshAsync();
         try
         {
             await NotificationService.ScheduleUpcomingPaymentsAsync();
@@ -233,6 +235,7 @@
     {
         _confirmDeleteId = null;
         await Database.DeleteRecurringItemAsync(item);
+        await WidgetSummary.TryRefreshAsync();
         try { await NotificationService.ScheduleUpcomingPaymentsAsync(); }
         catch { _notificationWarning = "Kayıt silindi; bildirimler sonraki açılışta tekrar planlanacak."; }
         await ReloadAsync();
@@ -241,6 +244,7 @@
     private async Task DeleteAsync(RecurringItem item)
     {
         await Database.DeleteRecurringItemAsync(item);
+        await WidgetSummary.TryRefreshAsync();
         await ReloadAsync();
     }
 

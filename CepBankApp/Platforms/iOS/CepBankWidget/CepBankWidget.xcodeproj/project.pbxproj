@@ -1,0 +1,26 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {};
+ objectVersion = 56;
+ objects = {
+  A10000000000000000000001 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CepBankWidget.swift; sourceTree = "<group>"; };
+  A10000000000000000000002 = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = CepBankWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+  A10000000000000000000003 = {isa = PBXBuildFile; fileRef = A10000000000000000000001; };
+  A10000000000000000000004 = {isa = PBXGroup; children = (A10000000000000000000005, A10000000000000000000006); sourceTree = "<group>"; };
+  A10000000000000000000005 = {isa = PBXGroup; children = (A10000000000000000000001,); name = CepBankWidget; sourceTree = "<group>"; };
+  A10000000000000000000006 = {isa = PBXGroup; children = (A10000000000000000000002,); name = Products; sourceTree = "<group>"; };
+  A10000000000000000000007 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (A10000000000000000000003,); runOnlyForDeploymentPostprocessing = 0; };
+  A10000000000000000000008 = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+  A10000000000000000000009 = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+  A10000000000000000000010 = {isa = PBXNativeTarget; buildConfigurationList = A10000000000000000000011; buildPhases = (A10000000000000000000007,A10000000000000000000008,A10000000000000000000009); buildRules = (); dependencies = (); name = CepBankWidget; productName = CepBankWidget; productReference = A10000000000000000000002; productType = "com.apple.product-type.app-extension"; };
+  A10000000000000000000011 = {isa = XCConfigurationList; buildConfigurations = (A10000000000000000000012,A10000000000000000000013); defaultConfigurationIsVisible = 0; defaultConfigurationName = Debug; };
+  A10000000000000000000012 = {isa = XCBuildConfiguration; buildSettings = { APPLICATION_EXTENSION_API_ONLY = YES; CLANG_ENABLE_MODULES = YES; CODE_SIGN_ENTITLEMENTS = Widget.entitlements; GENERATE_INFOPLIST_FILE = NO; INFOPLIST_FILE = Info.plist; IPHONEOS_DEPLOYMENT_TARGET = 15.0; LD_RUNPATH_SEARCH_PATHS = ("$(inherited)","@executable_path/Frameworks","@executable_path/../../Frameworks"); PRODUCT_BUNDLE_IDENTIFIER = com.emir.cepbankapp.cepbankapp.widget; PRODUCT_NAME = "$(TARGET_NAME)"; SDKROOT = iphoneos; SKIP_INSTALL = YES; SWIFT_OPTIMIZATION_LEVEL = "-Onone"; SWIFT_VERSION = 5.0; TARGETED_DEVICE_FAMILY = "1,2"; }; name = Debug; };
+  A10000000000000000000013 = {isa = XCBuildConfiguration; buildSettings = { APPLICATION_EXTENSION_API_ONLY = YES; CLANG_ENABLE_MODULES = YES; CODE_SIGN_ENTITLEMENTS = Widget.entitlements; GENERATE_INFOPLIST_FILE = NO; INFOPLIST_FILE = Info.plist; IPHONEOS_DEPLOYMENT_TARGET = 15.0; LD_RUNPATH_SEARCH_PATHS = ("$(inherited)","@executable_path/Frameworks","@executable_path/../../Frameworks"); PRODUCT_BUNDLE_IDENTIFIER = com.emir.cepbankapp.cepbankapp.widget; PRODUCT_NAME = "$(TARGET_NAME)"; SDKROOT = iphoneos; SKIP_INSTALL = YES; SWIFT_OPTIMIZATION_LEVEL = "-O"; SWIFT_VERSION = 5.0; TARGETED_DEVICE_FAMILY = "1,2"; }; name = Release; };
+  A10000000000000000000014 = {isa = PBXProject; attributes = { BuildIndependentTargetsInParallel = YES; LastUpgradeCheck = 2600; TargetAttributes = { A10000000000000000000010 = { CreatedOnToolsVersion = 26.2; SystemCapabilities = { com.apple.ApplicationGroups.iOS = { enabled = 1; }; }; }; }; }; buildConfigurationList = A10000000000000000000015; compatibilityVersion = "Xcode 14.0"; developmentRegion = tr; hasScannedForEncodings = 0; knownRegions = (tr,en,Base); mainGroup = A10000000000000000000004; productRefGroup = A10000000000000000000006; projectDirPath = ""; projectRoot = ""; targets = (A10000000000000000000010,); };
+  A10000000000000000000015 = {isa = XCConfigurationList; buildConfigurations = (A10000000000000000000016,A10000000000000000000017); defaultConfigurationIsVisible = 0; defaultConfigurationName = Debug; };
+  A10000000000000000000016 = {isa = XCBuildConfiguration; buildSettings = { ALWAYS_SEARCH_USER_PATHS = NO; CLANG_ENABLE_MODULES = YES; IPHONEOS_DEPLOYMENT_TARGET = 15.0; SDKROOT = iphoneos; SWIFT_VERSION = 5.0; }; name = Debug; };
+  A10000000000000000000017 = {isa = XCBuildConfiguration; buildSettings = { ALWAYS_SEARCH_USER_PATHS = NO; CLANG_ENABLE_MODULES = YES; IPHONEOS_DEPLOYMENT_TARGET = 15.0; SDKROOT = iphoneos; SWIFT_VERSION = 5.0; }; name = Release; };
+ };
+ rootObject = A10000000000000000000014;
+}

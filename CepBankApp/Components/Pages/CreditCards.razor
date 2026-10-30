@@ -6,6 +6,7 @@
 @inject DatabaseService Database
 @inject NavigationManager Navigation
 @inject NotificationService NotificationService
+@inject WidgetSummaryService WidgetSummary
 
 <div class="finance-page">
     <nav class="card-type-tabs" aria-label="Kart türü">
@@ -106,6 +107,7 @@
     private async Task ArchiveCardAsync(CreditCard card)
     {
         await Database.ArchiveCreditCardAsync(card);
+        await WidgetSummary.TryRefreshAsync();
         try { await NotificationService.ScheduleUpcomingPaymentsAsync(); }
         catch { }
         try { CardDetailsStore.Remove(card.SecureDetailsKey); }

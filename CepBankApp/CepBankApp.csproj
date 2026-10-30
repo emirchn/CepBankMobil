@@ -48,6 +48,37 @@
         <TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
     </PropertyGroup>
 
+    <PropertyGroup Condition="'$(TargetFramework)' == 'net10.0-ios'">
+        <CodesignEntitlements>Platforms/iOS/Entitlements.plist</CodesignEntitlements>
+        <_WidgetSdk Condition="'$(RuntimeIdentifier)' == 'iossimulator-arm64' or '$(RuntimeIdentifier)' == 'iossimulator-x64'">iphonesimulator</_WidgetSdk>
+        <_WidgetSdk Condition="'$(_WidgetSdk)' == ''">iphoneos</_WidgetSdk>
+        <_WidgetDestination Condition="'$(_WidgetSdk)' == 'iphonesimulator'">generic/platform=iOS Simulator</_WidgetDestination>
+        <_WidgetDestination Condition="'$(_WidgetSdk)' == 'iphoneos'">generic/platform=iOS</_WidgetDestination>
+        <_WidgetTeamId>CP6N6FNF43</_WidgetTeamId>
+    </PropertyGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)' == 'net10.0-ios'">
+        <AdditionalAppExtensions Include="$(MSBuildProjectDirectory)/obj/widget">
+            <Name>CepBankWidget</Name>
+            <BuildOutput>Build/Products/$(Configuration)-$(_WidgetSdk)</BuildOutput>
+            <CodesignEntitlements>Platforms/iOS/CepBankWidget/Widget.entitlements</CodesignEntitlements>
+        </AdditionalAppExtensions>
+    </ItemGroup>
+
+    <Target Name="BuildCepBankWidgetSimulator" BeforeTargets="_ResolveAppExtensionReferences"
+            Condition="'$(TargetFramework)' == 'net10.0-ios' and '$(_WidgetSdk)' == 'iphonesimulator'"
+            Inputs="Platforms/iOS/CepBankWidget/CepBankWidget.swift;Platforms/iOS/CepBankWidget/Info.plist;Platforms/iOS/CepBankWidget/Widget.entitlements;Platforms/iOS/CepBankWidget/CepBankWidget.xcodeproj/project.pbxproj"
+            Outputs="$(MSBuildProjectDirectory)/obj/widget/Build/Products/$(Configuration)-$(_WidgetSdk)/CepBankWidget.appex/CepBankWidget">
+        <Exec Command="xcodebuild -quiet -project &quot;$(MSBuildProjectDirectory)/Platforms/iOS/CepBankWidget/CepBankWidget.xcodeproj&quot; -scheme CepBankWidget -configuration $(Configuration) -sdk $(_WidgetSdk) -destination &quot;$(_WidgetDestination)&quot; -derivedDataPath &quot;$(MSBuildProjectDirectory)/obj/widget&quot; CODE_SIGNING_ALLOWED=NO build" IgnoreStandardErrorWarningFormat="true" />
+    </Target>
+
+    <Target Name="BuildCepBankWidgetDevice" BeforeTargets="_ResolveAppExtensionReferences"
+            Condition="'$(TargetFramework)' == 'net10.0-ios' and '$(_WidgetSdk)' == 'iphoneos'"
+            Inputs="Platforms/iOS/CepBankWidget/CepBankWidget.swift;Platforms/iOS/CepBankWidget/Info.plist;Platforms/iOS/CepBankWidget/Widget.entitlements;Platforms/iOS/CepBankWidget/CepBankWidget.xcodeproj/project.pbxproj"
+            Outputs="$(MSBuildProjectDirectory)/obj/widget/Build/Products/$(Configuration)-iphoneos/CepBankWidget.appex/embedded.mobileprovision">
+        <Exec Command="xcodebuild -quiet -project &quot;$(MSBuildProjectDirectory)/Platforms/iOS/CepBankWidget/CepBankWidget.xcodeproj&quot; -scheme CepBankWidget -configuration $(Configuration) -sdk iphoneos -destination &quot;generic/platform=iOS&quot; -derivedDataPath &quot;$(MSBuildProjectDirectory)/obj/widget&quot; DEVELOPMENT_TEAM=$(_WidgetTeamId) CODE_SIGN_STYLE=Automatic -allowProvisioningUpdates build" />
+    </Target>
+
     <ItemGroup>
         <!-- App Icon -->
         <MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#222566" />

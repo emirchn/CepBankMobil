@@ -1,10 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <_CodesignBundle Include="CepBankApp.app/PlugIns/CepBankWidget.appex">
+      <EnableCodeSigning>false</EnableCodeSigning>
+      <CodesignSigningKey></CodesignSigningKey>
+      <CodesignEntitlements>Platforms/iOS/CepBankWidget/Widget.entitlements</CodesignEntitlements>
+      <CodesignUseSecureTimestamp></CodesignUseSecureTimestamp>
+      <CodesignAllocate></CodesignAllocate>
+      <CodesignResourceRules></CodesignResourceRules>
+      <CodesignWarnIfNoEntitlements>true</CodesignWarnIfNoEntitlements>
+      <CodesignDisableTimestamp>true</CodesignDisableTimestamp>
+      <CodesignKeychain></CodesignKeychain>
+      <CodesignUseHardenedRuntime></CodesignUseHardenedRuntime>
+    </_CodesignBundle>
     <_CodesignBundle Include="CepBankApp.app">
       <EnableCodeSigning>false</EnableCodeSigning>
       <CodesignSigningKey></CodesignSigningKey>
-      <CodesignEntitlements></CodesignEntitlements>
+      <CodesignEntitlements>/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/Debug/net10.0-ios/iossimulator-arm64/Entitlements.xcent</CodesignEntitlements>
       <CodesignUseSecureTimestamp></CodesignUseSecureTimestamp>
       <CodesignAllocate></CodesignAllocate>
       <CodesignExtraArgs></CodesignExtraArgs>

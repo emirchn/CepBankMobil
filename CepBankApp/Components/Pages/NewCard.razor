@@ -7,6 +7,7 @@
 @inject DatabaseService Database
 @inject NavigationManager Navigation
 @inject NotificationService NotificationService
+@inject WidgetSummaryService WidgetSummary
 
 <div class="finance-page">
     <header class="finance-header">
@@ -153,6 +154,7 @@
             return;
         }
         _number = _cvv = string.Empty;
+        await WidgetSummary.TryRefreshAsync();
         try { await NotificationService.ScheduleUpcomingPaymentsAsync(); }
         catch { /* Card details were saved; reminders will be retried on the next launch. */ }
         Navigation.NavigateTo("cards");

@@ -5,6 +5,7 @@
 @inject DatabaseService Database
 @inject NavigationManager Navigation
 @inject CepBankApp.Services.NotificationService NotificationService
+@inject CepBankApp.Services.WidgetSummaryService WidgetSummary
 
 <div class="finance-page">
     <header class="finance-header">
@@ -106,6 +107,7 @@
                 CardId = _typeValue == "Expense" && int.TryParse(_cardIdValue, out var cardId) ? cardId : null,
                 Source = "Manual"
             });
+            await WidgetSummary.TryRefreshAsync();
             try { await NotificationService.CheckMonthlyBalanceAsync(); }
             catch { /* The saved transaction must remain successful if notifications are unavailable. */ }
             Navigation.NavigateTo("/");

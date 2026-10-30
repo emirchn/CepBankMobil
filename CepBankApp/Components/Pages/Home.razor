@@ -7,6 +7,7 @@
 @inject CepBankApp.Services.RecurringTransactionService RecurringService
 @inject CepBankApp.Services.NotificationService NotificationService
 @inject CepBankApp.Services.MarketRatesService MarketRatesService
+@inject CepBankApp.Services.WidgetSummaryService WidgetSummary
 
 <div class="finance-page overview-page">
     <header class="finance-header">
@@ -41,11 +42,7 @@
     </div>
 
     <section class="overview-hero" aria-label="Aylık durum">
-        <div class="hero-topline"><span>AYLIK DURUM</span>
-            <NavLink href="@($"activity/{_selectedMonth.Year}/{_selectedMonth.Month}")" class="hero-detail-button" aria-label="Ayın tüm hareketlerini aç" title="Ayın hareketleri">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h14v16H5zM8 8h8M8 12h8M8 16h4"/><path d="m15 16 2 2 4-4"/></svg>
-            </NavLink>
-        </div>
+        <div class="hero-topline"><span>AYLIK DURUM</span></div>
         <span class="hero-caption">Gelir − gider @(_isCurrentMonth ? "ve güncel kart borçları" : "")</span>
         <strong class="hero-amount @(NetAmount < 0 ? "negative" : "positive")">@FormatMoney(NetAmount)</strong>
         <div class="hero-footer"><span>@_selectedMonth.ToString("MMMM yyyy", new CultureInfo("tr-TR"))</span><span>@(_transactions.Any(transaction => transaction.IsProjected) ? "Beklenenler dahil" : (_isCurrentMonth ? "Güncel görünüm" : "Geçmiş ay"))</span></div>
@@ -245,6 +242,7 @@
         _monthlyExpense = _transactions
             .Where(transaction => transaction.Type == TransactionType.Expense && (!_isCurrentMonth || transaction.CardDebtChange <= 0))
             .Sum(transaction => transaction.Amount);
+        await WidgetSummary.TryRefreshAsync();
     }
 
     private static string FormatMoney(decimal amount) => string.Format(new CultureInfo("tr-TR"), "{0:C2}", amount);

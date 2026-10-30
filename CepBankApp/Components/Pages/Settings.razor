@@ -7,6 +7,7 @@
 @using CepBankApp.Services
 @inject DatabaseService Database
 @inject NotificationService NotificationService
+@inject WidgetSummaryService WidgetSummary
 @inject IJSRuntime JS
 
 <div class="finance-page">
@@ -16,7 +17,7 @@
 
     <section class="transactions-section">
         <div class="section-heading"><h2>Yerel veriler</h2><span>Bu cihazda saklanır</span></div>
-        <p class="settings-copy">Gelir, gider, düzenli işlemler ve kartlar yalnızca telefonunuzdaki yerel veritabanında tutulur.</p>
+        <p class="settings-copy">Gelir, gider, aylık tekrarlanan işlemler ve kartlar yalnızca telefonunuzdaki yerel veritabanında tutulur.</p>
         <button class="primary-button" @onclick="ExportAsync">Verileri yedek olarak dışa aktar</button>
         @if (!string.IsNullOrWhiteSpace(_message)) { <p class="settings-message">@_message</p> }
     </section>
@@ -67,7 +68,7 @@
 
     <section class="transactions-section danger-section">
         <div class="section-heading"><div><p class="section-kicker">VERİ YÖNETİMİ</p><h2>Tüm verileri sıfırla</h2></div></div>
-        <p class="settings-copy">Kayıtlı işlemler, düzenli işlemler ve kartlar silinir.</p>
+        <p class="settings-copy">Kayıtlı işlemler, aylık tekrarlanan işlemler ve kartlar silinir.</p>
         @if (!_showResetConfirm)
         {
             <button type="button" class="danger-button" @onclick="ShowResetConfirm">Tüm verileri sıfırla</button>
@@ -152,6 +153,7 @@
         {
             await Database.InitializeAsync();
             await Database.ClearAllDataAsync();
+            await WidgetSummary.TryRefreshAsync();
             SecureStorage.Default.RemoveAll();
             LocalNotificationCenter.Current.CancelAll();
             NotificationService.ResetCurrentBalanceAlerts();
