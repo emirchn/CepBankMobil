@@ -380,3 +380,6 @@
 /Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/bin/Debug/net10.0-ios/ios-arm64/Microsoft.VisualStudio.DesignTools.MobileTapContracts.dll
 /Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/bin/Debug/net10.0-ios/ios-arm64/Microsoft.VisualStudio.DesignTools.TapContract.dll
 /Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/bin/Debug/net10.0-ios/ios-arm64/Microsoft.VisualStudio.DesignTools.XamlTapContract.dll
+/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/Debug/net10.0-ios/ios-arm64/resizetizer/sp/splash_64E32B789C0C2015B96DE4017C5ECB7724FADC31CC728E3659643297D837CDC3.png
+/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/Debug/net10.0-ios/ios-arm64/resizetizer/sp/splash_64E32B789C0C2015B96DE4017C5ECB7724FADC31CC728E3659643297D837CDC3@2x.png
+/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/Debug/net10.0-ios/ios-arm64/resizetizer/sp/splash_64E32B789C0C2015B96DE4017C5ECB7724FADC31CC728E3659643297D837CDC3@3x.png

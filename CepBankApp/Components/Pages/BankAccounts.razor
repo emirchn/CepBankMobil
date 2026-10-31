@@ -21,6 +21,12 @@
                 <label>Hesap Adı<input @bind="_name" placeholder="Örn. Maaş hesabı" /></label>
                 <label>IBAN<input @bind="_iban" inputmode="text" autocapitalize="characters" placeholder="TR..." /></label>
             </div>
+            <div class="bank-brand-field"><strong>Banka logosu</strong><div class="bank-brand-grid" role="group" aria-label="Banka logosu seç">
+                @foreach (var brand in BankBrand.Choices)
+                {
+                    <button type="button" class="bank-brand-choice @(_bankCode == brand.Code ? "selected" : "")" aria-pressed="@(_bankCode == brand.Code)" @onclick="() => _bankCode = brand.Code"><BankLogo Code="@brand.Code" /><span>@brand.Name</span></button>
+                }
+            </div></div>
             @if (!string.IsNullOrWhiteSpace(_error)) { <p class="error-message">@_error</p> }
             <button type="button" class="primary-button" disabled="@_saving" @onclick="SaveAsync">@(_saving ? "Kaydediliyor…" : "Hesabı kaydet")</button>
         </section>
@@ -36,20 +42,19 @@
             @foreach (var account in _accounts)
             {
                 <article class="account-list-item" @key="account.Id">
+                    <NavLink href="@($"accounts/{account.Id}")" class="account-open-button" title="@($"{account.Name} işlemlerini aç")" aria-label="@($"{account.Name} işlemlerini aç")">↗</NavLink>
                     <NavLink href="@($"accounts/{account.Id}")" class="account-list-link">
-                        <span class="account-list-name">@account.Name</span>
+                        <span class="account-list-title"><BankLogo Code="@account.BankLogoCode" /><span class="account-list-name">@account.Name</span></span>
                         <small>@FormatIban(account.Iban)</small>
-                        <strong>@Money(account.CurrentBalance)</strong>
                     </NavLink>
-                    <div class="account-list-controls">
-                        <label class="account-home-choice"><input type="radio" name="home-account" checked="@account.ShowOnHome" @onchange="() => SelectHomeAsync(account.Id)" /> Ana Sayfada Göster</label>
+                    <div class="account-balance-row">
+                        <NavLink href="@($"accounts/{account.Id}")" class="account-balance-link">@Money(account.CurrentBalance)</NavLink>
                         <button type="button" class="section-link" @onclick="() => Edit(account)">Düzenle</button>
                     </div>
                 </article>
             }
         </div>
     }
-    @if (!string.IsNullOrWhiteSpace(_selectionError)) { <p class="error-message">@_selectionError</p> }
 </div>
 
 @code {
@@ -59,8 +64,8 @@
     private int? _editingId;
     private string _name = string.Empty;
     private string _iban = string.Empty;
+    private string _bankCode = string.Empty;
     private string _error = string.Empty;
-    private string _selectionError = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
@@ -68,8 +73,8 @@
         await ReloadAsync();
     }
 
-    private void ShowAdd() { _editingId = null; _name = _iban = _error = string.Empty; _showForm = true; }
-    private void Edit(BankAccount account) { _editingId = account.Id; _name = account.Name; _iban = account.Iban; _error = string.Empty; _showForm = true; }
+    private void ShowAdd() { _editingId = null; _name = _iban = _bankCode = _error = string.Empty; _showForm = true; }
+    private void Edit(BankAccount account) { _editingId = account.Id; _name = account.Name; _iban = account.Iban; _bankCode = account.BankLogoCode; _error = string.Empty; _showForm = true; }
     private void CancelForm() => _showForm = false;
     private Task ReloadAsync() => LoadAsync();
     private async Task LoadAsync() => _accounts = await Database.GetBankAccountsAsync();
@@ -80,7 +85,7 @@
         _error = string.Empty;
         try
         {
-            await Database.SaveBankAccountAsync(new BankAccount { Id = _editingId ?? 0, Name = _name, Iban = _iban });
+            await Database.SaveBankAccountAsync(new BankAccount { Id = _editingId ?? 0, Name = _name, Iban = _iban, BankLogoCode = _bankCode });
             _showForm = false;
             await ReloadAsync();
             await WidgetSummary.TryRefreshAsync();
@@ -88,19 +93,6 @@
         }
         catch (InvalidOperationException ex) { _error = ex.Message; }
         finally { _saving = false; }
-    }
-
-    private async Task SelectHomeAsync(int id)
-    {
-        _selectionError = string.Empty;
-        try
-        {
-            await Database.SetHomeBankAccountAsync(id);
-            await ReloadAsync();
-            await WidgetSummary.TryRefreshAsync();
-            try { await NotificationService.ScheduleDailyBalanceAsync(); } catch { }
-        }
-        catch (InvalidOperationException ex) { _selectionError = ex.Message; await ReloadAsync(); }
     }
 
     private static string Money(decimal amount) => string.Format(new CultureInfo("tr-TR"), "{0:C2}", amount);

@@ -1,0 +1,94 @@
+@page "/card-history"
+@using CepBankApp.Data
+@using CepBankApp.Models
+@using CepBankApp.Services
+@using System.Globalization
+@inject DatabaseService Database
+
+<div class="finance-page">
+    <header class="finance-header"><div><p class="eyebrow">CEPBANK / KARTLAR</p><h1>Tüm Kart Hareketleri</h1><p class="header-subtitle">Tüm kredi kartlarının kullanımları</p></div></header>
+    <div class="activity-filter-heading"><button type="button" class="activity-filter-toggle" aria-expanded="@_filtersOpen" @onclick="() => _filtersOpen = !_filtersOpen">⚑ Filtrele @if (ActiveFilterCount > 0) { <span>@ActiveFilterCount</span> }</button>@if (ActiveFilterCount > 0) { <button type="button" class="text-button" @onclick="ClearFilters">Temizle</button> }</div>
+    @if (_filtersOpen)
+    {
+        <section class="transactions-section activity-filter-panel" aria-label="Kart hareketlerini filtrele">
+            <div class="activity-filter-grid">
+                <label>Kart<select @bind="_cardId"><option value="0">Tüm kartlar</option>@foreach (var card in _cards) { <option value="@card.Id">@card.Name</option> }</select></label>
+                <label>İşlem türü<select @bind="_kind"><option value="">Tüm işlemler</option><option value="single">Tek çekim</option><option value="installment">Taksit</option><option value="payment">Ödeme</option></select></label>
+                <label>Kategori<select @bind="_category"><option value="">Tüm kategoriler</option>@foreach (var category in _categories) { <option value="@category">@category</option> }</select></label>
+                <label>Açıklama ara<input type="search" placeholder="İşlem adı" @bind="_search" @bind:event="oninput" /></label>
+                <label>Başlangıç<input type="date" value="@_fromDate" @onchange="OnFromDateChanged" /></label>
+                <label>Bitiş<input type="date" value="@_toDate" @onchange="OnToDateChanged" /></label>
+                <label>En az (TL)<input type="number" min="0" step="0.01" @bind="_minAmount" /></label>
+                <label>En çok (TL)<input type="number" min="0" step="0.01" @bind="_maxAmount" /></label>
+            </div>
+        </section>
+    }
+    <section class="transactions-section">
+        <div class="section-heading"><h2>Yeniden eskiye</h2><span>@VisibleMovements.Count hareket</span></div>
+        @if (VisibleMovements.Count == 0)
+        {
+            <div class="empty-state"><strong>@(_movements.Count == 0 ? "Henüz kart hareketi yok" : "Filtrelere uygun hareket yok")</strong></div>
+        }
+        else
+        {
+            <div class="transaction-list">
+                @foreach (var item in VisibleMovements)
+                {
+                    <article class="transaction-row" @key="item.TransactionId"><div class="transaction-icon @(item.IsPayment ? "income" : "expense")">@(item.IsPayment ? "↙" : "↗")</div><div class="transaction-details"><strong>@item.Description</strong><span>@CardName(item.CardId) · @item.Category</span><span>@item.Date.ToString("dd.MM.yyyy")@if (item.InstallmentCount > 1) { <text> · @item.InstallmentNumber/@item.InstallmentCount taksit</text> }</span></div><div class="transaction-actions"><strong class="@(item.IsPayment ? "positive" : "negative")">@(item.IsPayment ? "+" : "−")@Money(item.Amount)</strong></div></article>
+                }
+            </div>
+        }
+    </section>
+</div>
+
+@code {
+    private List<CardMovement> _movements = new();
+    private List<CreditCard> _cards = new();
+    private List<string> _categories = new();
+    private Dictionary<int, string> _cardNames = new();
+    private bool _filtersOpen;
+    private int _cardId;
+    private string _kind = string.Empty;
+    private string _category = string.Empty;
+    private string _search = string.Empty;
+    private string _fromDate = string.Empty;
+    private string _toDate = string.Empty;
+    private string _minAmount = string.Empty;
+    private string _maxAmount = string.Empty;
+    protected override async Task OnInitializedAsync()
+    {
+        await Database.InitializeAsync();
+        _cards = (await Database.GetCreditCardsAsync()).Where(card => card.IsActive).ToList();
+        _cardNames = _cards.ToDictionary(card => card.Id, card => card.Name);
+        var installments = new List<CardInstallment>();
+        foreach (var card in _cards) installments.AddRange(await Database.GetCardInstallmentsAsync(card.Id));
+        var activeIds = _cards.Select(card => card.Id).ToHashSet();
+        _movements = CardMovementReport.Build(await Database.GetTransactionsAsync(), installments)
+            .Where(item => activeIds.Contains(item.CardId)).ToList();
+        _categories = _movements.Select(item => item.Category).Where(category => !string.IsNullOrWhiteSpace(category))
+            .Distinct().OrderBy(category => category).ToList();
+    }
+    private List<CardMovement> VisibleMovements => _movements.Where(item =>
+        (_cardId == 0 || item.CardId == _cardId) &&
+        (_kind == "" || (_kind == "payment" && item.IsPayment) ||
+            (_kind == "single" && !item.IsPayment && item.InstallmentCount == 1) ||
+            (_kind == "installment" && !item.IsPayment && item.InstallmentCount > 1)) &&
+        (_category == "" || item.Category == _category) &&
+        (_search == "" || item.Description.Contains(_search, StringComparison.CurrentCultureIgnoreCase)) &&
+        (!DateTime.TryParseExact(_fromDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var from) || item.Date.Date >= from) &&
+        (!DateTime.TryParseExact(_toDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var to) || item.Date.Date <= to) &&
+        (!decimal.TryParse(_minAmount, NumberStyles.Number, CultureInfo.InvariantCulture, out var min) || item.Amount >= min) &&
+        (!decimal.TryParse(_maxAmount, NumberStyles.Number, CultureInfo.InvariantCulture, out var max) || item.Amount <= max)).ToList();
+    private int ActiveFilterCount => (_cardId != 0 ? 1 : 0) + (_kind != "" ? 1 : 0) + (_category != "" ? 1 : 0) +
+        (!string.IsNullOrWhiteSpace(_search) ? 1 : 0) + (_fromDate != "" ? 1 : 0) + (_toDate != "" ? 1 : 0) +
+        (_minAmount != "" ? 1 : 0) + (_maxAmount != "" ? 1 : 0);
+    private void ClearFilters()
+    {
+        _cardId = 0;
+        _kind = _category = _search = _fromDate = _toDate = _minAmount = _maxAmount = string.Empty;
+    }
+    private void OnFromDateChanged(ChangeEventArgs args) => _fromDate = args.Value?.ToString() ?? string.Empty;
+    private void OnToDateChanged(ChangeEventArgs args) => _toDate = args.Value?.ToString() ?? string.Empty;
+    private string CardName(int cardId) => _cardNames.GetValueOrDefault(cardId, "Silinen kart");
+    private static string Money(decimal amount) => string.Format(new CultureInfo("tr-TR"), "{0:C2}", amount);
+}

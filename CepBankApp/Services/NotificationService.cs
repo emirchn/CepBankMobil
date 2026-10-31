@@ -107,13 +107,13 @@ public class NotificationService
             if (!NotificationSettings.DailyBalanceEnabled ||
                 !await LocalNotificationCenter.Current.AreNotificationsEnabled(new NotificationPermission { AskPermission = false })) return;
             await _database.InitializeAsync();
-            var account = await _database.GetHomeBankAccountAsync();
-            if (account is null) return;
+            var accounts = await _database.GetBankAccountsAsync();
+            if (accounts.Count == 0) return;
             await LocalNotificationCenter.Current.Show(new NotificationRequest
             {
                 NotificationId = DailyBalanceId,
                 Title = "Günlük bakiye",
-                Description = $"{account.Name} güncel bakiyesi: {account.CurrentBalance.ToString("N2", Turkish)} TL",
+                Description = $"Banka hesaplarının toplam güncel bakiyesi: {accounts.Sum(account => account.CurrentBalance).ToString("N2", Turkish)} TL",
                 Schedule = new NotificationRequestSchedule
                 {
                     NotifyTime = NextDeliveryTime(),

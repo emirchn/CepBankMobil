@@ -1,0 +1,8 @@
+@using CepBankApp.Models
+
+<span class="bank-logo" style="background-color: @Brand.Color" role="img" aria-label="@Brand.Name"><span aria-hidden="true">@Brand.Mark</span></span>
+
+@code {
+    [Parameter] public string? Code { get; set; }
+    private BankBrand Brand => BankBrand.Find(Code);
+}

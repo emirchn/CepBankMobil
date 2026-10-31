@@ -30,7 +30,7 @@ public partial class MainPage : ContentPage
 	public void UpdatePageBackground(string mode, AppTheme requestedTheme)
 	{
 		var dark = mode == "dark" || (mode == "device" && requestedTheme == AppTheme.Dark);
-		BackgroundColor = Color.FromArgb(mode == "glassy" ? "#C1CCF5" : dark ? "#161D38" : "#EEF2FF");
+		BackgroundColor = Color.FromArgb(mode is "glassy" or "custom" ? "#C1CCF5" : dark ? "#161D38" : "#EEF2FF");
 	}
 
 	private void OnBlazorWebViewInitialized(object? sender, Microsoft.AspNetCore.Components.WebView.BlazorWebViewInitializedEventArgs args)

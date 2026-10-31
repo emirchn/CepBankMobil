@@ -35,26 +35,22 @@
         }
     </div>
 
-    @if (_homeAccount is null)
-    {
-        <section class="overview-hero account-overview-hero" aria-label="Banka hesabı">
-            <div class="hero-topline"><span>BANKA HESABI</span></div>
-            <strong class="hero-account-name">Henüz hesap seçilmedi</strong>
-            <p class="hero-caption">Bakiyeni görmek için bir banka hesabı ekle.</p>
-            <NavLink href="accounts" class="hero-account-link">Hesaplara git →</NavLink>
-        </section>
-    }
-    else
-    {
-        <section class="overview-hero account-overview-hero" aria-label="Seçili banka hesabı">
-            <div class="hero-topline"><span>BANKA HESABI</span></div>
-            <strong class="hero-account-name">@_homeAccount.Name</strong>
-            <span class="hero-account-iban">@FormatIban(_homeAccount.Iban)</span>
-            <span class="hero-caption">Güncel bakiye</span>
-            <strong class="hero-amount">@FormatMoney(_homeAccount.CurrentBalance)</strong>
-            <NavLink href="@($"accounts/{_homeAccount.Id}")" class="hero-account-link">Hesabı aç →</NavLink>
-        </section>
-    }
+    <section class="transactions-section account-overview" aria-label="Banka hesapları">
+        <div class="section-heading"><h2>Banka Hesapları</h2><NavLink href="accounts" class="section-link">Tüm hesaplar <span aria-hidden="true">→</span></NavLink></div>
+        @if (_accounts.Count == 0)
+        {
+            <div class="empty-state"><strong>Henüz banka hesabı yok</strong><NavLink href="accounts" class="inline-link">Hesap ekle →</NavLink></div>
+        }
+        else
+        {
+            <div class="account-overview-list">
+                @foreach (var account in _accounts)
+                {
+                    <NavLink href="@($"accounts/{account.Id}")" class="account-overview-row" @key="account.Id"><BankLogo Code="@account.BankLogoCode" /><span>@account.Name</span><strong>@FormatMoney(account.CurrentBalance)</strong></NavLink>
+                }
+            </div>
+        }
+    </section>
 
     <section class="transactions-section cards-overview">
         <div class="section-heading">
@@ -105,7 +101,7 @@
 
 @code {
     private List<CreditCard> _cards = new();
-    private BankAccount? _homeAccount;
+    private List<BankAccount> _accounts = new();
     private BenefitCard? _mealCard;
     private BenefitCard? _fuelCard;
     private decimal _cardDebt;
@@ -172,7 +168,7 @@
 
     private async Task ReloadAsync()
     {
-        _homeAccount = await Database.GetHomeBankAccountAsync();
+        _accounts = await Database.GetBankAccountsAsync();
         _cards = (await Database.GetCreditCardsAsync()).Where(card => card.IsActive).ToList();
         _mealCard = await Database.GetBenefitCardAsync(BenefitCardKind.Meal);
         _fuelCard = await Database.GetBenefitCardAsync(BenefitCardKind.Fuel);
@@ -184,6 +180,4 @@
     private static string FormatBenefitBalance(BenefitCard card) => card.Unit == BenefitUnit.Liter
         ? $"{card.CurrentBalance.ToString("N2", new CultureInfo("tr-TR"))} L" : FormatMoney(card.CurrentBalance);
     private static string FormatMarket(decimal? amount) => amount?.ToString("N2", new CultureInfo("tr-TR")) ?? "—";
-    private static string FormatIban(string iban) => string.Join(" ", Enumerable.Range(0, (iban.Length + 3) / 4)
-        .Select(index => iban.Substring(index * 4, Math.Min(4, iban.Length - index * 4))));
 }

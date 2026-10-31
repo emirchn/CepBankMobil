@@ -1,0 +1,129 @@
+@page "/cards/{CardId:int}/statement"
+@using CepBankApp.Data
+@using CepBankApp.Models
+@using CepBankApp.Services
+@using System.Globalization
+@inject DatabaseService Database
+
+<div class="finance-page">
+    <header class="finance-header">
+        <div><NavLink href="cards?type=credit" class="back-link">← Kredi kartlarına dön</NavLink><p class="eyebrow">KREDİ KARTI / EKSTRE</p><h1>Ekstre Detayı</h1><p class="header-subtitle">@_card?.Name</p></div>
+    </header>
+    @if (_card is null)
+    {
+        <div class="empty-state"><strong>Kart bulunamadı</strong></div>
+    }
+    else
+    {
+        <section class="transactions-section">
+            <label class="statement-month-picker">Ekstre ayı ve yılı<input type="month" value="@_selectedMonth" @onchange="ChangeMonth" /></label>
+            <p class="statement-period">@_start.ToString("dd.MM.yyyy") – @_end.ToString("dd.MM.yyyy")</p>
+            <div class="statement-summary"><div><span>Dönem harcaması</span><strong>@Money(_expenses.Sum(item => item.Amount))</strong></div><div><span>İşlem / taksit</span><strong>@_expenses.Count</strong></div></div>
+        </section>
+        @if (_expenses.Count > 0)
+        {
+            <section class="transactions-section">
+                <div class="section-heading"><h2>Kategori dağılımı</h2></div>
+                <div class="statement-chart-layout">
+                    <div class="statement-donut" style="background: conic-gradient(@ChartStops())" role="img" aria-label="Kategori harcama dağılımı"><span>@Money(_expenses.Sum(item => item.Amount))</span></div>
+                    <div class="statement-legend">
+                        @foreach (var category in _categories.Select((value, index) => (value, index)))
+                        {
+                            <div><i style="background:@ChartColor(category.index)"></i><span>@category.value.Key</span><strong>@Money(category.value.Value)</strong></div>
+                        }
+                    </div>
+                </div>
+            </section>
+            <section class="transactions-section">
+                <div class="section-heading"><h2>Günlük harcamalar</h2></div>
+                @foreach (var day in _expenses.GroupBy(item => item.Date.Date).OrderByDescending(group => group.Key))
+                {
+                    <div class="statement-day"><strong>@day.Key.ToString("dd MMMM yyyy", _culture)</strong><span>@Money(day.Sum(item => item.Amount))</span></div>
+                    <div class="transaction-list">
+                        @foreach (var item in day)
+                        {
+                            <article class="transaction-row" @key="item.TransactionId"><div class="transaction-icon expense">↗</div><div class="transaction-details"><strong>@item.Description</strong><span>@item.Category</span>@if (item.InstallmentCount > 1) { <span>@item.InstallmentNumber/@item.InstallmentCount taksit · Alışveriş @item.PurchaseDate.ToString("dd.MM.yyyy")</span> }</div><div class="transaction-actions"><strong class="negative">@Money(item.Amount)</strong></div></article>
+                        }
+                    </div>
+                }
+            </section>
+        }
+        else
+        {
+            <div class="empty-state"><strong>Bu ekstre döneminde harcama yok</strong></div>
+        }
+        @if (_payments.Count > 0)
+        {
+            <section class="transactions-section"><div class="section-heading"><h2>Ödemeler</h2><span>@Money(_payments.Sum(item => item.Amount))</span></div>
+                @foreach (var item in _payments)
+                {
+                    <div class="statement-day"><span>@item.Description · @item.Date.ToString("dd.MM.yyyy")</span><strong>@Money(item.Amount)</strong></div>
+                }
+            </section>
+        }
+    }
+</div>
+
+@code {
+    [Parameter] public int CardId { get; set; }
+    private static readonly CultureInfo _culture = new("tr-TR");
+    private CreditCard? _card;
+    private List<CardMovement> _all = new();
+    private List<CardMovement> _expenses = new();
+    private List<CardMovement> _payments = new();
+    private List<KeyValuePair<string, decimal>> _categories = new();
+    private string _selectedMonth = string.Empty;
+    private DateTime _start;
+    private DateTime _end;
+    private static readonly string[] _colors = ["#6268d5", "#e28a65", "#51a897", "#aa7bd1", "#d5aa46", "#5d94c6", "#df718e"];
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await Database.InitializeAsync();
+        _card = (await Database.GetCreditCardsAsync()).FirstOrDefault(card => card.Id == CardId && card.IsActive);
+        if (_card is null) return;
+        var month = CardBilling.LastClosedStatement(DateTime.Today, _card.StatementDay);
+        _selectedMonth = CardBilling.StatementMonth(month, CardBilling.NextStatement(month, _card.StatementDay)).ToString("yyyy-MM");
+        _all = CardMovementReport.Build(await Database.GetTransactionsAsync(), await Database.GetCardInstallmentsAsync(CardId))
+            .Where(item => item.CardId == CardId).ToList();
+        Refresh();
+    }
+
+    private void ChangeMonth(ChangeEventArgs args)
+    {
+        var value = args.Value?.ToString() ?? "";
+        if (!DateTime.TryParseExact(value, "yyyy-MM", CultureInfo.InvariantCulture, DateTimeStyles.None, out _)) return;
+        _selectedMonth = value;
+        Refresh();
+    }
+
+    private void Refresh()
+    {
+        if (_card is null || !DateTime.TryParseExact(_selectedMonth, "yyyy-MM", CultureInfo.InvariantCulture, DateTimeStyles.None, out var month)) return;
+        _start = CardBilling.PeriodStartForMonth(month.Year, month.Month, _card.StatementDay);
+        _end = CardBilling.NextStatement(_start, _card.StatementDay);
+        var period = _all.Where(item => CardMovementReport.InPeriod(item, _start, _end)).ToList();
+        _expenses = period.Where(item => !item.IsPayment).ToList();
+        _payments = period.Where(item => item.IsPayment).ToList();
+        _categories = _expenses.GroupBy(item => string.IsNullOrWhiteSpace(item.Category) ? "Diğer" : item.Category)
+            .Select(group => new KeyValuePair<string, decimal>(group.Key, group.Sum(item => item.Amount)))
+            .OrderByDescending(item => item.Value).ToList();
+    }
+
+    private static string ChartColor(int index) => _colors[index % _colors.Length];
+    private string ChartStops()
+    {
+        var total = _categories.Sum(item => item.Value);
+        if (total <= 0) return "#ddd 0 100%";
+        decimal start = 0;
+        var stops = new List<string>();
+        foreach (var item in _categories.Select((value, index) => (value, index)))
+        {
+            var end = start + item.value.Value / total * 100;
+            stops.Add($"{ChartColor(item.index)} {start.ToString(CultureInfo.InvariantCulture)}% {end.ToString(CultureInfo.InvariantCulture)}%");
+            start = end;
+        }
+        return string.Join(", ", stops);
+    }
+    private static string Money(decimal amount) => string.Format(_culture, "{0:C2}", amount);
+}

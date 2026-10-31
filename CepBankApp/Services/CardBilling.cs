@@ -18,6 +18,28 @@ public static class CardBilling
         return Cutoff(month.Year, month.Month, statementDay);
     }
 
+    public static DateTime StatementMonth(DateTime periodStart, DateTime periodEnd)
+    {
+        var firstMonth = new DateTime(periodStart.Year, periodStart.Month, 1);
+        var nextMonth = firstMonth.AddMonths(1);
+        var firstDays = ((periodEnd < nextMonth ? periodEnd : nextMonth) - periodStart).Days;
+        var laterDays = (periodEnd - (periodStart > nextMonth ? periodStart : nextMonth)).Days;
+        return laterDays >= firstDays ? nextMonth : firstMonth;
+    }
+
+    public static DateTime PeriodStartForMonth(int year, int month, int statementDay)
+    {
+        var selected = new DateTime(year, month, 1);
+        var previous = selected.AddMonths(-1);
+        foreach (var candidate in new[] { selected, previous })
+        {
+            var start = Cutoff(candidate.Year, candidate.Month, statementDay);
+            if (StatementMonth(start, NextStatement(start, statementDay)) == selected)
+                return start;
+        }
+        return Cutoff(year, month, statementDay);
+    }
+
     public static DateTime StatementDate(DateTime transactionDate, int statementDay)
     {
         statementDay = Math.Clamp(statementDay, 1, 31);

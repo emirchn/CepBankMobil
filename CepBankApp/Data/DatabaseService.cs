@@ -38,6 +38,8 @@ public class DatabaseService
         await _database.CreateTableAsync<BankAccountMovement>();
         await _database.CreateTableAsync<Loan>();
         await _database.CreateTableAsync<LoanPayment>();
+        try { await _database.ExecuteAsync("ALTER TABLE BankAccount ADD COLUMN BankLogoCode TEXT NOT NULL DEFAULT ''"); }
+        catch (SQLiteException ex) when (ex.Message.Contains("duplicate column", StringComparison.OrdinalIgnoreCase)) { }
 
         var cardsToMigrate = await _database.Table<CreditCard>().ToListAsync();
         foreach (var card in cardsToMigrate)
@@ -372,6 +374,8 @@ public class DatabaseService
         var iban = new string(input.Iban.Where(char.IsLetterOrDigit).ToArray()).ToUpperInvariant();
         if (string.IsNullOrWhiteSpace(input.Name) || !IsValidIban(iban))
             throw new InvalidOperationException("Hesap adı ve geçerli bir IBAN girin.");
+        if (!BankBrand.Choices.Any(brand => brand.Code == input.BankLogoCode))
+            throw new InvalidOperationException("Geçerli bir banka simgesi seçin.");
         var duplicate = connection.Table<BankAccount>().FirstOrDefault(account => account.Iban == iban && account.Id != input.Id);
         if (duplicate is not null) throw new InvalidOperationException("Bu IBAN zaten kayıtlı.");
         if (input.Id == 0)
@@ -386,6 +390,7 @@ public class DatabaseService
             var existing = connection.Find<BankAccount>(input.Id) ?? throw new InvalidOperationException("Hesap bulunamadı.");
             existing.Name = input.Name.Trim();
             existing.Iban = iban;
+            existing.BankLogoCode = input.BankLogoCode;
             connection.Update(existing);
         }
     });

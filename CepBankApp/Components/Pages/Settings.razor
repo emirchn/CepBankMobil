@@ -2,6 +2,7 @@
 @using CepBankApp.Data
 @using Microsoft.Maui.ApplicationModel.DataTransfer
 @using Microsoft.Maui.Storage
+@using Microsoft.Maui.Media
 @using Plugin.LocalNotification
 @using Plugin.LocalNotification.Core.Models
 @using CepBankApp.Services
@@ -24,13 +25,21 @@
 
     <section class="transactions-section">
         <div class="section-heading"><div><p class="section-kicker">GÖRÜNÜM</p><h2>Tema</h2></div></div>
-        <p class="settings-copy">Uygulamanın renklerini seç.</p>
         <div class="theme-options" role="group" aria-label="Tema seçimi">
-            <button type="button" class="@ThemeClass("light")" aria-pressed="@(_themeMode == "light")" @onclick="SelectLightAsync">Gündüz</button>
-            <button type="button" class="@ThemeClass("dark")" aria-pressed="@(_themeMode == "dark")" @onclick="SelectDarkAsync">Gece</button>
-            <button type="button" class="@ThemeClass("device")" aria-pressed="@(_themeMode == "device")" @onclick="SelectDeviceAsync">Cihaz</button>
-            <button type="button" class="@ThemeClass("glassy")" aria-pressed="@(_themeMode == "glassy")" @onclick="SelectGlassyAsync">Glassy</button>
+            <button type="button" class="@ThemeClass("light")" title="Gündüz" aria-label="Gündüz" aria-pressed="@(_themeMode == "light")" @onclick="SelectLightAsync">☀</button>
+            <button type="button" class="@ThemeClass("dark")" title="Gece" aria-label="Gece" aria-pressed="@(_themeMode == "dark")" @onclick="SelectDarkAsync">☾</button>
+            <button type="button" class="@ThemeClass("device")" title="Cihaz teması" aria-label="Cihaz teması" aria-pressed="@(_themeMode == "device")" @onclick="SelectDeviceAsync">◐</button>
+            <button type="button" class="@ThemeClass("glassy")" title="Glassy" aria-label="Glassy" aria-pressed="@(_themeMode == "glassy")" @onclick="SelectGlassyAsync">◈</button>
+            <button type="button" class="@ThemeClass("custom")" title="Özel tema" aria-label="Özel tema" aria-pressed="@(_themeMode == "custom")" @onclick="SelectCustomAsync">✦</button>
         </div>
+        @if (_themeMode == "custom")
+        {
+            <div class="custom-theme-controls">
+                <button type="button" class="secondary-button" @onclick="PickWallpaperAsync">Fotoğraflardan arka plan seç</button>
+                <label>Buton rengi <input type="color" @bind="_accent" @bind:after="UpdateAccentAsync" /></label>
+            </div>
+            @if (!string.IsNullOrWhiteSpace(_themeError)) { <p class="error-message">@_themeError</p> }
+        }
     </section>
 
     <section class="transactions-section notification-settings">
@@ -56,7 +65,7 @@
         </div>
         <div class="notification-setting-group">
             <strong>Günlük kalan bakiye</strong>
-            <p class="settings-copy">Açıkken her gün saat 16:00'da ana sayfada seçili banka hesabının bakiyesini TL olarak bildirir.</p>
+            <p class="settings-copy">Açıkken her gün saat 16:00'da banka hesaplarının toplam bakiyesini TL olarak bildirir.</p>
             <div class="notification-options" role="group" aria-label="Günlük bakiye bildirimi">
                 <button type="button" class="@NotificationOptionClass(_dailyBalanceEnabled)" aria-pressed="@_dailyBalanceEnabled" @onclick="() => SetDailyBalanceAsync(true)">Açık</button>
                 <button type="button" class="@NotificationOptionClass(!_dailyBalanceEnabled)" aria-pressed="@(!_dailyBalanceEnabled)" @onclick="() => SetDailyBalanceAsync(false)">Kapalı</button>
@@ -91,6 +100,8 @@
     private string _message = string.Empty;
     private string _resetMessage = string.Empty;
     private string _themeMode = "device";
+    private string _accent = "#6268d5";
+    private string _themeError = string.Empty;
     private bool _showResetConfirm;
     private int _statementDays;
     private int _paymentDays;
@@ -100,6 +111,7 @@
     protected override void OnInitialized()
     {
         _themeMode = Preferences.Default.Get("theme_mode", "device");
+        _accent = Preferences.Default.Get("custom_accent", "#6268d5");
         _statementDays = NotificationSettings.StatementDays;
         _paymentDays = NotificationSettings.PaymentDays;
         _dailyBalanceEnabled = NotificationSettings.DailyBalanceEnabled;
@@ -129,13 +141,40 @@
     private Task SelectDarkAsync() => SetThemeAsync("dark");
     private Task SelectDeviceAsync() => SetThemeAsync("device");
     private Task SelectGlassyAsync() => SetThemeAsync("glassy");
+    private Task SelectCustomAsync() => SetThemeAsync("custom");
 
     private async Task SetThemeAsync(string mode)
     {
         _themeMode = mode;
         Preferences.Default.Set("theme_mode", mode);
         await CepBankApp.Services.AppAppearance.ApplyAsync(mode);
-        await JS.InvokeVoidAsync("cepbankTheme.apply", mode);
+        await JS.InvokeVoidAsync("cepbankTheme.apply", mode, _accent, await AppAppearance.GetWallpaperDataUrlAsync());
+    }
+
+    private async Task UpdateAccentAsync()
+    {
+        Preferences.Default.Set("custom_accent", _accent);
+        await JS.InvokeVoidAsync("cepbankTheme.apply", _themeMode, _accent, await AppAppearance.GetWallpaperDataUrlAsync());
+    }
+
+    private async Task PickWallpaperAsync()
+    {
+        _themeError = string.Empty;
+        try
+        {
+            var photo = (await MediaPicker.Default.PickPhotosAsync()).FirstOrDefault();
+            if (photo is null) return;
+            await using var source = await photo.OpenReadAsync();
+            await using var buffer = new MemoryStream();
+            await source.CopyToAsync(buffer);
+            if (buffer.Length > 10 * 1024 * 1024) { _themeError = "10 MB'den küçük bir fotoğraf seçin."; return; }
+            var path = Path.Combine(FileSystem.AppDataDirectory, "custom-wallpaper");
+            await File.WriteAllBytesAsync(path, buffer.ToArray());
+            Preferences.Default.Set("custom_wallpaper", path);
+            Preferences.Default.Set("custom_wallpaper_mime", photo.ContentType?.StartsWith("image/") == true ? photo.ContentType : "image/jpeg");
+            await JS.InvokeVoidAsync("cepbankTheme.apply", "custom", _accent, await AppAppearance.GetWallpaperDataUrlAsync());
+        }
+        catch (Exception ex) { _themeError = $"Fotoğraf seçilemedi: {ex.Message}"; }
     }
 
     private void ShowResetConfirm()
@@ -159,6 +198,11 @@
             _paymentDays = NotificationSettings.PaymentDays = 1 << 3;
             _dailyBalanceEnabled = NotificationSettings.DailyBalanceEnabled = true;
             await SetThemeAsync("device");
+            var wallpaperPath = Preferences.Default.Get("custom_wallpaper", "");
+            if (!string.IsNullOrWhiteSpace(wallpaperPath) && File.Exists(wallpaperPath)) File.Delete(wallpaperPath);
+            Preferences.Default.Remove("custom_wallpaper");
+            Preferences.Default.Remove("custom_wallpaper_mime");
+            Preferences.Default.Remove("custom_accent");
             _showResetConfirm = false;
             _resetMessage = "Tüm veriler silindi.";
         }

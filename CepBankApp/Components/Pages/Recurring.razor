@@ -65,6 +65,13 @@
                     </article>
                 }
             </div>
+            <div class="subscription-totals" aria-label="Kartlara göre aylık abonelik toplamı">
+                @foreach (var group in _items.GroupBy(item => item.CardId).OrderBy(group => CardName(group.Key)))
+                {
+                    <div><span>@CardName(group.Key)</span><strong>@Money(group.Sum(item => item.Amount))</strong></div>
+                }
+                <div class="subscription-grand-total"><span>Aylık Toplam</span><strong>@Money(_items.Sum(item => item.Amount))</strong></div>
+            </div>
         }
     </section>
 </div>

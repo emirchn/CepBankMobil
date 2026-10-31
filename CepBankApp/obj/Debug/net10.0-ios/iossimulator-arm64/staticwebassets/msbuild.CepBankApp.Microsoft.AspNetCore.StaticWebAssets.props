@@ -12,12 +12,12 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>zp4qpev2so</Fingerprint>
-      <Integrity>Z7uzoWJH2FxcxIFURL92E7dP97rqBGD45KHzKgYj9Y8=</Integrity>
+      <Fingerprint>bssrrfbsj5</Fingerprint>
+      <Integrity>he6cylCgBB+TiNSF1ciuFoG9+bXGnlq1PYs143VF0q4=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <FileLength>48841</FileLength>
-      <LastWriteTime>Fri, 30 Oct 2026 08:29:11 GMT</LastWriteTime>
+      <FileLength>63570</FileLength>
+      <LastWriteTime>Sat, 31 Oct 2026 22:00:35 GMT</LastWriteTime>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\app.css'))</OriginalItemSpec>
     </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\brand-mark.svg'))">
@@ -152,12 +152,12 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>7vct6wpa9g</Fingerprint>
-      <Integrity>ncP8dXGyGcSWOeHEPjkwI5L5kzbweffx1vnocwB8wo4=</Integrity>
+      <Fingerprint>dyk22d4mrc</Fingerprint>
+      <Integrity>a9PviINbKMT6ujq7Yht44wpSqmHEljSHL7KV1uQQUVA=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <FileLength>619</FileLength>
-      <LastWriteTime>Thu, 29 Oct 2026 20:55:30 GMT</LastWriteTime>
+      <FileLength>958</FileLength>
+      <LastWriteTime>Sat, 31 Oct 2026 21:22:56 GMT</LastWriteTime>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\theme.js'))</OriginalItemSpec>
     </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\_framework\blazor.modules.json'))">

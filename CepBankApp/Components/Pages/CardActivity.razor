@@ -1,6 +1,7 @@
 @page "/cards/{CardId:int}/{View}"
 @using CepBankApp.Data
 @using CepBankApp.Models
+@using CepBankApp.Services
 @using System.Globalization
 @inject DatabaseService Database
 
@@ -46,21 +47,20 @@
     else
     {
         <section class="transactions-section">
-            <div class="section-heading"><h2>@DateTime.Today.ToString("MMMM yyyy", new CultureInfo("tr-TR"))</h2><span>@_movements.Count hareket</span></div>
+            <div class="section-heading"><h2>@_periodStart.ToString("dd.MM.yyyy") – @_periodEnd.ToString("dd.MM.yyyy")</h2><span>@_movements.Count hareket</span></div>
             @if (_movements.Count == 0)
             {
-                <div class="empty-state"><strong>Bu ay hareket yok</strong></div>
+                <div class="empty-state"><strong>Bu dönemde hareket yok</strong></div>
             }
             else
             {
                 <div class="transaction-list">
                     @foreach (var transaction in _movements)
                     {
-                        var payment = transaction.CardDebtChange < 0 || transaction.Category == "Kredi Kartı Ödemesi";
-                        <article class="transaction-row" @key="transaction.Id">
-                            <div class="transaction-icon @(payment ? "income" : "expense")">@(payment ? "↙" : "↗")</div>
-                            <div class="transaction-details"><strong>@transaction.Description</strong><span>@transaction.Category · @transaction.Date.ToString("dd.MM.yyyy")</span></div>
-                            <div class="transaction-actions"><strong class="@(payment ? "positive" : "negative")">@(payment ? "+" : "−")@Money(transaction.Amount)</strong></div>
+                        <article class="transaction-row" @key="transaction.TransactionId">
+                            <div class="transaction-icon @(transaction.IsPayment ? "income" : "expense")">@(transaction.IsPayment ? "↙" : "↗")</div>
+                            <div class="transaction-details"><strong>@transaction.Description</strong><span>@transaction.Category · @transaction.Date.ToString("dd.MM.yyyy")</span>@if (transaction.InstallmentCount > 1) { <span>@transaction.InstallmentNumber/@transaction.InstallmentCount taksit · Alışveriş @transaction.PurchaseDate.ToString("dd.MM.yyyy")</span> }</div>
+                            <div class="transaction-actions"><strong class="@(transaction.IsPayment ? "positive" : "negative")">@(transaction.IsPayment ? "+" : "−")@Money(transaction.Amount)</strong></div>
                         </article>
                     }
                 </div>
@@ -74,7 +74,9 @@
     [Parameter] public string View { get; set; } = string.Empty;
     private CreditCard? _card;
     private bool _isInstallments;
-    private List<FinancialTransaction> _movements = new();
+    private List<CardMovement> _movements = new();
+    private DateTime _periodStart;
+    private DateTime _periodEnd;
     private List<FinancialTransaction> _purchases = new();
     private List<CardInstallment> _installments = new();
 
@@ -91,8 +93,11 @@
         }
         else
         {
-            _movements = (await Database.GetTransactionsForMonthAsync(DateTime.Today))
-                .Where(item => item.CardId == CardId).ToList();
+            _periodStart = CardBilling.LastClosedStatement(DateTime.Today, _card.StatementDay);
+            _periodEnd = CardBilling.NextStatement(_periodStart, _card.StatementDay);
+            _movements = CardMovementReport.Build(await Database.GetTransactionsAsync(),
+                    await Database.GetCardInstallmentsAsync(CardId))
+                .Where(item => item.CardId == CardId && CardMovementReport.InPeriod(item, _periodStart, _periodEnd)).ToList();
         }
     }
 
