@@ -71,15 +71,16 @@
                 @foreach (var card in _cards)
                 {
                     <div class="overview-card-row">
-                        <CardIcon Color="@card.IconColor" />
-                        <div class="overview-card-name"><strong>@card.Name</strong><span>•••• @card.LastFourDigits</span></div>
-                        <div class="overview-card-debt">
-                            <small>Güncel borç</small><strong>@FormatMoney(card.CurrentDebt)</strong>
-                            <small>Ekstre: @FormatMoney(card.StatementDebt)</small>
-                            <small>Mevcut dönem: @FormatMoney(card.CurrentPeriodDebt)</small>
+                        <div class="overview-card-identity">
+                            <CardIcon Color="@card.IconColor" />
+                            <div class="overview-card-name"><strong>@card.Name</strong><span>•••• @card.LastFourDigits</span></div>
+                        </div>
+                        <div class="overview-card-metrics">
+                            <div class="overview-card-main-amount"><small>Güncel borç</small><strong>@FormatMoney(card.CurrentDebt)</strong></div>
+                            <div><small>Mevcut dönem</small><strong>@FormatMoney(card.CurrentPeriodDebt)</strong></div>
                             @if (card.AvailableLimit.HasValue)
                             {
-                                <small>Kullanılabilir limit: @FormatMoney(card.AvailableLimit.Value)</small>
+                                <div><small>Kullanılabilir limit</small><strong>@FormatMoney(card.AvailableLimit.Value)</strong></div>
                             }
                         </div>
                     </div>

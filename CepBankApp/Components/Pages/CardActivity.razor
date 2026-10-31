@@ -1,0 +1,100 @@
+@page "/cards/{CardId:int}/{View}"
+@using CepBankApp.Data
+@using CepBankApp.Models
+@using System.Globalization
+@inject DatabaseService Database
+
+<div class="finance-page">
+    <header class="finance-header">
+        <div><NavLink href="cards?type=credit" class="back-link">← Kredi kartlarına dön</NavLink><p class="eyebrow">KREDİ KARTI / @(_isInstallments ? "TAKSİTLER" : "HAREKETLER")</p><h1>@(_isInstallments ? "Taksitli İşlemler" : "Mevcut Ay Hareketleri")</h1><p class="header-subtitle">@_card?.Name</p></div>
+    </header>
+    @if (_card is null)
+    {
+        <div class="empty-state"><strong>Kart bulunamadı</strong></div>
+    }
+    else if (_isInstallments)
+    {
+        <section class="transactions-section">
+            <div class="section-heading"><h2>Taksitli alışverişler</h2><span>@_purchases.Count işlem</span></div>
+            @if (_purchases.Count == 0)
+            {
+                <div class="empty-state"><strong>Taksitli işlem yok</strong></div>
+            }
+            else
+            {
+                <div class="transaction-list">
+                    @foreach (var purchase in _purchases)
+                    {
+                        <article class="transaction-row" @key="purchase.Id">
+                            <div class="transaction-icon expense">▤</div>
+                            <div class="transaction-details">
+                                <strong>@purchase.Description</strong>
+                                <span>@purchase.Date.ToString("dd.MM.yyyy") · @purchase.InstallmentCount taksit · Taksit başına @Money(purchase.CardPeriodChange)</span>
+                                <span>İlk dönem: @purchase.CardStatementDate?.ToString("dd.MM.yyyy")</span>
+                                @foreach (var installment in _installments.Where(item => item.PurchaseTransactionId == purchase.Id))
+                                {
+                                    <span>@installment.Number/@installment.TotalCount · @installment.StatementDate.ToString("dd.MM.yyyy") · @Money(installment.Amount) · @(installment.IsApplied ? "Döneme işlendi" : "Gelecek")</span>
+                                }
+                            </div>
+                            <div class="transaction-actions"><strong class="negative">@Money(purchase.Amount)</strong><small>Toplam</small></div>
+                        </article>
+                    }
+                </div>
+            }
+        </section>
+    }
+    else
+    {
+        <section class="transactions-section">
+            <div class="section-heading"><h2>@DateTime.Today.ToString("MMMM yyyy", new CultureInfo("tr-TR"))</h2><span>@_movements.Count hareket</span></div>
+            @if (_movements.Count == 0)
+            {
+                <div class="empty-state"><strong>Bu ay hareket yok</strong></div>
+            }
+            else
+            {
+                <div class="transaction-list">
+                    @foreach (var transaction in _movements)
+                    {
+                        var payment = transaction.CardDebtChange < 0 || transaction.Category == "Kredi Kartı Ödemesi";
+                        <article class="transaction-row" @key="transaction.Id">
+                            <div class="transaction-icon @(payment ? "income" : "expense")">@(payment ? "↙" : "↗")</div>
+                            <div class="transaction-details"><strong>@transaction.Description</strong><span>@transaction.Category · @transaction.Date.ToString("dd.MM.yyyy")</span></div>
+                            <div class="transaction-actions"><strong class="@(payment ? "positive" : "negative")">@(payment ? "+" : "−")@Money(transaction.Amount)</strong></div>
+                        </article>
+                    }
+                </div>
+            }
+        </section>
+    }
+</div>
+
+@code {
+    [Parameter] public int CardId { get; set; }
+    [Parameter] public string View { get; set; } = string.Empty;
+    private CreditCard? _card;
+    private bool _isInstallments;
+    private List<FinancialTransaction> _movements = new();
+    private List<FinancialTransaction> _purchases = new();
+    private List<CardInstallment> _installments = new();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await Database.InitializeAsync();
+        _card = (await Database.GetCreditCardsAsync()).FirstOrDefault(card => card.Id == CardId && card.IsActive);
+        _isInstallments = View == "installments";
+        if (_card is null) return;
+        if (_isInstallments)
+        {
+            _purchases = await Database.GetCardInstallmentPurchasesAsync(CardId);
+            _installments = await Database.GetCardInstallmentsAsync(CardId);
+        }
+        else
+        {
+            _movements = (await Database.GetTransactionsForMonthAsync(DateTime.Today))
+                .Where(item => item.CardId == CardId).ToList();
+        }
+    }
+
+    private static string Money(decimal amount) => string.Format(new CultureInfo("tr-TR"), "{0:C2}", amount);
+}

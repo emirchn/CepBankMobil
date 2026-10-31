@@ -35,13 +35,8 @@ public class RecurringTransactionService
             .Select(transaction => (transaction.Source, transaction.Date.Year, transaction.Date.Month)).ToHashSet();
         var today = DateTime.Today;
 
-        foreach (var item in items.Where(item => item.IsActive))
+        foreach (var item in items.Where(item => item.IsActive && item.RecurringType == RecurringType.Subscription && item.CardId.HasValue))
         {
-            if (!item.EndDate.HasValue)
-            {
-                item.EndDate = item.StartDate.Date.AddYears(1);
-                await _database.UpdateRecurringItemAsync(item);
-            }
             if (item.EndDate.HasValue && item.EndDate.Value.Date < item.StartDate.Date)
             {
                 continue;
@@ -109,7 +104,8 @@ public class RecurringTransactionService
 
     public async Task<List<FinancialTransaction>> GetProjectedTransactionsAsync(DateTime month, IEnumerable<FinancialTransaction> existing)
     {
-        var projected = RecurringSchedule.ProjectMonth(await _database.GetRecurringItemsAsync(), existing, month, DateTime.Today);
+        var projected = RecurringSchedule.ProjectMonth((await _database.GetRecurringItemsAsync())
+            .Where(item => item.RecurringType == RecurringType.Subscription && item.CardId.HasValue), existing, month, DateTime.Today);
         var cards = await _database.GetCreditCardsAsync();
         foreach (var transaction in projected.Where(transaction => transaction.CardId.HasValue))
         {

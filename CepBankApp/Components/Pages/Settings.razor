@@ -17,7 +17,7 @@
 
     <section class="transactions-section">
         <div class="section-heading"><h2>Yerel veriler</h2><span>Bu cihazda saklanır</span></div>
-        <p class="settings-copy">Banka hesapları, giderler, aylık tekrarlanan işlemler ve kartlar yalnızca telefonundaki yerel veritabanında tutulur.</p>
+        <p class="settings-copy">Banka hesapları, kart işlemleri, abonelikler ve krediler yalnızca telefonundaki yerel veritabanında tutulur.</p>
         <button class="primary-button" @onclick="ExportAsync">Verileri yedek olarak dışa aktar</button>
         @if (!string.IsNullOrWhiteSpace(_message)) { <p class="settings-message">@_message</p> }
     </section>
@@ -67,7 +67,7 @@
 
     <section class="transactions-section danger-section">
         <div class="section-heading"><div><p class="section-kicker">VERİ YÖNETİMİ</p><h2>Tüm verileri sıfırla</h2></div></div>
-        <p class="settings-copy">Banka hesapları, hareketleri, kayıtlı işlemler, aylık tekrarlanan işlemler ve kartlar silinir.</p>
+        <p class="settings-copy">Banka hesapları, hareketleri, kart işlemleri, abonelikler, krediler ve kartlar silinir.</p>
         @if (!_showResetConfirm)
         {
             <button type="button" class="danger-button" @onclick="ShowResetConfirm">Tüm verileri sıfırla</button>

@@ -61,33 +61,28 @@ public class NotificationService
                 }
             }
 
-            var recordedToday = (await _database.GetTransactionsForMonthAsync(new DateTime(today.Year, today.Month, 1)))
-                .Where(item => item.Date.Date == today).Select(item => item.Source).ToHashSet();
             var recurringItems = (await _database.GetRecurringItemsAsync())
-                .Where(item => item.IsActive ||
-                    (item.TransactionType == TransactionType.Expense && item.Category == "Kredi Ödemesi" &&
-                     recordedToday.Contains($"Recurring:{item.Id}"))).ToList();
+                .Where(item => item.IsActive && item.RecurringType == RecurringType.Subscription && item.CardId.HasValue).ToList();
             foreach (var item in recurringItems)
             {
                 for (var offset = 0; offset <= 2; offset++)
                 {
                     var month = new DateTime(today.Year, today.Month, 1).AddMonths(offset);
                     var due = RecurringSchedule.MonthlyDate(month.Year, month.Month, item.DayOfMonth);
-                    if (!item.IsActive && due.Date != today) continue;
-                    if (due < item.StartDate.Date || due > (item.EndDate?.Date ?? item.StartDate.Date.AddYears(1))) continue;
-                    var isLoan = item.TransactionType == TransactionType.Expense && item.Category == "Kredi Ödemesi";
-                    if (!isLoan)
-                        AddSchedule(planned, $"recurring:{item.Id}:{due:yyyyMMdd}",
-                            item.TransactionType == TransactionType.Income ? "Düzenli gelir günü" : "Düzenli ödeme günü",
-                            $"{item.Name}: {item.Amount.ToString("N2", Turkish)} TL", due, horizon);
-                    if (!isLoan) continue;
-                    AddSchedule(planned, $"loan:{item.Id}:{due:yyyyMMdd}:tomorrow",
-                        "Yarın kredi ödemesi", $"Yarın {item.Name} kredinizin ödeme günü.", due.AddDays(-1), horizon);
-                    AddSchedule(planned, $"loan:{item.Id}:{due:yyyyMMdd}:today",
-                        "Kredi ödemesi bugün", $"Bugün {item.Name} kredinizin ödeme günü.", due, horizon);
-                    foreach (var days in NotificationSettings.ReminderDays.Where(day => NotificationSettings.HasDay(item.LoanReminderDaysMask, day)))
-                        AddSchedule(planned, $"loan:{item.Id}:{due:yyyyMMdd}:{days}", "Yaklaşan kredi ödemesi",
-                            $"{item.Name} ödemesine {days} gün kaldı: {item.Amount.ToString("N2", Turkish)} TL", due.AddDays(-days), horizon);
+                    if (due < item.StartDate.Date || due > (item.EndDate?.Date ?? DateTime.MaxValue.Date)) continue;
+                    AddSchedule(planned, $"recurring:{item.Id}:{due:yyyyMMdd}",
+                        "Abonelik ödeme günü", $"{item.Name}: {item.Amount.ToString("N2", Turkish)} TL", due, horizon);
+                }
+            }
+            foreach (var loan in await _database.GetLoansAsync())
+            {
+                foreach (var payment in (await _database.GetLoanPaymentsAsync(loan.Id))
+                             .Where(item => !item.IsPaid && item.DueDate.Date <= horizon))
+                {
+                    AddSchedule(planned, $"loan:{loan.Id}:{payment.DueDate:yyyyMMdd}:tomorrow",
+                        "Yarın kredi ödemesi", $"Yarın {loan.Name} kredinizin ödeme günü.", payment.DueDate.AddDays(-1), horizon);
+                    AddSchedule(planned, $"loan:{loan.Id}:{payment.DueDate:yyyyMMdd}:today",
+                        "Kredi ödemesi bugün", $"Bugün {loan.Name} kredinizin ödeme günü.", payment.DueDate, horizon);
                 }
             }
             foreach (var reminder in planned.OrderBy(item => item.When).Take(58))

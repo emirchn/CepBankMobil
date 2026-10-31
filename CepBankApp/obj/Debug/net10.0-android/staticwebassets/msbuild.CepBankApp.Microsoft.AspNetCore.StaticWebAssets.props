@@ -12,12 +12,12 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>zacooyepkz</Fingerprint>
-      <Integrity>S1RpeM6/mpA22sRmmcLwpWY42NhXTI7WRKRstrYfALU=</Integrity>
+      <Fingerprint>thz67bv859</Fingerprint>
+      <Integrity>z6PUIH2zXhjBedPtpxMW6lR3Ym9DqxmXxCf8FsaEWzs=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <FileLength>52428</FileLength>
-      <LastWriteTime>Fri, 30 Oct 2026 22:20:26 GMT</LastWriteTime>
+      <FileLength>56353</FileLength>
+      <LastWriteTime>Sat, 31 Oct 2026 00:37:35 GMT</LastWriteTime>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\app.css'))</OriginalItemSpec>
     </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\brand-mark.svg'))">

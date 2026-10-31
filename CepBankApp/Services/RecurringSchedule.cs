@@ -14,7 +14,7 @@ public static class RecurringSchedule
         foreach (var item in items.Where(item => item.IsActive))
         {
             var date = MonthlyDate(month.Year, month.Month, item.DayOfMonth);
-            var end = item.EndDate?.Date ?? item.StartDate.Date.AddYears(1);
+            var end = item.EndDate?.Date ?? DateTime.MaxValue.Date;
             var source = $"Recurring:{item.Id}";
             if (date <= today.Date || date < item.StartDate.Date || date > end ||
                 existing.Any(transaction => transaction.Source == source && transaction.Date.Year == date.Year && transaction.Date.Month == date.Month))

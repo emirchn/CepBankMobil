@@ -1,0 +1,202 @@
+@page "/loans"
+@using CepBankApp.Data
+@using CepBankApp.Models
+@using CepBankApp.Services
+@using System.Globalization
+@inject DatabaseService Database
+@inject WidgetSummaryService WidgetSummary
+@inject NotificationService NotificationService
+
+<div class="finance-page">
+    <header class="finance-header">
+        <div><NavLink href="transaction" class="back-link">← Yeni işleme dön</NavLink><p class="eyebrow">CEPBANK / KREDİLER</p><h1>Kredi İşlemleri</h1><p class="header-subtitle">Kredilerini ve ödeme günlerini takip et.</p></div>
+    </header>
+    <section class="add-card">
+        <div class="section-heading"><h2>Kredi ekle</h2><span>Taksitler otomatik hesaplanır</span></div>
+        <div class="form-grid">
+            <label>Kredi adı<input @bind="_name" placeholder="Örn. İhtiyaç kredisi" /></label>
+            <label>Taksit tutarı (TL)<input type="number" min="0.01" step="0.01" @bind="_amountText" placeholder="0,00" /></label>
+            <label>İlk ödeme günü<input type="date" @bind="_firstDate" /></label>
+            <label>Son ödeme günü<input type="date" @bind="_lastDate" /></label>
+            <label>Bağlı banka hesabı
+                <select @bind="_accountId">
+                    <option value="">Hesap seç</option>
+                    @foreach (var account in _accounts)
+                    {
+                        <option value="@account.Id">@account.Name · @Money(account.CurrentBalance)</option>
+                    }
+                </select>
+            </label>
+        </div>
+        @if (_lastDate >= _firstDate)
+        {
+            <p class="field-hint">@PaymentCount taksit · İlk ve son gün arasında her ay ödeme planlanır.</p>
+        }
+        <p class="field-hint">Taksitler ödeme gününde bekler. Onay verdiğinde bağlı banka hesabından düşülür.</p>
+        @if (!string.IsNullOrWhiteSpace(_error)) { <p class="error-message">@_error</p> }
+        <button type="button" class="primary-button" disabled="@_saving" @onclick="AddAsync">@(_saving ? "Kaydediliyor…" : "Krediyi kaydet")</button>
+    </section>
+    <section class="transactions-section">
+        <div class="section-heading"><h2>Mevcut krediler</h2><span>@_loans.Count kredi</span></div>
+        @if (!string.IsNullOrWhiteSpace(_paymentError)) { <p class="error-message">@_paymentError</p> }
+        @if (_loans.Count == 0)
+        {
+            <div class="empty-state"><strong>Kayıtlı kredi yok</strong></div>
+        }
+        else
+        {
+            @foreach (var loan in _loans)
+            {
+                var payments = _payments.GetValueOrDefault(loan.Id) ?? new();
+                var expanded = _expandedLoanIds.Contains(loan.Id);
+                var visiblePayments = expanded ? payments : payments.Take(1).ToList();
+                <article class="add-card loan-card" @key="loan.Id">
+                    <div class="section-heading"><h2>@loan.Name</h2><span>@AccountName(loan.BankAccountId)</span></div>
+                    <p class="field-hint">@loan.FirstPaymentDate.ToString("dd.MM.yyyy") – @loan.LastPaymentDate.ToString("dd.MM.yyyy") · @loan.InstallmentCount taksit · Taksit @Money(loan.InstallmentAmount)</p>
+                    <p class="field-hint">Kalan: <strong>@Money(payments.Where(item => !item.IsPaid).Sum(item => item.Amount))</strong></p>
+                    <div class="transaction-list">
+                        @foreach (var payment in visiblePayments)
+                        {
+                            <div class="transaction-row" @key="payment.Id">
+                                <div class="transaction-icon @(payment.IsPaid ? "income" : "expense")">@(payment.IsPaid ? "✓" : "◷")</div>
+                                @if (payment.Number == 1 && payments.Count > 1)
+                                {
+                                    <button type="button" class="transaction-details loan-installment-toggle" aria-expanded="@expanded" aria-label="@(expanded ? "Diğer taksitleri gizle" : "Diğer taksitleri göster")" @onclick="() => ToggleLoan(loan.Id)">
+                                        <strong>İlk taksit <span aria-hidden="true">@(expanded ? "⌃" : "⌄")</span></strong>
+                                        <span>@payment.DueDate.ToString("dd.MM.yyyy") · @(payment.IsPaid ? "Ödendi" : payment.DueDate.Date <= DateTime.Today ? "Ödeme bekliyor" : "Planlandı")</span>
+                                        <span class="loan-expand-hint">@(expanded ? "Diğer taksitleri gizle" : $"{payments.Count - 1} taksiti göster")</span>
+                                    </button>
+                                }
+                                else
+                                {
+                                    <div class="transaction-details"><strong>@payment.Number/@loan.InstallmentCount taksit</strong><span>@payment.DueDate.ToString("dd.MM.yyyy") · @(payment.IsPaid ? "Ödendi" : payment.DueDate.Date <= DateTime.Today ? "Ödeme bekliyor" : "Planlandı")</span></div>
+                                }
+                                <div class="transaction-actions"><strong>@Money(payment.Amount)</strong>
+                                    @if (!payment.IsPaid && payment.DueDate.Date <= DateTime.Today)
+                                    {
+                                        <button type="button" class="header-action" @onclick="() => _confirmPaymentId = payment.Id">Öde</button>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </article>
+            }
+        }
+    </section>
+    @if (_legacyLoans.Count > 0)
+    {
+        <section class="transactions-section">
+            <div class="section-heading"><h2>Önceki kredi kayıtları</h2><span>@_legacyLoans.Count kayıt</span></div>
+            <p class="field-hint">Bu kayıtlar önceki aylık işlem yapısından geldi. Banka hesabına bağlamak için yeni kredi formuna ekleyebilirsin; eski kayıtlar korunur.</p>
+            <div class="transaction-list">
+                @foreach (var item in _legacyLoans)
+                {
+                    <article class="transaction-row" @key="item.Id">
+                        <div class="transaction-icon expense">◷</div>
+                        <div class="transaction-details"><strong>@item.Name</strong><span>Başlangıç: @item.StartDate.ToString("dd.MM.yyyy") · Bitiş: @(item.EndDate?.ToString("dd.MM.yyyy") ?? "Belirtilmedi")</span></div>
+                        <div class="transaction-actions"><strong>@Money(item.Amount)</strong></div>
+                    </article>
+                }
+            </div>
+        </section>
+    }
+    @if (_confirmPaymentId is int paymentId && SelectedPayment is LoanPayment selectedPayment)
+    {
+        <div class="dialog-backdrop" @onclick="() => _confirmPaymentId = null">
+            <section class="choice-dialog" role="dialog" aria-modal="true" aria-label="Kredi taksitini öde" @onclick:stopPropagation="true">
+                <h2>Kredi taksitini öde</h2>
+                <p>@Money(selectedPayment.Amount) tutarındaki taksit @AccountName(SelectedLoan?.BankAccountId ?? 0) hesabından düşülecek.</p>
+                <div class="recurring-delete-actions"><button type="button" class="primary-button" disabled="@_saving" @onclick="() => PayAsync(paymentId)">Ödemeyi onayla</button><button type="button" class="secondary-button" @onclick="() => _confirmPaymentId = null">Vazgeç</button></div>
+            </section>
+        </div>
+    }
+</div>
+
+@code {
+    private List<Loan> _loans = new();
+    private List<RecurringItem> _legacyLoans = new();
+    private List<BankAccount> _accounts = new();
+    private Dictionary<int, List<LoanPayment>> _payments = new();
+    private HashSet<int> _expandedLoanIds = new();
+    private string _name = string.Empty;
+    private string _amountText = string.Empty;
+    private DateTime _firstDate = DateTime.Today;
+    private DateTime _lastDate = DateTime.Today;
+    private int? _accountId;
+    private string _error = string.Empty;
+    private string _paymentError = string.Empty;
+    private bool _saving;
+    private int? _confirmPaymentId;
+    private LoanPayment? SelectedPayment => _confirmPaymentId is int id
+        ? _payments.Values.SelectMany(items => items).FirstOrDefault(item => item.Id == id) : null;
+    private Loan? SelectedLoan => SelectedPayment is { } payment
+        ? _loans.FirstOrDefault(loan => loan.Id == payment.LoanId) : null;
+    private void ToggleLoan(int loanId)
+    {
+        if (!_expandedLoanIds.Add(loanId)) _expandedLoanIds.Remove(loanId);
+    }
+    private int PaymentCount => _lastDate < _firstDate ? 0 :
+        (_lastDate.Year - _firstDate.Year) * 12 + _lastDate.Month - _firstDate.Month + 1;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Database.InitializeAsync();
+        await ReloadAsync();
+    }
+
+    private async Task AddAsync()
+    {
+        _error = string.Empty;
+        if (!_accountId.HasValue) { _error = "Banka hesabı seçin."; return; }
+        if (!decimal.TryParse(_amountText, NumberStyles.Number, CultureInfo.InvariantCulture, out var amount))
+            decimal.TryParse(_amountText, NumberStyles.Number, new CultureInfo("tr-TR"), out amount);
+        _saving = true;
+        try
+        {
+            await Database.AddLoanAsync(new Loan
+            {
+                Name = _name, BankAccountId = _accountId.Value, InstallmentAmount = amount,
+                FirstPaymentDate = _firstDate, LastPaymentDate = _lastDate
+            });
+            await WidgetSummary.TryRefreshAsync();
+            try { await NotificationService.ScheduleUpcomingPaymentsAsync(); } catch { }
+            try { await NotificationService.ScheduleDailyBalanceAsync(); } catch { }
+            _name = _amountText = string.Empty;
+            _accountId = null;
+            await ReloadAsync();
+        }
+        catch (InvalidOperationException ex) { _error = ex.Message; }
+        finally { _saving = false; }
+    }
+
+    private async Task PayAsync(int paymentId)
+    {
+        _saving = true;
+        _paymentError = string.Empty;
+        try
+        {
+            await Database.PayLoanInstallmentAsync(paymentId);
+            _confirmPaymentId = null;
+            await ReloadAsync();
+            await WidgetSummary.TryRefreshAsync();
+            try { await NotificationService.ScheduleUpcomingPaymentsAsync(); } catch { }
+            try { await NotificationService.ScheduleDailyBalanceAsync(); } catch { }
+        }
+        catch (InvalidOperationException ex) { _confirmPaymentId = null; _paymentError = ex.Message; }
+        finally { _saving = false; }
+    }
+
+    private async Task ReloadAsync()
+    {
+        _accounts = await Database.GetBankAccountsAsync();
+        _loans = await Database.GetLoansAsync();
+        _legacyLoans = (await Database.GetRecurringItemsAsync()).Where(item => item.RecurringType == RecurringType.Loan).ToList();
+        _payments.Clear();
+        foreach (var loan in _loans)
+            _payments[loan.Id] = await Database.GetLoanPaymentsAsync(loan.Id);
+    }
+
+    private string AccountName(int id) => _accounts.FirstOrDefault(account => account.Id == id)?.Name ?? "Hesap bulunamadı";
+    private static string Money(decimal amount) => string.Format(new CultureInfo("tr-TR"), "{0:C2}", amount);
+}

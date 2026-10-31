@@ -20,15 +20,22 @@
     {
         <section class="add-card">
             <div class="section-heading"><div><p class="section-kicker">İŞLEM DETAYLARI</p><h2>Bilgileri doldur</h2></div><span>Bu cihazda saklanır</span></div>
+            @if (!IsPayment)
+            {
+                <div class="card-purchase-mode" role="group" aria-label="Harcama biçimi">
+                    <button type="button" class="@(!_isInstallmentPurchase ? "selected" : "")" aria-pressed="@(!_isInstallmentPurchase)" @onclick="() => SetPurchaseMode(false)">Normal harcama</button>
+                    <button type="button" class="@(_isInstallmentPurchase ? "selected" : "")" aria-pressed="@_isInstallmentPurchase" @onclick="() => SetPurchaseMode(true)">Taksitli alışveriş</button>
+                </div>
+            }
             <div class="form-grid">
                 @if (!IsPayment)
                 {
-                    <label>Tarih<input type="date" min="@_card.LastStatementDate.ToString("yyyy-MM-dd")" max="@DateTime.Today.ToString("yyyy-MM-dd")" @bind="_date" /></label>
+                    <label>Tarih<input type="date" min="@_card.LastStatementDate.ToString("yyyy-MM-dd")" max="@OpenPeriodLastDay.ToString("yyyy-MM-dd")" @bind="_date" /></label>
                 }
-                <label>Tutar (TL)<input type="number" min="0.01" step="0.01" @bind="_amountText" @bind:event="oninput" placeholder="0,00" /></label>
+                <label>@(IsPayment ? "Ödeme tutarı (TL)" : _isInstallmentPurchase ? "Tek taksit tutarı (TL)" : "Harcama tutarı (TL)")<input type="text" inputmode="decimal" @bind="_amountText" @bind:event="oninput" placeholder="0,00" /></label>
                 @if (!IsPayment)
                 {
-                    <label>Açıklama<input type="text" @bind="_description" placeholder="Örn. Market" /></label>
+                    <label>Açıklama<input type="text" @bind="_description" @bind:event="oninput" placeholder="Örn. Market" /></label>
                 }
                 <label>Kategori
                     <select @bind="_category">
@@ -49,9 +56,9 @@
                         </select>
                     </label>
                 }
-                else
+                else if (_isInstallmentPurchase)
                 {
-                    <label>Taksit sayısı<input type="number" min="1" max="36" step="1" @bind="_installmentCount" /></label>
+                    <label>Taksit sayısı<input type="number" min="2" max="36" step="1" @bind="_installmentCount" /></label>
                 }
             </div>
             @if (IsPayment)
@@ -69,9 +76,13 @@
             else
             {
                 <p class="field-hint">@CardEffectHint()</p>
+                @if (_isInstallmentPurchase && Amount > 0 && _installmentCount is >= 2 and <= 36 && Amount <= decimal.MaxValue / _installmentCount)
+                {
+                    <p class="field-hint">Toplam alışveriş: <strong>@Money(Amount * _installmentCount)</strong> · Bu dönem: <strong>@Money(Amount)</strong></p>
+                }
             }
             @if (!string.IsNullOrWhiteSpace(_errorMessage)) { <p class="error-message">@_errorMessage</p> }
-            <button class="primary-button" type="button" disabled="@(!CanSave)" @onclick="AddTransactionAsync">@(_saving ? "Kaydediliyor…" : "İşlemi kaydet")</button>
+            <button class="primary-button" type="button" disabled="@_saving" @onclick="AddTransactionAsync">@(_saving ? "Kaydediliyor…" : "İşlemi kaydet")</button>
         </section>
         <section class="transactions-section" aria-label="Son kredi kartı işlemleri">
             <div class="section-heading"><h2>Son işlemler</h2><span>@_recentTransactions.Count işlem</span></div>
@@ -92,7 +103,7 @@
                                 <span>@transaction.Category · @transaction.Date.ToString("dd.MM.yyyy")</span>
                                 @if (transaction.InstallmentCount > 1)
                                 {
-                                    <span>@transaction.InstallmentCount taksit</span>
+                                    <span>@transaction.InstallmentCount taksit · Taksit başına @Money(transaction.CardPeriodChange)</span>
                                 }
                             </div>
                             <div class="transaction-actions"><strong class="@(isPayment ? "positive" : "negative")">@(isPayment ? "+" : "−")@Money(transaction.Amount)</strong></div>
@@ -115,16 +126,15 @@
     private string _category = "Diğer";
     private string _accountIdValue = string.Empty;
     private int _installmentCount = 1;
+    private bool _isInstallmentPurchase;
     private string _errorMessage = string.Empty;
     private bool _saving;
     private bool IsPayment => _category == "Kredi Kartı Ödemesi";
     private BankAccount? SelectedAccount => int.TryParse(_accountIdValue, out var id) ? _accounts.FirstOrDefault(account => account.Id == id) : null;
     private decimal Amount => TryAmount(_amountText, out var amount) ? amount : 0;
     private decimal PayableDebt => _card is null ? 0 : _card.StatementDebt + _card.CurrentPeriodDebt;
-    private bool CanSave => !_saving && _card is not null && Amount > 0 && decimal.Round(Amount, 2) == Amount &&
-        (IsPayment ? SelectedAccount is not null && Amount <= SelectedAccount.CurrentBalance && Amount <= PayableDebt
-            : _date.Date >= _card.LastStatementDate.Date && _date.Date <= DateTime.Today &&
-              !string.IsNullOrWhiteSpace(_description) && _installmentCount is >= 1 and <= 36 && Amount >= _installmentCount * .01m);
+    private DateTime OpenPeriodLastDay => _card is null ? DateTime.Today : CardBilling.NextStatement(_card.LastStatementDate.Date, _card.StatementDay).AddDays(-1);
+    private int EffectiveInstallmentCount => _isInstallmentPurchase ? _installmentCount : 1;
 
     protected override async Task OnParametersSetAsync()
     {
@@ -138,16 +148,17 @@
     {
         if (_card is null) return string.Empty;
         var cutoff = CardBilling.StatementDate(_date, _card.StatementDay);
-        return _installmentCount > 1
-            ? $"Alışverişin toplam tutarı hemen güncel borca eklenir ve kullanılabilir limitten düşer. İlk taksit {cutoff:dd.MM.yyyy} dönemine, kalan taksitler sonraki dönemlere yazılır."
+        return _isInstallmentPurchase
+            ? $"Taksit tutarı × taksit sayısı hemen güncel borca eklenir ve kullanılabilir limitten düşer. İlk taksit {cutoff:dd.MM.yyyy} dönemine, kalan taksitler sonraki dönemlere yazılır."
             : $"Harcama {cutoff:dd.MM.yyyy} kesimli döneme ve güncel borca eklenir.";
     }
 
     private async Task AddTransactionAsync()
     {
-        if (!CanSave || _card is null) return;
+        if (_saving) return;
+        _errorMessage = ValidationError();
+        if (_errorMessage.Length > 0 || _card is null) return;
         _saving = true;
-        _errorMessage = string.Empty;
         try
         {
             if (IsPayment)
@@ -160,9 +171,9 @@
             {
                 await Database.AddTransactionAsync(new FinancialTransaction
                 {
-                    Date = _date, Type = TransactionType.Expense, Amount = Amount,
+                    Date = _date, Type = TransactionType.Expense, Amount = Amount * EffectiveInstallmentCount,
                     Description = _description.Trim(), Category = _category,
-                    CardId = _card.Id, Source = "Manual", InstallmentCount = _installmentCount
+                    CardId = _card.Id, Source = "Manual", InstallmentCount = EffectiveInstallmentCount
                 });
                 await WidgetSummary.TryRefreshAsync();
             }
@@ -177,8 +188,35 @@
         finally { _saving = false; }
     }
 
+    private void SetPurchaseMode(bool installments)
+    {
+        _isInstallmentPurchase = installments;
+        _installmentCount = installments ? 2 : 1;
+        _errorMessage = string.Empty;
+    }
+
+    private string ValidationError()
+    {
+        if (_card is null) return "Kart bulunamadı.";
+        if (!TryAmount(_amountText, out var amount) || amount <= 0 || decimal.Round(amount, 2) != amount)
+            return "Sıfırdan büyük, en fazla iki ondalıklı bir tutar girin.";
+        if (IsPayment)
+        {
+            if (SelectedAccount is null) return "Ödeme için banka hesabı seçin.";
+            if (amount > SelectedAccount.CurrentBalance) return "Banka hesabı bakiyesi yetersiz.";
+            if (amount > PayableDebt) return "Ödeme ödenebilir borcu aşamaz.";
+            return string.Empty;
+        }
+        if (_date.Date < _card.LastStatementDate.Date || _date.Date > OpenPeriodLastDay)
+            return "İşlem tarihi mevcut hesap döneminde olmalı.";
+        if (string.IsNullOrWhiteSpace(_description)) return "Harcama açıklaması girin.";
+        if (_isInstallmentPurchase && (_installmentCount is < 2 or > 36 || amount > decimal.MaxValue / _installmentCount))
+            return "2-36 arasında geçerli bir taksit sayısı girin.";
+        return string.Empty;
+    }
+
     private static bool TryAmount(string value, out decimal amount) =>
-        decimal.TryParse(value, NumberStyles.Number, CultureInfo.InvariantCulture, out amount) ||
-        decimal.TryParse(value, NumberStyles.Number, new CultureInfo("tr-TR"), out amount);
+        decimal.TryParse(value, NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign,
+            value.Contains(',') ? new CultureInfo("tr-TR") : CultureInfo.InvariantCulture, out amount);
     private static string Money(decimal amount) => string.Format(new CultureInfo("tr-TR"), "{0:C2}", amount);
 }

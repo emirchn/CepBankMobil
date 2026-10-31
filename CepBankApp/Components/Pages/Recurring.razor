@@ -1,61 +1,27 @@
 @page "/recurring"
 @using CepBankApp.Data
 @using CepBankApp.Models
-@using System.Globalization
 @using CepBankApp.Services
+@using System.Globalization
 @inject DatabaseService Database
-@inject CepBankApp.Services.RecurringTransactionService RecurringService
-@inject NotificationService NotificationService
+@inject RecurringTransactionService RecurringService
 @inject WidgetSummaryService WidgetSummary
+@inject NotificationService NotificationService
 
 <div class="finance-page">
     <header class="finance-header">
-        <div><p class="eyebrow">CEPBANK / AYLIK PLAN</p><h1>Aylık Tekrarlanan İşlemler</h1><p class="header-subtitle">Her ay tekrarlanan giderlerin burada.</p></div>
+        <div><p class="eyebrow">CEPBANK / ABONELİKLER</p><h1>Abonelik İşlemleri</h1><p class="header-subtitle">Dijital aboneliklerini kartına bağla.</p></div>
     </header>
-
     <section class="add-card">
-        <div class="section-heading"><h2>Yeni aylık tekrarlanan işlem</h2><span>Her ay otomatik kaydedilir</span></div>
+        <div class="section-heading"><h2>Yeni abonelik</h2><span>Her ay karttan işlenir</span></div>
         <div class="form-grid">
-            <label>İşlem adı
-                <input @bind="_name" placeholder="Örn. Netflix, Kredi" />
-            </label>
-            <label>Tutar
-                <input type="number" step="0.01" @bind="_amountText" placeholder="0,00" />
-            </label>
-            <label>Kategori
-                <select @bind="_category">
-                    <option>Kredi Ödemesi</option>
-                    <option>Fatura</option>
-                    <option>Dijital Abonelik</option>
-                    <option>Diğer Giderler</option>
-                </select>
-            </label>
-            <div class="recurring-dates">
-                <label>Başlangıç
-                    <input type="date" @bind="_startDate" />
-                </label>
-                <label>Bitiş (isteğe bağlı)
-                    <input type="date" @bind="_endDate" />
-                </label>
-            </div>
-            @if (_category == "Kredi Ödemesi")
-            {
-                <label>Kalan taksit (isteğe bağlı)
-                    <input type="number" min="1" @bind="_installments" />
-                </label>
-                <div class="loan-reminder-field">
-                    <strong>Ödeme bildirimi</strong>
-                    <div class="notification-options" role="group" aria-label="Kredi ödemesi bildirim günleri">
-                        @foreach (var day in NotificationSettings.ReminderDays)
-                        {
-                            <button type="button" class="@ReminderClass(_loanReminderDaysMask, day)" aria-pressed="@NotificationSettings.HasDay(_loanReminderDaysMask, day)" @onclick="() => ToggleNewLoanReminder(day)">@day gün önce</button>
-                        }
-                    </div>
-                </div>
-            }
-            <label>Kart (isteğe bağlı)
+            <label>Abonelik adı<input @bind="_name" placeholder="Örn. Netflix" /></label>
+            <label>Aylık tutar (TL)<input type="number" min="0.01" step="0.01" @bind="_amountText" placeholder="0,00" /></label>
+            <label>Başlangıç<input type="date" @bind="_startDate" /></label>
+            <label>Bitiş (isteğe bağlı)<input type="date" @bind="_endDate" /></label>
+            <label>Kredi kartı
                 <select @bind="_cardId">
-                    <option value="">Kart seçme</option>
+                    <option value="">Kart seç</option>
                     @foreach (var card in _cards)
                     {
                         <option value="@card.Id">@card.Name •••• @card.LastFourDigits</option>
@@ -63,21 +29,15 @@
                 </select>
             </label>
         </div>
-        @if (_cardId.HasValue)
-        {
-            <p class="field-hint">Beklenen gider seçilen kartla gösterilir; işlem günü geldiğinde tutar kartın borcuna ve ilgili kesim dönemine eklenir.</p>
-        }
-        <p class="field-hint">Her ay başlangıç tarihinin gününde eklenir. Bitiş seçilmezse bir yıl sonra sona erer.</p>
+        <p class="field-hint">Ödeme günü geldiğinde aylık tutar seçili kartın harcaması olarak kaydedilir. Bitiş tarihi boşsa abonelik sürer.</p>
         @if (!string.IsNullOrWhiteSpace(_error)) { <p class="error-message">@_error</p> }
-        @if (!string.IsNullOrWhiteSpace(_notificationWarning)) { <p class="field-hint">@_notificationWarning</p> }
-        <button class="primary-button" @onclick="AddAsync">Aylık tekrarlanan işlemi kaydet</button>
+        <button class="primary-button" type="button" @onclick="AddAsync">Aboneliği kaydet</button>
     </section>
-
     <section class="transactions-section">
-        <div class="section-heading"><h2>Kayıtlı işlemler</h2><span>@_items.Count kayıt</span></div>
-        @if (!_items.Any())
+        <div class="section-heading"><h2>Kayıtlı abonelikler</h2><span>@_items.Count kayıt</span></div>
+        @if (_items.Count == 0)
         {
-            <div class="empty-state"><strong>Aylık tekrarlanan işlem yok</strong><p>Fatura veya abonelik ekleyebilirsin.</p></div>
+            <div class="empty-state"><strong>Henüz abonelik yok</strong><p>Dijital aboneliğini ekleyebilirsin.</p></div>
         }
         else
         {
@@ -85,35 +45,23 @@
                 @foreach (var item in _items)
                 {
                     <article class="transaction-row" @key="item.Id">
-                        <div class="transaction-icon expense">↘</div>
+                        <div class="transaction-icon expense">↗</div>
                         <div class="transaction-details">
                             <strong>@item.Name</strong>
-                            <span>@item.Category • Her ay @item.DayOfMonth. gün</span>
-                            <span>Başlangıç: @item.StartDate.ToString("dd.MM.yyyy") · Bitiş: @(item.EndDate?.ToString("dd.MM.yyyy") ?? "Belirtilmedi")</span>
+                            <span>@CardName(item.CardId) · Her ay @item.DayOfMonth. gün</span>
+                            <span>Başlangıç: @item.StartDate.ToString("dd.MM.yyyy") · Bitiş: @(item.EndDate?.ToString("dd.MM.yyyy") ?? "Süresiz")</span>
                         </div>
                         <div class="transaction-actions">
-                            <strong class="negative">-@FormatMoney(item.Amount)</strong>
+                            <strong class="negative">−@Money(item.Amount)</strong>
                             @if (_confirmDeleteId == item.Id)
                             {
-                                <div class="recurring-delete-actions"><button class="delete-button confirm-delete" @onclick="() => ConfirmDeleteAsync(item)">Evet, sil</button><button class="delete-button" @onclick="CancelDelete">Vazgeç</button></div>
+                                <div class="recurring-delete-actions"><button class="delete-button confirm-delete" @onclick="() => DeleteAsync(item)">Evet, sil</button><button class="delete-button" @onclick="() => _confirmDeleteId = null">Vazgeç</button></div>
                             }
                             else
                             {
-                                <button class="delete-button" @onclick="() => RequestDelete(item)">Sil</button>
+                                <button class="delete-button" @onclick="() => _confirmDeleteId = item.Id">Sil</button>
                             }
                         </div>
-                        @if (item.Category == "Kredi Ödemesi")
-                        {
-                            <div class="loan-reminder-row">
-                                <span>Ödeme bildirimi</span>
-                                <div class="notification-options" role="group" aria-label="@item.Name için bildirim günleri">
-                                    @foreach (var day in NotificationSettings.ReminderDays)
-                                    {
-                                        <button type="button" class="@ReminderClass(item.LoanReminderDaysMask, day)" aria-pressed="@NotificationSettings.HasDay(item.LoanReminderDaysMask, day)" @onclick="() => ToggleSavedLoanReminderAsync(item, day)">@day gün</button>
-                                    }
-                                </div>
-                            </div>
-                        }
                     </article>
                 }
             </div>
@@ -124,27 +72,13 @@
 @code {
     private List<RecurringItem> _items = new();
     private List<CreditCard> _cards = new();
-    private int? _cardId;
     private string _name = string.Empty;
     private string _amountText = string.Empty;
     private DateTime _startDate = DateTime.Today;
     private DateTime? _endDate;
-    private int? _installments;
-    private string _category = "Fatura";
-    private string _error = string.Empty;
-    private string _notificationWarning = string.Empty;
+    private int? _cardId;
     private int? _confirmDeleteId;
-    private int _loanReminderDaysMask;
-    private static string ReminderClass(int mask, int day) => NotificationSettings.HasDay(mask, day) ? "notification-option selected" : "notification-option";
-    private void ToggleNewLoanReminder(int day) => _loanReminderDaysMask = NotificationSettings.ToggleDay(_loanReminderDaysMask, day);
-
-    private async Task ToggleSavedLoanReminderAsync(RecurringItem item, int day)
-    {
-        item.LoanReminderDaysMask = NotificationSettings.ToggleDay(item.LoanReminderDaysMask, day);
-        await Database.UpdateRecurringItemAsync(item);
-        try { await NotificationService.ScheduleUpcomingPaymentsAsync(); }
-        catch { _notificationWarning = "Bildirim zamanı kaydedildi; bildirimler sonraki açılışta tekrar planlanacak."; }
-    }
+    private string _error = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
@@ -156,70 +90,31 @@
     private async Task AddAsync()
     {
         _error = string.Empty;
-        _notificationWarning = string.Empty;
-        if (string.IsNullOrWhiteSpace(_name)) { _error = "İşlem adı girin."; return; }
-        if (_endDate.HasValue && _endDate.Value.Date < _startDate.Date)
-        { _error = "Bitiş tarihi başlangıçtan önce olamaz."; return; }
+        if (string.IsNullOrWhiteSpace(_name)) { _error = "Abonelik adı girin."; return; }
+        if (_endDate.HasValue && _endDate.Value.Date < _startDate.Date) { _error = "Bitiş tarihi başlangıçtan önce olamaz."; return; }
+        if (_cardId is null || !_cards.Any(card => card.Id == _cardId)) { _error = "Kredi kartı seçin."; return; }
         if (!decimal.TryParse(_amountText, NumberStyles.Number, CultureInfo.InvariantCulture, out var amount))
             decimal.TryParse(_amountText, NumberStyles.Number, new CultureInfo("tr-TR"), out amount);
-        if (amount <= 0) { _error = "Tutar sıfırdan büyük olmalıdır."; return; }
-        if (_category == "Kredi Ödemesi" && _installments is <= 0)
-        { _error = "Taksit sayısını boş bırakın veya sıfırdan büyük bir değer girin."; return; }
-
-        var type = _category switch
-        {
-            "Kredi Ödemesi" => RecurringType.Loan,
-            "Dijital Abonelik" => RecurringType.Subscription,
-            _ => RecurringType.OtherExpense
-        };
-
+        if (amount <= 0 || decimal.Round(amount, 2) != amount) { _error = "Geçerli bir aylık tutar girin."; return; }
         await Database.AddRecurringItemAsync(new RecurringItem
         {
-            Name = _name.Trim(),
-            Amount = amount,
-            TransactionType = TransactionType.Expense,
-            RecurringType = type,
-            DayOfMonth = _startDate.Day,
-            StartDate = _startDate,
-            EndDate = _endDate ?? _startDate.AddYears(1),
-            Category = _category,
-            CardId = _cardId,
-            RemainingInstallments = type == RecurringType.Loan ? _installments ?? 0 : 0,
-            LoanReminderDaysMask = type == RecurringType.Loan ? _loanReminderDaysMask : 0
+            Name = _name.Trim(), Amount = amount, TransactionType = TransactionType.Expense,
+            RecurringType = RecurringType.Subscription, Category = "Abonelik",
+            CardId = _cardId, DayOfMonth = _startDate.Day,
+            StartDate = _startDate.Date, EndDate = _endDate?.Date
         });
-
         await RecurringService.ProcessAsync(force: true);
         await WidgetSummary.TryRefreshAsync();
-        try
-        {
-            await NotificationService.ScheduleUpcomingPaymentsAsync();
-            await NotificationService.ScheduleDailyBalanceAsync();
-        }
-        catch { _notificationWarning = "Kayıt eklendi; bildirimler sonraki açılışta tekrar planlanacak."; }
+        try { await NotificationService.ScheduleUpcomingPaymentsAsync(); } catch { }
         _name = _amountText = string.Empty;
+        _endDate = null;
         _cardId = null;
-        _loanReminderDaysMask = 0;
-        await ReloadAsync();
-    }
-
-    private void RequestDelete(RecurringItem item) => _confirmDeleteId = item.Id;
-
-    private void CancelDelete() => _confirmDeleteId = null;
-
-    private async Task ConfirmDeleteAsync(RecurringItem item)
-    {
-        _confirmDeleteId = null;
-        await Database.DeleteRecurringItemAsync(item);
-        await WidgetSummary.TryRefreshAsync();
-        try { await NotificationService.ScheduleUpcomingPaymentsAsync(); }
-        catch { _notificationWarning = "Kayıt silindi; bildirimler sonraki açılışta tekrar planlanacak."; }
-        try { await NotificationService.ScheduleDailyBalanceAsync(); }
-        catch { }
         await ReloadAsync();
     }
 
     private async Task DeleteAsync(RecurringItem item)
     {
+        _confirmDeleteId = null;
         await Database.DeleteRecurringItemAsync(item);
         await WidgetSummary.TryRefreshAsync();
         await ReloadAsync();
@@ -228,9 +123,10 @@
     private async Task ReloadAsync()
     {
         _items = (await Database.GetRecurringItemsAsync())
-            .Where(item => item.TransactionType == TransactionType.Expense && item.Category != "Alışveriş Taksidi").ToList();
+            .Where(item => item.RecurringType == RecurringType.Subscription && item.CardId.HasValue).ToList();
         _cards = (await Database.GetCreditCardsAsync()).Where(card => card.IsActive).ToList();
     }
 
-    private static string FormatMoney(decimal amount) => string.Format(new CultureInfo("tr-TR"), "{0:C2}", amount);
+    private string CardName(int? cardId) => _cards.FirstOrDefault(card => card.Id == cardId)?.Name ?? "Kart kaldırıldı";
+    private static string Money(decimal amount) => string.Format(new CultureInfo("tr-TR"), "{0:C2}", amount);
 }

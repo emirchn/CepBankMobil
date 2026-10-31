@@ -52,37 +52,28 @@
                                 <span>•••• @card.LastFourDigits</span>
                             }
                         </div>
-                        <div class="card-list-actions">
-                            <NavLink href="@($"cards/edit/{card.Id}")" class="section-link">Düzenle</NavLink>
-                            <button class="delete-button" type="button" title="Kartı listeden kaldır" @onclick="() => ArchiveCardAsync(card)">Kaldır</button>
-                        </div>
                     </div>
-                    <div class="card-list-bottom">
-                        <div><small>Güncel borç</small><strong>@FormatMoney(card.CurrentDebt)</strong></div>
-                        <div><small>Ekstre borcu</small><strong>@FormatMoney(card.StatementDebt)</strong></div>
-                        <div><small>Mevcut dönem borcu</small><strong>@FormatMoney(card.CurrentPeriodDebt)</strong></div>
-                        @if (card.FutureInstallmentDebt > 0)
-                        {
-                            <div><small>Gelecek taksitler</small><strong>@FormatMoney(card.FutureInstallmentDebt)</strong></div>
-                        }
-                        @if (card.CreditLimit.HasValue)
-                        {
-                            <div><small>Limit</small><strong>@FormatMoney(card.CreditLimit.Value)</strong></div>
-                            <div><small>Kullanılabilir limit</small><strong>@FormatMoney(card.AvailableLimit ?? 0)</strong></div>
-                        }
+                    <div class="card-balance-panel">
+                        <div class="card-balance-primary"><span>Güncel borç</span><strong>@FormatMoney(card.CurrentDebt)</strong></div>
+                        <div class="card-balance-grid">
+                            <div><span>Mevcut dönem</span><strong>@FormatMoney(card.CurrentPeriodDebt)</strong></div>
+                            <div><span>Ekstre borcu</span><strong>@FormatMoney(card.StatementDebt)</strong></div>
+                            <div><span>Gelecek taksitler</span><strong>@FormatMoney(card.FutureInstallmentDebt)</strong></div>
+                            @if (card.CreditLimit.HasValue)
+                            {
+                                <div><span>Kullanılabilir limit</span><strong>@FormatMoney(card.AvailableLimit ?? 0)</strong><small>Toplam limit @FormatMoney(card.CreditLimit.Value)</small></div>
+                            }
+                        </div>
                     </div>
                     <div class="card-period"><span>Hesap Kesim Günü</span><strong>Ayın @card.StatementDay. Günü</strong></div>
                     <div class="card-payment-date"><span>Son Ödeme Günü</span><strong>Ayın @card.PaymentDay. Günü</strong></div>
-                    @if (_movements.TryGetValue(card.Id, out var movements) && movements.Count > 0)
-                    {
-                        <div class="card-recent-movements">
-                            <strong>Mevcut dönem hareketleri</strong>
-                            @foreach (var movement in movements)
-                            {
-                                <div class="card-movement-row"><span>@movement.Description<small>@movement.Date.ToString("dd.MM.yyyy")@(movement.InstallmentCount > 1 ? $" · {movement.InstallmentCount} taksit" : "")</small></span><strong class="@(movement.CardDebtChange < 0 ? "positive" : "negative")">@(movement.CardDebtChange < 0 ? "−" : "+")@FormatMoney(movement.Amount)</strong></div>
-                            }
-                        </div>
-                    }
+                    <div class="card-icon-actions" role="group" aria-label="@($"{card.Name} işlemleri")">
+                        <NavLink href="@($"cards/edit/{card.Id}")" class="card-icon-action" title="Kartı düzenle" aria-label="Kartı düzenle"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4l11-11-4-4L4 16v4ZM13 7l4 4"/></svg></NavLink>
+                        <NavLink href="@($"cards/{card.Id}/movements")" class="card-icon-action" title="Mevcut ay hareketleri" aria-label="Mevcut ay hareketleri"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16M4 10h16M4 15h10M4 20h10M17 15l3 3-3 3"/></svg></NavLink>
+                        <NavLink href="@($"cards/{card.Id}/installments")" class="card-icon-action" title="Taksitli işlemler" aria-label="Taksitli işlemler"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M8 15h3m4 0h2"/></svg></NavLink>
+                        <button class="card-icon-action danger" type="button" title="Kart bakiyesini ve bağlı işlemleri sıfırla" aria-label="Kart bakiyesini ve bağlı işlemleri sıfırla" @onclick="() => _resetCardId = card.Id"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7M3 4v5h5M12 8v5l3 2"/></svg></button>
+                        <button class="card-icon-action danger" type="button" title="Kart işlemlerini sil" aria-label="Kart işlemlerini sil" @onclick="() => _resetCardId = card.Id"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3m3 0-1 13H7L6 7m4 4v6m4-6v6"/></svg></button>
+                    </div>
                 </article>
             }
         </div>
@@ -92,6 +83,16 @@
     {
         <BenefitCardPanel Kind="@(_tab == "fuel" ? BenefitCardKind.Fuel : BenefitCardKind.Meal)" />
     }
+    @if (_resetCardId is int resetId)
+    {
+        <div class="dialog-backdrop" @onclick="() => _resetCardId = null">
+            <section class="choice-dialog" role="dialog" aria-modal="true" aria-label="Kart işlemlerini sil" @onclick:stopPropagation="true">
+                <h2>Kart işlemlerini sil</h2>
+                <p>Bu karta ait harcamalar, ödemeler, taksitler ve bağlı abonelikler silinecek. Kart bilgileri kalacak. Banka hesabından yapılmış kart ödemeleri hesap bakiyesine geri eklenecek.</p>
+                <div class="recurring-delete-actions"><button type="button" class="danger-button" @onclick="() => ResetCardAsync(resetId)">Evet, işlemleri sil</button><button type="button" class="secondary-button" @onclick="() => _resetCardId = null">Vazgeç</button></div>
+            </section>
+        </div>
+    }
 </div>
 
 @code {
@@ -100,7 +101,7 @@
     private List<CreditCard> _cards = new();
     private string _error = string.Empty;
     private Dictionary<int, CardPrivateDetails> _privateDetails = new();
-    private Dictionary<int, List<FinancialTransaction>> _movements = new();
+    private int? _resetCardId;
     private bool _creditLoaded;
 
     protected override async Task OnParametersSetAsync()
@@ -122,25 +123,23 @@
         Navigation.NavigateTo($"cards?type={tab}");
     }
 
-    private async Task ArchiveCardAsync(CreditCard card)
+    private async Task ResetCardAsync(int cardId)
     {
-        await Database.ArchiveCreditCardAsync(card);
-        await WidgetSummary.TryRefreshAsync();
-        try { await NotificationService.ScheduleUpcomingPaymentsAsync(); }
-        catch { }
-        try { await NotificationService.ScheduleDailyBalanceAsync(); }
-        catch { }
-        try { CardDetailsStore.Remove(card.SecureDetailsKey); }
-        catch { _error = "Kart listeden kaldırıldı, ancak güvenli bilgileri temizlenemedi. Tüm verileri sıfırlama işlemiyle temizleyebilirsin."; }
-        await ReloadAsync();
+        _resetCardId = null;
+        try
+        {
+            await Database.ResetCreditCardAsync(cardId);
+            await WidgetSummary.TryRefreshAsync();
+            try { await NotificationService.ScheduleUpcomingPaymentsAsync(); } catch { }
+            try { await NotificationService.ScheduleDailyBalanceAsync(); } catch { }
+            await ReloadAsync();
+        }
+        catch (Exception ex) { _error = $"Kart sıfırlanamadı: {ex.Message}"; }
     }
 
     private async Task ReloadAsync()
     {
         _cards = (await Database.GetCreditCardsAsync()).Where(card => card.IsActive).ToList();
-        _movements.Clear();
-        foreach (var card in _cards)
-            _movements[card.Id] = await Database.GetCardTransactionsForCurrentPeriodAsync(card);
         _privateDetails.Clear();
         foreach (var card in _cards.Where(card => card.RevealSensitive))
         {

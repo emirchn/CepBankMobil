@@ -36,6 +36,8 @@ public class DatabaseService
         await _database.CreateTableAsync<BenefitCardMovement>();
         await _database.CreateTableAsync<BankAccount>();
         await _database.CreateTableAsync<BankAccountMovement>();
+        await _database.CreateTableAsync<Loan>();
+        await _database.CreateTableAsync<LoanPayment>();
 
         var cardsToMigrate = await _database.Table<CreditCard>().ToListAsync();
         foreach (var card in cardsToMigrate)
@@ -183,9 +185,10 @@ public class DatabaseService
                 if (transaction.Amount <= 0 || decimal.Round(transaction.Amount, 2) != transaction.Amount ||
                     transaction.InstallmentCount is < 1 or > 36)
                     throw new InvalidOperationException("Geçerli tutar ve 1-36 arası taksit sayısı girin.");
+                var openPeriodEnd = CardBilling.NextStatement(card.LastStatementDate.Date, card.StatementDay);
                 if (transaction.Source == "Manual" &&
-                    (transaction.Date.Date < card.LastStatementDate.Date || transaction.Date.Date > DateTime.Today))
-                    throw new InvalidOperationException("Kart işlemi yalnızca mevcut dönemin bir gününe kaydedilebilir.");
+                    (transaction.Date.Date < card.LastStatementDate.Date || transaction.Date.Date >= openPeriodEnd))
+                    throw new InvalidOperationException("Kart işlemi yalnızca açık hesap kesim dönemine kaydedilebilir.");
 
                 var installmentAmount = decimal.Floor(transaction.Amount * 100 / transaction.InstallmentCount) / 100;
                 if (installmentAmount <= 0) throw new InvalidOperationException("Tutar taksit sayısına göre çok düşük.");
@@ -287,6 +290,69 @@ public class DatabaseService
     public Task<List<BankAccount>> GetBankAccountsAsync() =>
         _database.Table<BankAccount>().OrderBy(account => account.Name).ToListAsync();
 
+    public Task<List<Loan>> GetLoansAsync() => _database.Table<Loan>()
+        .OrderByDescending(item => item.CreatedAt).ToListAsync();
+
+    public Task<List<LoanPayment>> GetLoanPaymentsAsync(int loanId) => _database.Table<LoanPayment>()
+        .Where(item => item.LoanId == loanId).OrderBy(item => item.DueDate).ToListAsync();
+
+    public Task AddLoanAsync(Loan loan) => _database.RunInTransactionAsync(connection =>
+    {
+        if (string.IsNullOrWhiteSpace(loan.Name) || loan.InstallmentAmount <= 0 ||
+            decimal.Round(loan.InstallmentAmount, 2) != loan.InstallmentAmount ||
+            loan.FirstPaymentDate.Date > loan.LastPaymentDate.Date ||
+            connection.Find<BankAccount>(loan.BankAccountId) is null)
+            throw new InvalidOperationException("Kredi bilgilerini ve banka hesabını kontrol et.");
+
+        var first = loan.FirstPaymentDate.Date;
+        var last = loan.LastPaymentDate.Date;
+        var monthCount = (last.Year - first.Year) * 12 + last.Month - first.Month + 1;
+        if (monthCount is < 1 or > 360)
+            throw new InvalidOperationException("Kredi süresi 1 ile 360 ay arasında olmalı.");
+        if (monthCount == 1 && first != last)
+            throw new InvalidOperationException("Tek taksitli kredide ilk ve son ödeme günü aynı olmalı.");
+
+        loan.Name = loan.Name.Trim();
+        loan.FirstPaymentDate = first;
+        loan.LastPaymentDate = last;
+        loan.InstallmentCount = monthCount;
+        connection.Insert(loan);
+        for (var index = 0; index < monthCount; index++)
+        {
+            var month = new DateTime(first.Year, first.Month, 1).AddMonths(index);
+            var due = index == 0 ? first : index == monthCount - 1 ? last :
+                new DateTime(month.Year, month.Month, Math.Min(first.Day, DateTime.DaysInMonth(month.Year, month.Month)));
+            connection.Insert(new LoanPayment
+            {
+                LoanId = loan.Id, Number = index + 1, DueDate = due,
+                Amount = loan.InstallmentAmount
+            });
+        }
+    });
+
+    public Task PayLoanInstallmentAsync(int paymentId) => _database.RunInTransactionAsync(connection =>
+    {
+        var payment = connection.Find<LoanPayment>(paymentId) ?? throw new InvalidOperationException("Taksit bulunamadı.");
+        if (payment.IsPaid) throw new InvalidOperationException("Bu taksit zaten ödendi.");
+        if (payment.DueDate.Date > DateTime.Today) throw new InvalidOperationException("Ödeme günü henüz gelmedi.");
+        var loan = connection.Find<Loan>(payment.LoanId) ?? throw new InvalidOperationException("Kredi bulunamadı.");
+        var account = connection.Find<BankAccount>(loan.BankAccountId) ?? throw new InvalidOperationException("Bağlı banka hesabı bulunamadı.");
+        if (account.CurrentBalance < payment.Amount) throw new InvalidOperationException("Banka hesabı bakiyesi yetersiz.");
+        account.CurrentBalance -= payment.Amount;
+        connection.Update(account);
+        var movement = new BankAccountMovement
+        {
+            AccountId = account.Id, Kind = BankMovementKind.Spend, Amount = payment.Amount,
+            BalanceAfter = account.CurrentBalance, Date = DateTime.Now,
+            Description = $"{loan.Name} kredi taksiti {payment.Number}/{loan.InstallmentCount}"
+        };
+        connection.Insert(movement);
+        payment.IsPaid = true;
+        payment.PaidAt = DateTime.Now;
+        payment.BankMovementId = movement.Id;
+        connection.Update(payment);
+    });
+
     public async Task<BankAccount?> GetBankAccountAsync(int id) => await _database.FindAsync<BankAccount>(id);
 
     public async Task<BankAccount?> GetHomeBankAccountAsync() =>
@@ -371,8 +437,9 @@ public class DatabaseService
 
     public Task<int> AddRecurringItemAsync(RecurringItem item)
     {
-        if (item.Category == "Alışveriş Taksidi")
-            throw new InvalidOperationException("Taksitli alışverişi kredi kartı işleminden ekleyin.");
+        if (item.RecurringType != RecurringType.Subscription || item.TransactionType != TransactionType.Expense ||
+            !item.CardId.HasValue || string.IsNullOrWhiteSpace(item.Name) || item.Amount <= 0)
+            throw new InvalidOperationException("Abonelik için geçerli bir kart ve tutar girin.");
         return _database.InsertAsync(item);
     }
 
@@ -425,6 +492,57 @@ public class DatabaseService
             .Where(item => item.CardId == cardId)
             .OrderByDescending(item => item.Date).ThenByDescending(item => item.Id)
             .Take(count).ToListAsync();
+
+    public Task<List<FinancialTransaction>> GetCardInstallmentPurchasesAsync(int cardId) =>
+        _database.Table<FinancialTransaction>()
+            .Where(item => item.CardId == cardId && item.InstallmentCount > 1 && item.CardDebtChange > 0)
+            .OrderByDescending(item => item.Date).ThenByDescending(item => item.Id).ToListAsync();
+
+    public Task<List<CardInstallment>> GetCardInstallmentsAsync(int cardId) =>
+        _database.Table<CardInstallment>()
+            .Where(item => item.CardId == cardId)
+            .OrderBy(item => item.StatementDate).ThenBy(item => item.Number).ToListAsync();
+
+    public Task ResetCreditCardAsync(int cardId) => _database.RunInTransactionAsync(connection =>
+    {
+        var card = connection.Find<CreditCard>(cardId) ?? throw new InvalidOperationException("Kart bulunamadı.");
+        var transactions = connection.Table<FinancialTransaction>().Where(item => item.CardId == cardId).ToList();
+        var paymentMovementIds = transactions.Where(item => item.BankMovementId.HasValue)
+            .Select(item => item.BankMovementId!.Value).ToHashSet();
+        var paymentMovements = connection.Table<BankAccountMovement>().ToList()
+            .Where(item => paymentMovementIds.Contains(item.Id)).ToList();
+        foreach (var group in paymentMovements.GroupBy(item => item.AccountId))
+        {
+            var accountId = group.Key;
+            var account = connection.Find<BankAccount>(accountId);
+            if (account is null) continue;
+            account.CurrentBalance += group.Sum(item => item.Amount);
+            connection.Update(account);
+            var removed = group.OrderBy(item => item.Id).ToList();
+            foreach (var movement in connection.Table<BankAccountMovement>()
+                         .Where(item => item.AccountId == accountId).ToList())
+            {
+                if (paymentMovementIds.Contains(movement.Id)) continue;
+                var refund = removed.Where(item => item.Id < movement.Id).Sum(item => item.Amount);
+                if (refund == 0) continue;
+                movement.BalanceAfter += refund;
+                connection.Update(movement);
+            }
+        }
+        foreach (var movement in paymentMovements) connection.Delete(movement);
+        foreach (var transaction in transactions) connection.Delete(transaction);
+        foreach (var installment in connection.Table<CardInstallment>().Where(item => item.CardId == cardId).ToList())
+            connection.Delete(installment);
+        foreach (var statement in connection.Table<CardStatement>().Where(item => item.CardId == cardId).ToList())
+            connection.Delete(statement);
+        foreach (var recurring in connection.Table<RecurringItem>().Where(item => item.CardId == cardId).ToList())
+            connection.Delete(recurring);
+        card.CurrentDebt = 0;
+        card.StatementDebt = 0;
+        card.CurrentPeriodDebt = 0;
+        card.LastStatementDate = CardBilling.LastClosedStatement(DateTime.Today, card.StatementDay);
+        connection.Update(card);
+    });
 
     public async Task<BenefitCard?> GetBenefitCardAsync(BenefitCardKind kind) =>
         await _database.Table<BenefitCard>().Where(card => card.Kind == kind).FirstOrDefaultAsync();
@@ -607,6 +725,8 @@ public class DatabaseService
     public Task ClearAllDataAsync() =>
         _database.RunInTransactionAsync(connection =>
         {
+            connection.DeleteAll<LoanPayment>();
+            connection.DeleteAll<Loan>();
             connection.DeleteAll<CardStatement>();
             connection.DeleteAll<CardInstallment>();
             connection.DeleteAll<BenefitCardMovement>();
@@ -630,6 +750,8 @@ public class DatabaseService
             BenefitMovements = await _database.Table<BenefitCardMovement>().ToListAsync(),
             BankAccounts = await GetBankAccountsAsync(),
             BankMovements = await _database.Table<BankAccountMovement>().ToListAsync(),
+            Loans = await GetLoansAsync(),
+            LoanPayments = await _database.Table<LoanPayment>().ToListAsync(),
             Statements = await GetStatementsAsync(),
             ExportedAt = DateTime.Now
         };
