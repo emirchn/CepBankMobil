@@ -21,11 +21,11 @@ else
             <div><small>SON KULLANMA</small><strong>@_card.ExpirationMonth.ToString("00")/@_card.ExpirationYear</strong></div>
         </div>
         <div class="benefit-card-stats">
-            <div><small>@(_kind == BenefitCardKind.Fuel ? "Kart limiti" : "Aylık yükleme")</small><strong>@FormatQuantity(_card.MonthlyAmount, _card.Unit)</strong></div>
+            @if (_kind == BenefitCardKind.Fuel) { <div><small>Kart limiti</small><strong>@FormatQuantity(_card.MonthlyAmount, _card.Unit)</strong></div> }
             <div><small>@(_kind == BenefitCardKind.Fuel ? "Kullanılabilir" : "Bakiye")</small><strong>@FormatQuantity(_card.CurrentBalance, _card.Unit)</strong></div>
-            <div><small>Kullanılan</small><strong>@FormatQuantity(_card.UsedThisCycle, _card.Unit)</strong></div>
+            @if (_kind == BenefitCardKind.Fuel) { <div><small>Kullanılan</small><strong>@FormatQuantity(_card.UsedThisCycle, _card.Unit)</strong></div> }
         </div>
-        <p class="benefit-renewal-hint">@(_kind == BenefitCardKind.Fuel ? $"Ayın {_card.RenewalDay}. günü limit sıfırlanır." : "Her ayın 1. günü aylık tutar bakiyeye eklenir.")</p>
+        <p class="benefit-renewal-hint">@(_kind == BenefitCardKind.Fuel ? $"Ayın {_card.RenewalDay}. günü limit sıfırlanır." : "Bakiye yalnızca manuel olarak yüklenir.")</p>
         <p class="benefit-renewal-hint">Bu kartın hareketleri genel gelir ve gider hesabını etkilemez.</p>
     </article>
 

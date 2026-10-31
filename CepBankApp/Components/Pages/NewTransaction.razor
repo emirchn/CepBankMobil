@@ -39,10 +39,8 @@
                 }
                 <label>Kategori
                     <select @bind="_category">
-                        <option>Kredi Kartı Ödemesi</option><option>Yemek</option><option>Market</option><option>Kıyafet</option>
-                        <option>Ulaşım</option><option>Fatura</option><option>Sağlık</option><option>Eğlence</option>
-                        <option>Ev &amp; Yaşam</option><option>Teknoloji</option><option>Hobi &amp; Oyuncak</option>
-                        <option>Eğitim</option><option>Diğer</option>
+                        <option>Kredi Kartı Ödemesi</option>
+                        @foreach (var category in CardCategories.Purchases) { <option value="@category">@category</option> }
                     </select>
                 </label>
                 @if (IsPayment)
@@ -96,9 +94,10 @@
                 <div class="transaction-list">
                     @foreach (var transaction in _recentTransactions)
                     {
-                        var isPayment = transaction.CardDebtChange < 0 || transaction.Category == "Kredi Kartı Ödemesi";
+                        var isPayment = transaction.Category == "Kredi Kartı Ödemesi";
+                        var isDecrease = isPayment || (transaction.Source == "StatementAdjustment" && transaction.CardDebtChange < 0);
                         <article class="transaction-row" @key="transaction.Id">
-                            <div class="transaction-icon @(isPayment ? "income" : "expense")">@(isPayment ? "↙" : "↗")</div>
+                            <div class="transaction-icon @(isDecrease ? "income" : "expense")">@(isDecrease ? "↙" : "↗")</div>
                             <div class="transaction-details">
                                 <strong>@transaction.Description</strong>
                                 <span>@transaction.Category · @transaction.Date.ToString("dd.MM.yyyy")</span>
@@ -107,7 +106,7 @@
                                     <span>@transaction.InstallmentCount taksit · Taksit başına @Money(transaction.CardPeriodChange)</span>
                                 }
                             </div>
-                            <div class="transaction-actions"><strong class="@(isPayment ? "positive" : "negative")">@(isPayment ? "+" : "−")@Money(transaction.Amount)</strong></div>
+                            <div class="transaction-actions"><strong class="@(isDecrease ? "positive" : "negative")">@(isDecrease ? "+" : "−")@Money(transaction.Amount)</strong></div>
                         </article>
                     }
                 </div>

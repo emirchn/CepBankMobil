@@ -17,6 +17,62 @@
       "PackagePath": "staticwebassets/app.css"
     },
     {
+      "Id": "/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/wwwroot/bank-logos/SOURCES.txt",
+      "PackagePath": "staticwebassets/bank-logos/SOURCES.txt"
+    },
+    {
+      "Id": "/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/wwwroot/bank-logos/akbank.svg",
+      "PackagePath": "staticwebassets/bank-logos/akbank.svg"
+    },
+    {
+      "Id": "/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/wwwroot/bank-logos/denizbank.svg",
+      "PackagePath": "staticwebassets/bank-logos/denizbank.svg"
+    },
+    {
+      "Id": "/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/wwwroot/bank-logos/enpara.svg",
+      "PackagePath": "staticwebassets/bank-logos/enpara.svg"
+    },
+    {
+      "Id": "/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/wwwroot/bank-logos/garanti.svg",
+      "PackagePath": "staticwebassets/bank-logos/garanti.svg"
+    },
+    {
+      "Id": "/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/wwwroot/bank-logos/halkbank.svg",
+      "PackagePath": "staticwebassets/bank-logos/halkbank.svg"
+    },
+    {
+      "Id": "/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/wwwroot/bank-logos/ing.svg",
+      "PackagePath": "staticwebassets/bank-logos/ing.svg"
+    },
+    {
+      "Id": "/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/wwwroot/bank-logos/isbank.svg",
+      "PackagePath": "staticwebassets/bank-logos/isbank.svg"
+    },
+    {
+      "Id": "/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/wwwroot/bank-logos/kuveytturk.svg",
+      "PackagePath": "staticwebassets/bank-logos/kuveytturk.svg"
+    },
+    {
+      "Id": "/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/wwwroot/bank-logos/qnb.svg",
+      "PackagePath": "staticwebassets/bank-logos/qnb.svg"
+    },
+    {
+      "Id": "/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/wwwroot/bank-logos/teb.svg",
+      "PackagePath": "staticwebassets/bank-logos/teb.svg"
+    },
+    {
+      "Id": "/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/wwwroot/bank-logos/vakifbank.svg",
+      "PackagePath": "staticwebassets/bank-logos/vakifbank.svg"
+    },
+    {
+      "Id": "/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/wwwroot/bank-logos/yapikredi.svg",
+      "PackagePath": "staticwebassets/bank-logos/yapikredi.svg"
+    },
+    {
+      "Id": "/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/wwwroot/bank-logos/ziraat.svg",
+      "PackagePath": "staticwebassets/bank-logos/ziraat.svg"
+    },
+    {
       "Id": "/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/wwwroot/brand-mark.svg",
       "PackagePath": "staticwebassets/brand-mark.svg"
     },

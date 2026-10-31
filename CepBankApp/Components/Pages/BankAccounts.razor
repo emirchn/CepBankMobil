@@ -21,11 +21,11 @@
                 <label>Hesap Adı<input @bind="_name" placeholder="Örn. Maaş hesabı" /></label>
                 <label>IBAN<input @bind="_iban" inputmode="text" autocapitalize="characters" placeholder="TR..." /></label>
             </div>
-            <div class="bank-brand-field"><strong>Banka logosu</strong><div class="bank-brand-grid" role="group" aria-label="Banka logosu seç">
-                @foreach (var brand in BankBrand.Choices)
-                {
-                    <button type="button" class="bank-brand-choice @(_bankCode == brand.Code ? "selected" : "")" aria-pressed="@(_bankCode == brand.Code)" @onclick="() => _bankCode = brand.Code"><BankLogo Code="@brand.Code" /><span>@brand.Name</span></button>
-                }
+            <div class="bank-brand-field"><label for="bank-brand-select">Banka</label><div class="bank-brand-select-row">
+                <select id="bank-brand-select" @bind="_bankCode">
+                    @foreach (var brand in BankBrand.Choices) { <option value="@brand.Code">@brand.Name</option> }
+                </select>
+                <BankLogo Code="@_bankCode" />
             </div></div>
             @if (!string.IsNullOrWhiteSpace(_error)) { <p class="error-message">@_error</p> }
             <button type="button" class="primary-button" disabled="@_saving" @onclick="SaveAsync">@(_saving ? "Kaydediliyor…" : "Hesabı kaydet")</button>
@@ -49,10 +49,21 @@
                     </NavLink>
                     <div class="account-balance-row">
                         <NavLink href="@($"accounts/{account.Id}")" class="account-balance-link">@Money(account.CurrentBalance)</NavLink>
-                        <button type="button" class="section-link" @onclick="() => Edit(account)">Düzenle</button>
+                        <div class="account-row-actions"><button type="button" class="section-link" @onclick="() => Edit(account)">Düzenle</button><button type="button" class="account-delete-button" @onclick="() => ShowDeleteConfirm(account.Id)">Sil</button></div>
                     </div>
                 </article>
             }
+        </div>
+    }
+    @if (_deleteAccountId is int deleteId && _accounts.FirstOrDefault(account => account.Id == deleteId) is BankAccount deletingAccount)
+    {
+        <div class="dialog-backdrop" @onclick="() => _deleteAccountId = null">
+            <section class="choice-dialog" role="dialog" aria-modal="true" aria-label="Banka hesabını sil" @onclick:stopPropagation="true">
+                <h2>Banka hesabını sil</h2>
+                <p><strong>@deletingAccount.Name</strong> hesabı, hesap hareketleri ve bu hesaba bağlı kredi kayıtları silinecek. Kart ödeme kayıtları korunacak. Bu işlem geri alınamaz.</p>
+                @if (!string.IsNullOrWhiteSpace(_deleteError)) { <p class="error-message">@_deleteError</p> }
+                <div class="recurring-delete-actions"><button type="button" class="danger-button" disabled="@_deleting" @onclick="() => DeleteAsync(deleteId)">Evet, hesabı sil</button><button type="button" class="secondary-button" @onclick="() => _deleteAccountId = null">Vazgeç</button></div>
+            </section>
         </div>
     }
 </div>
@@ -66,6 +77,9 @@
     private string _iban = string.Empty;
     private string _bankCode = string.Empty;
     private string _error = string.Empty;
+    private int? _deleteAccountId;
+    private bool _deleting;
+    private string _deleteError = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
@@ -76,6 +90,7 @@
     private void ShowAdd() { _editingId = null; _name = _iban = _bankCode = _error = string.Empty; _showForm = true; }
     private void Edit(BankAccount account) { _editingId = account.Id; _name = account.Name; _iban = account.Iban; _bankCode = account.BankLogoCode; _error = string.Empty; _showForm = true; }
     private void CancelForm() => _showForm = false;
+    private void ShowDeleteConfirm(int accountId) { _deleteError = string.Empty; _deleteAccountId = accountId; }
     private Task ReloadAsync() => LoadAsync();
     private async Task LoadAsync() => _accounts = await Database.GetBankAccountsAsync();
 
@@ -93,6 +108,25 @@
         }
         catch (InvalidOperationException ex) { _error = ex.Message; }
         finally { _saving = false; }
+    }
+
+    private async Task DeleteAsync(int accountId)
+    {
+        if (_deleting) return;
+        _deleting = true;
+        _deleteError = string.Empty;
+        try
+        {
+            await Database.DeleteBankAccountAsync(accountId);
+            _deleteAccountId = null;
+            if (_editingId == accountId) _showForm = false;
+            await ReloadAsync();
+            await WidgetSummary.TryRefreshAsync();
+            try { await NotificationService.ScheduleDailyBalanceAsync(); } catch { }
+            try { await NotificationService.ScheduleUpcomingPaymentsAsync(); } catch { }
+        }
+        catch (Exception ex) { _deleteError = ex.Message; }
+        finally { _deleting = false; }
     }
 
     private static string Money(decimal amount) => string.Format(new CultureInfo("tr-TR"), "{0:C2}", amount);

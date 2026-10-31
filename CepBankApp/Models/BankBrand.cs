@@ -18,7 +18,8 @@ public sealed record BankBrand(string Code, string Name, string Mark, string Col
         new("denizbank", "DenizBank", "D", "#005DA9"),
         new("teb", "TEB", "TEB", "#198549"),
         new("ing", "ING", "ING", "#F27618"),
-        new("kuveytturk", "Kuveyt Türk", "KT", "#007F65")
+        new("kuveytturk", "Kuveyt Türk", "KT", "#007F65"),
+        new("enpara", "Enpara", "e", "#A5459D")
     ];
 
     public static BankBrand Find(string? code) => Choices.FirstOrDefault(item => item.Code == code) ?? Generic;

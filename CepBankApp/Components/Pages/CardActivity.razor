@@ -58,9 +58,9 @@
                     @foreach (var transaction in _movements)
                     {
                         <article class="transaction-row" @key="transaction.TransactionId">
-                            <div class="transaction-icon @(transaction.IsPayment ? "income" : "expense")">@(transaction.IsPayment ? "↙" : "↗")</div>
+                            <div class="transaction-icon @(transaction.IsPayment || transaction.IsDecrease ? "income" : "expense")">@(transaction.IsPayment || transaction.IsDecrease ? "↙" : "↗")</div>
                             <div class="transaction-details"><strong>@transaction.Description</strong><span>@transaction.Category · @transaction.Date.ToString("dd.MM.yyyy")</span>@if (transaction.InstallmentCount > 1) { <span>@transaction.InstallmentNumber/@transaction.InstallmentCount taksit · Alışveriş @transaction.PurchaseDate.ToString("dd.MM.yyyy")</span> }</div>
-                            <div class="transaction-actions"><strong class="@(transaction.IsPayment ? "positive" : "negative")">@(transaction.IsPayment ? "+" : "−")@Money(transaction.Amount)</strong></div>
+                            <div class="transaction-actions"><strong class="@(transaction.IsPayment || transaction.IsDecrease ? "positive" : "negative")">@(transaction.IsPayment || transaction.IsDecrease ? "+" : "−")@Money(transaction.Amount)</strong></div>
                         </article>
                     }
                 </div>

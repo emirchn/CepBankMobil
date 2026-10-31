@@ -1,6 +1,15 @@
 @using CepBankApp.Models
 
-<span class="bank-logo" style="background-color: @Brand.Color" role="img" aria-label="@Brand.Name"><span aria-hidden="true">@Brand.Mark</span></span>
+<span class="bank-logo" role="img" aria-label="@Brand.Name">
+    @if (string.IsNullOrEmpty(Brand.Code))
+    {
+        <span class="bank-logo-fallback" aria-hidden="true">₺</span>
+    }
+    else
+    {
+        <img src="@($"bank-logos/{Brand.Code}.svg")" alt="" aria-hidden="true" />
+    }
+</span>
 
 @code {
     [Parameter] public string? Code { get; set; }

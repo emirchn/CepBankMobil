@@ -1,5 +1,25 @@
 main { min-height: 100vh; }
 .content { width: 100%; padding: env(safe-area-inset-top, 0px) 0 calc(92px + env(safe-area-inset-bottom)); }
+.status-bar-frost {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 110;
+    height: env(safe-area-inset-top, 0px);
+    pointer-events: none;
+    background: var(--nav-bg);
+    -webkit-backdrop-filter: blur(24px) saturate(150%);
+    backdrop-filter: blur(24px) saturate(150%);
+    -webkit-mask-image: linear-gradient(to bottom, #000 8%, rgba(0,0,0,.88) 50%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 8%, rgba(0,0,0,.88) 50%, transparent 100%);
+}
+.bottom-nav-frost {
+    position: fixed; inset: auto 0 0; z-index: 19;
+    height: calc(81px + env(safe-area-inset-bottom, 0px));
+    pointer-events: none;
+    background: var(--nav-bg);
+    -webkit-backdrop-filter: blur(26px) saturate(150%);
+    backdrop-filter: blur(26px) saturate(150%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,.38) 32%, rgba(0,0,0,.82) 72%, #000 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,.38) 32%, rgba(0,0,0,.82) 72%, #000 100%);
+}
 .bottom-nav {
     position: fixed; inset: auto 0 0; z-index: 20;
     display: grid; grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -39,8 +59,10 @@ main { min-height: 100vh; }
     .bottom-nav { left: 50%; right: auto; width: 760px; border-radius: 25px; border-bottom: 1px solid var(--nav-border); }
 }
 @media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
+    .status-bar-frost { background: var(--surface); backdrop-filter: none; -webkit-backdrop-filter: none; }
+    .bottom-nav-frost { background: var(--surface); backdrop-filter: none; -webkit-backdrop-filter: none; }
     .bottom-nav { background: var(--surface); backdrop-filter: none; -webkit-backdrop-filter: none; }
 }
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-    .bottom-nav { background: var(--surface); }
+    .status-bar-frost, .bottom-nav-frost, .bottom-nav { background: var(--surface); }
 }

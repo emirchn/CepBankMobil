@@ -6,14 +6,13 @@
 @inject DatabaseService Database
 
 <div class="finance-page">
-    <header class="finance-header"><div><p class="eyebrow">CEPBANK / KARTLAR</p><h1>Tüm Kart Hareketleri</h1><p class="header-subtitle">Tüm kredi kartlarının kullanımları</p></div></header>
-    <div class="activity-filter-heading"><button type="button" class="activity-filter-toggle" aria-expanded="@_filtersOpen" @onclick="() => _filtersOpen = !_filtersOpen">⚑ Filtrele @if (ActiveFilterCount > 0) { <span>@ActiveFilterCount</span> }</button>@if (ActiveFilterCount > 0) { <button type="button" class="text-button" @onclick="ClearFilters">Temizle</button> }</div>
+    <header class="finance-header activity-header"><div><p class="eyebrow">CEPBANK / KARTLAR</p><h1>Tüm Kart Hareketleri</h1><p class="header-subtitle">Tüm kredi kartlarının kullanımları</p></div><div class="activity-header-actions"><button type="button" class="activity-filter-toggle" aria-expanded="@_filtersOpen" @onclick="() => _filtersOpen = !_filtersOpen">⚑ Filtrele @if (ActiveFilterCount > 0) { <span>@ActiveFilterCount</span> }</button>@if (ActiveFilterCount > 0) { <button type="button" class="text-button" @onclick="ClearFilters">Temizle</button> }</div></header>
     @if (_filtersOpen)
     {
         <section class="transactions-section activity-filter-panel" aria-label="Kart hareketlerini filtrele">
             <div class="activity-filter-grid">
                 <label>Kart<select @bind="_cardId"><option value="0">Tüm kartlar</option>@foreach (var card in _cards) { <option value="@card.Id">@card.Name</option> }</select></label>
-                <label>İşlem türü<select @bind="_kind"><option value="">Tüm işlemler</option><option value="single">Tek çekim</option><option value="installment">Taksit</option><option value="payment">Ödeme</option></select></label>
+                <label>İşlem türü<select @bind="_kind"><option value="">Tüm işlemler</option><option value="single">Tek çekim</option><option value="installment">Taksit</option><option value="payment">Ödeme</option><option value="adjustment">Ekstre güncellemesi</option></select></label>
                 <label>Kategori<select @bind="_category"><option value="">Tüm kategoriler</option>@foreach (var category in _categories) { <option value="@category">@category</option> }</select></label>
                 <label>Açıklama ara<input type="search" placeholder="İşlem adı" @bind="_search" @bind:event="oninput" /></label>
                 <label>Başlangıç<input type="date" value="@_fromDate" @onchange="OnFromDateChanged" /></label>
@@ -34,7 +33,7 @@
             <div class="transaction-list">
                 @foreach (var item in VisibleMovements)
                 {
-                    <article class="transaction-row" @key="item.TransactionId"><div class="transaction-icon @(item.IsPayment ? "income" : "expense")">@(item.IsPayment ? "↙" : "↗")</div><div class="transaction-details"><strong>@item.Description</strong><span>@CardName(item.CardId) · @item.Category</span><span>@item.Date.ToString("dd.MM.yyyy")@if (item.InstallmentCount > 1) { <text> · @item.InstallmentNumber/@item.InstallmentCount taksit</text> }</span></div><div class="transaction-actions"><strong class="@(item.IsPayment ? "positive" : "negative")">@(item.IsPayment ? "+" : "−")@Money(item.Amount)</strong></div></article>
+                    <article class="transaction-row" @key="item.TransactionId"><div class="transaction-icon @(item.IsPayment || item.IsDecrease ? "income" : "expense")">@(item.IsPayment || item.IsDecrease ? "↙" : "↗")</div><div class="transaction-details"><strong>@item.Description</strong><span>@CardName(item.CardId) · @item.Category</span><span>@item.Date.ToString("dd.MM.yyyy")@if (item.InstallmentCount > 1) { <text> · @item.InstallmentNumber/@item.InstallmentCount taksit</text> }</span></div><div class="transaction-actions"><strong class="@(item.IsPayment || item.IsDecrease ? "positive" : "negative")">@(item.IsPayment || item.IsDecrease ? "+" : "−")@Money(item.Amount)</strong></div></article>
                 }
             </div>
         }
@@ -65,14 +64,16 @@
         var activeIds = _cards.Select(card => card.Id).ToHashSet();
         _movements = CardMovementReport.Build(await Database.GetTransactionsAsync(), installments)
             .Where(item => activeIds.Contains(item.CardId)).ToList();
-        _categories = _movements.Select(item => item.Category).Where(category => !string.IsNullOrWhiteSpace(category))
-            .Distinct().OrderBy(category => category).ToList();
+        _categories = CardCategories.Purchases.Concat(new[] { "Kredi Kartı Ödemesi", "Ekstre Tutarı Güncellemesi" })
+            .Concat(_movements.Select(item => item.Category).Where(category => !string.IsNullOrWhiteSpace(category)))
+            .Distinct().ToList();
     }
     private List<CardMovement> VisibleMovements => _movements.Where(item =>
         (_cardId == 0 || item.CardId == _cardId) &&
         (_kind == "" || (_kind == "payment" && item.IsPayment) ||
-            (_kind == "single" && !item.IsPayment && item.InstallmentCount == 1) ||
-            (_kind == "installment" && !item.IsPayment && item.InstallmentCount > 1)) &&
+            (_kind == "adjustment" && item.IsAdjustment) ||
+            (_kind == "single" && !item.IsPayment && !item.IsAdjustment && item.InstallmentCount == 1) ||
+            (_kind == "installment" && !item.IsPayment && !item.IsAdjustment && item.InstallmentCount > 1)) &&
         (_category == "" || item.Category == _category) &&
         (_search == "" || item.Description.Contains(_search, StringComparison.CurrentCultureIgnoreCase)) &&
         (!DateTime.TryParseExact(_fromDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var from) || item.Date.Date >= from) &&

@@ -61,6 +61,15 @@
                 }
             </section>
         }
+        @if (_adjustments.Count > 0)
+        {
+            <section class="transactions-section"><div class="section-heading"><h2>Ekstre borcu düzeltmeleri</h2></div>
+                @foreach (var item in _adjustments)
+                {
+                    <div class="statement-day"><span>@item.Date.ToString("dd.MM.yyyy")</span><strong class="@(item.IsDecrease ? "positive" : "negative")">@(item.IsDecrease ? "+" : "−")@Money(item.Amount)</strong></div>
+                }
+            </section>
+        }
     }
 </div>
 
@@ -71,6 +80,7 @@
     private List<CardMovement> _all = new();
     private List<CardMovement> _expenses = new();
     private List<CardMovement> _payments = new();
+    private List<CardMovement> _adjustments = new();
     private List<KeyValuePair<string, decimal>> _categories = new();
     private string _selectedMonth = string.Empty;
     private DateTime _start;
@@ -103,8 +113,9 @@
         _start = CardBilling.PeriodStartForMonth(month.Year, month.Month, _card.StatementDay);
         _end = CardBilling.NextStatement(_start, _card.StatementDay);
         var period = _all.Where(item => CardMovementReport.InPeriod(item, _start, _end)).ToList();
-        _expenses = period.Where(item => !item.IsPayment).ToList();
+        _expenses = period.Where(item => !item.IsPayment && !item.IsAdjustment).ToList();
         _payments = period.Where(item => item.IsPayment).ToList();
+        _adjustments = period.Where(item => item.IsAdjustment).ToList();
         _categories = _expenses.GroupBy(item => string.IsNullOrWhiteSpace(item.Category) ? "Diğer" : item.Category)
             .Select(group => new KeyValuePair<string, decimal>(group.Key, group.Sum(item => item.Amount)))
             .OrderByDescending(item => item.Value).ToList();

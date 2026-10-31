@@ -14,11 +14,11 @@
 		</data>
 		<key>CepBankApp.dll</key>
 		<data>
-		ET7bi4YOD98WJ9E8s+3AnZRr36s=
+		VVXexsbh9ZBN7+hPJ0arMx6J2Pk=
 		</data>
 		<key>CepBankApp.pdb</key>
 		<data>
-		OWVZ80gb74+S6amOTtuTTzi01ck=
+		rm2r6wur2bZTZw4AlwfzLjBcmUw=
 		</data>
 		<key>Info.plist</key>
 		<data>
@@ -1196,13 +1196,21 @@
 		<data>
 		GtaoTI2UFUg71pYeZESpg4m0LuU=
 		</data>
+		<key>wwwroot/CepBankApp.rdhh6pyx62.bundle.scp.css</key>
+		<data>
+		6L1Cl/tVF280wj0a4FGy0EiRV90=
+		</data>
 		<key>wwwroot/CepBankApp.scm9idynid.bundle.scp.css</key>
 		<data>
 		pONw3RxyrP3YgEYMpll3AdVEong=
 		</data>
 		<key>wwwroot/CepBankApp.styles.css</key>
 		<data>
-		GtaoTI2UFUg71pYeZESpg4m0LuU=
+		6L1Cl/tVF280wj0a4FGy0EiRV90=
+		</data>
+		<key>wwwroot/CepBankApp.ur9w6jzk35.bundle.scp.css</key>
+		<data>
+		3fxQ/GuUVogt2mJagVmm+/olBak=
 		</data>
 		<key>wwwroot/CepBankApp.v0xp6oq7qp.bundle.scp.css</key>
 		<data>
@@ -1218,7 +1226,63 @@
 		</data>
 		<key>wwwroot/app.css</key>
 		<data>
-		5eHswgAr2SZ4lF9W0LdozJaIQCU=
+		ZdzeIAQ1G2mJr1FYvSdL3PRtg1c=
+		</data>
+		<key>wwwroot/bank-logos/SOURCES.txt</key>
+		<data>
+		wS/H71odDWLd/C2gyV6/gBayECc=
+		</data>
+		<key>wwwroot/bank-logos/akbank.svg</key>
+		<data>
+		/mTynrqwtSShnBHsFFcEDMR8eYE=
+		</data>
+		<key>wwwroot/bank-logos/denizbank.svg</key>
+		<data>
+		hqxvCRVd67GtqkzCOl9mOGL9JTI=
+		</data>
+		<key>wwwroot/bank-logos/enpara.svg</key>
+		<data>
+		vYTdUJnqyPwZrTEoHil9s8RBvd8=
+		</data>
+		<key>wwwroot/bank-logos/garanti.svg</key>
+		<data>
+		QQdtTbPAZQ//Po27R/ltkDSLNTM=
+		</data>
+		<key>wwwroot/bank-logos/halkbank.svg</key>
+		<data>
+		qgfZOnNAO35OCCdSk09FcmF23eY=
+		</data>
+		<key>wwwroot/bank-logos/ing.svg</key>
+		<data>
+		DrFtHzTCDEgWfPPTB/65kLGhSHg=
+		</data>
+		<key>wwwroot/bank-logos/isbank.svg</key>
+		<data>
+		0YftH90HKF7UMgvfrfZMMYWGPI4=
+		</data>
+		<key>wwwroot/bank-logos/kuveytturk.svg</key>
+		<data>
+		5WoVyivyuQMGpjsxycMHMf3nouE=
+		</data>
+		<key>wwwroot/bank-logos/qnb.svg</key>
+		<data>
+		dr6aHjJa3+hwL9I4sbjDnOIcHDM=
+		</data>
+		<key>wwwroot/bank-logos/teb.svg</key>
+		<data>
+		zLNq7ITdc/F3zzoIdwgoM9GVWIY=
+		</data>
+		<key>wwwroot/bank-logos/vakifbank.svg</key>
+		<data>
+		LIBuxyBXH0zsw3iJCkdgicqIFNo=
+		</data>
+		<key>wwwroot/bank-logos/yapikredi.svg</key>
+		<data>
+		sPdU23CQPdrFf6LRGozP9PUOxmA=
+		</data>
+		<key>wwwroot/bank-logos/ziraat.svg</key>
+		<data>
+		D7nrUhnHnlzZyTl2x2+/bSldZVg=
 		</data>
 		<key>wwwroot/brand-mark.svg</key>
 		<data>
@@ -1285,14 +1349,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			Ukh29fg8/DcH3Ojo0WVFFp30gxRmkkFx8GcYe8twY20=
+			AZNy0nShSxPI/D4xtaaJY2irXYvjSqyKc/y+GsrpcEY=
 			</data>
 		</dict>
 		<key>CepBankApp.pdb</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			yhkGuu7IJ1VM9Ma1HSq95X9iqZNeSgOM1qHZiGDTUiY=
+			zZK20HpaFafzNWHrbw7MKdGfIPGW1dg2el0Rs5Id24M=
 			</data>
 		</dict>
 		<key>MauiInfo.plist</key>
@@ -3339,6 +3403,13 @@
 			UrJVhCcskgRsVTrMhuYRDOlTP6yXVG294rC7uSogLBw=
 			</data>
 		</dict>
+		<key>wwwroot/CepBankApp.rdhh6pyx62.bundle.scp.css</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			P5yEou7YpjZSM0HlBYIOysRaLIN61nGMmFYSNnat3Vc=
+			</data>
+		</dict>
 		<key>wwwroot/CepBankApp.scm9idynid.bundle.scp.css</key>
 		<dict>
 			<key>hash2</key>
@@ -3350,7 +3421,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			UrJVhCcskgRsVTrMhuYRDOlTP6yXVG294rC7uSogLBw=
+			P5yEou7YpjZSM0HlBYIOysRaLIN61nGMmFYSNnat3Vc=
+			</data>
+		</dict>
+		<key>wwwroot/CepBankApp.ur9w6jzk35.bundle.scp.css</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			ehvu0oCg3AkC1xmnrqWceA0CxVHEEsU7QXdMWj6nFj4=
 			</data>
 		</dict>
 		<key>wwwroot/CepBankApp.v0xp6oq7qp.bundle.scp.css</key>
@@ -3378,7 +3456,105 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			IQ0B2BWd1yQr0SXRbtjNciKrsS/XkWyn+hegop1kpp8=
+			LV41brHb8Dewu9eaA+TkZg0yMUv29jMDZGoeMuUvY8U=
+			</data>
+		</dict>
+		<key>wwwroot/bank-logos/SOURCES.txt</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			0OL75sNJjSqMcaLLA1p7puQMzQDxWT5/UmGQL1Xkl10=
+			</data>
+		</dict>
+		<key>wwwroot/bank-logos/akbank.svg</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			1QCj3fsPuJen/hC28JAs5+3R0TifOHkR/Hk865lj6R4=
+			</data>
+		</dict>
+		<key>wwwroot/bank-logos/denizbank.svg</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			sIqhcy6Ai9koz9OekaXsVAnfF6KhEALo6yUXpQR9KkI=
+			</data>
+		</dict>
+		<key>wwwroot/bank-logos/enpara.svg</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			cbSGm4eDY7zb/6Fb2zXzQPzDDoZXVarm7atLoIaXX78=
+			</data>
+		</dict>
+		<key>wwwroot/bank-logos/garanti.svg</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			+uODwgSeiXFLGWDBYgUlmu4lAmKohKhEUXxHTo11Mj4=
+			</data>
+		</dict>
+		<key>wwwroot/bank-logos/halkbank.svg</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			K0fX8gdXDYMvFq49aGPJpY7ckJms+/eTgPhk1XhbuMs=
+			</data>
+		</dict>
+		<key>wwwroot/bank-logos/ing.svg</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			L79uARcQmvDtosqpBx4/H89capmilQz5/JPSVRKcVIo=
+			</data>
+		</dict>
+		<key>wwwroot/bank-logos/isbank.svg</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			EZDgohmN8ZPwdlj4b0WomMYUg1psAlyizxpsi+QaYc8=
+			</data>
+		</dict>
+		<key>wwwroot/bank-logos/kuveytturk.svg</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			DuVG7/f6eC+meo/UIb32IgWLW+IAmKM2NNIwhUAANJs=
+			</data>
+		</dict>
+		<key>wwwroot/bank-logos/qnb.svg</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			9r0Mhhc19WXg40XuBrLfmRo5heBKzREH8G6VgcalWxU=
+			</data>
+		</dict>
+		<key>wwwroot/bank-logos/teb.svg</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			16+XuF1/Pq52JrotBynv7j+fhKSAQ4R7XStaBOxjFXs=
+			</data>
+		</dict>
+		<key>wwwroot/bank-logos/vakifbank.svg</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			SSMz7czwzWK07Ai/Q9vH44XZ9wodrGSdjUGHSgrwLoc=
+			</data>
+		</dict>
+		<key>wwwroot/bank-logos/yapikredi.svg</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			XBgtgW7IDtH+1X09Xbv1MF86es2Cy1GfHFoTpP9YfwQ=
+			</data>
+		</dict>
+		<key>wwwroot/bank-logos/ziraat.svg</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			OJfJnFzzei9A/tQrsv7oGVN6O9bUa7mtEZ70wk3s3dc=
 			</data>
 		</dict>
 		<key>wwwroot/brand-mark.svg</key>

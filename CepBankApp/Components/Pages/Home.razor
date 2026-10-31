@@ -89,13 +89,21 @@
     <section class="transactions-section benefit-overview" aria-label="Yemek kartı">
         <div class="section-heading"><h2>Yemek Kartı</h2><NavLink href="cards?type=meal" class="section-link">Kartı aç <span aria-hidden="true">→</span></NavLink></div>
         @if (_mealCard is null) { <div class="benefit-overview-empty">Henüz yemek kartı eklenmedi.</div> }
-        else { <div class="benefit-overview-row"><strong>@_mealCard.Name</strong><div><small>Güncel bakiye</small><strong>@FormatMoney(_mealCard.CurrentBalance)</strong></div></div> }
+        else
+        {
+            <div class="benefit-overview-row"><strong>@_mealCard.Name</strong><div><small>Güncel bakiye</small><strong>@FormatMoney(_mealCard.CurrentBalance)</strong></div></div>
+            <div class="benefit-overview-history">@foreach (var movement in _mealMovements) { <div><span>@movement.Description</span><strong>@BenefitMovementAmount(movement)</strong></div> }</div>
+        }
     </section>
 
     <section class="transactions-section benefit-overview" aria-label="Yakıt kartı">
         <div class="section-heading"><h2>Yakıt Kartı</h2><NavLink href="cards?type=fuel" class="section-link">Kartı aç <span aria-hidden="true">→</span></NavLink></div>
         @if (_fuelCard is null) { <div class="benefit-overview-empty">Henüz yakıt kartı eklenmedi.</div> }
-        else { <div class="benefit-overview-row"><strong>@_fuelCard.Name</strong><div><small>Kullanılabilir bakiye</small><strong>@FormatBenefitBalance(_fuelCard)</strong></div></div> }
+        else
+        {
+            <div class="benefit-overview-row"><strong>@_fuelCard.Name</strong><div><small>Kullanılabilir bakiye</small><strong>@FormatBenefitBalance(_fuelCard)</strong></div></div>
+            <div class="benefit-overview-history">@foreach (var movement in _fuelMovements) { <div><span>@movement.Description</span><strong>@BenefitMovementAmount(movement)</strong></div> }</div>
+        }
     </section>
 </div>
 
@@ -104,6 +112,8 @@
     private List<BankAccount> _accounts = new();
     private BenefitCard? _mealCard;
     private BenefitCard? _fuelCard;
+    private List<BenefitCardMovement> _mealMovements = new();
+    private List<BenefitCardMovement> _fuelMovements = new();
     private decimal _cardDebt;
     private bool _initialDataLoaded;
     private bool _notificationsStarted;
@@ -172,6 +182,8 @@
         _cards = (await Database.GetCreditCardsAsync()).Where(card => card.IsActive).ToList();
         _mealCard = await Database.GetBenefitCardAsync(BenefitCardKind.Meal);
         _fuelCard = await Database.GetBenefitCardAsync(BenefitCardKind.Fuel);
+        _mealMovements = _mealCard is null ? new() : (await Database.GetBenefitMovementsAsync(_mealCard.Id)).Take(5).ToList();
+        _fuelMovements = _fuelCard is null ? new() : (await Database.GetBenefitMovementsAsync(_fuelCard.Id)).Take(5).ToList();
         _cardDebt = _cards.Sum(card => card.CurrentDebt);
         await WidgetSummary.TryRefreshAsync();
     }
@@ -180,4 +192,11 @@
     private static string FormatBenefitBalance(BenefitCard card) => card.Unit == BenefitUnit.Liter
         ? $"{card.CurrentBalance.ToString("N2", new CultureInfo("tr-TR"))} L" : FormatMoney(card.CurrentBalance);
     private static string FormatMarket(decimal? amount) => amount?.ToString("N2", new CultureInfo("tr-TR")) ?? "—";
+    private static string BenefitMovementAmount(BenefitCardMovement movement)
+    {
+        var sign = movement.Kind == BenefitMovementKind.Spend || movement.Amount < 0 ? "−" : "+";
+        return sign + (movement.Unit == BenefitUnit.Liter
+            ? $"{Math.Abs(movement.Amount).ToString("N2", new CultureInfo("tr-TR"))} L"
+            : FormatMoney(Math.Abs(movement.Amount)));
+    }
 }

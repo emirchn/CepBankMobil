@@ -4,7 +4,8 @@ namespace CepBankApp.Services;
 
 public sealed record CardMovement(int CardId, int TransactionId, DateTime Date, DateTime PurchaseDate,
     DateTime StatementDate, string Description, string Category, decimal Amount,
-    int InstallmentNumber, int InstallmentCount, bool IsPayment);
+    int InstallmentNumber, int InstallmentCount, bool IsPayment,
+    bool IsAdjustment = false, bool IsDecrease = false);
 
 public static class CardMovementReport
 {
@@ -12,12 +13,19 @@ public static class CardMovementReport
         IEnumerable<CardInstallment> installments)
     {
         var all = transactions.Where(item => item.CardId.HasValue).ToList();
-        var purchases = all.Where(item => item.CardDebtChange > 0).ToDictionary(item => item.Id);
+        var purchases = all.Where(item => item.CardDebtChange > 0 && item.Source != "StatementAdjustment").ToDictionary(item => item.Id);
         var installmentById = installments.ToDictionary(item => item.Id);
         var result = new List<CardMovement>();
         foreach (var item in all)
         {
             if (item.Source.StartsWith("Carry:", StringComparison.Ordinal)) continue;
+            if (item.Source == "StatementAdjustment")
+            {
+                result.Add(new(item.CardId!.Value, item.Id, item.Date, item.Date,
+                    item.CardStatementDate ?? item.Date, item.Description, item.Category,
+                    item.Amount, 1, 1, false, true, item.CardDebtChange < 0));
+                continue;
+            }
             if (item.Source.StartsWith("Installment:", StringComparison.Ordinal))
             {
                 if (!int.TryParse(item.Source[12..], out var id) || !installmentById.TryGetValue(id, out var part)) continue;
@@ -37,7 +45,7 @@ public static class CardMovementReport
         return result.OrderByDescending(item => item.Date).ThenByDescending(item => item.TransactionId).ToList();
     }
 
-    public static bool InPeriod(CardMovement item, DateTime start, DateTime end) => item.IsPayment
+    public static bool InPeriod(CardMovement item, DateTime start, DateTime end) => item.IsPayment || item.IsAdjustment
         ? item.Date.Date >= start.Date && item.Date.Date < end.Date
         : item.StatementDate.Date > start.Date && item.StatementDate.Date <= end.Date;
 }

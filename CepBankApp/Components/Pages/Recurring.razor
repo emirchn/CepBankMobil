@@ -53,14 +53,7 @@
                         </div>
                         <div class="transaction-actions">
                             <strong class="negative">−@Money(item.Amount)</strong>
-                            @if (_confirmDeleteId == item.Id)
-                            {
-                                <div class="recurring-delete-actions"><button class="delete-button confirm-delete" @onclick="() => DeleteAsync(item)">Evet, sil</button><button class="delete-button" @onclick="() => _confirmDeleteId = null">Vazgeç</button></div>
-                            }
-                            else
-                            {
-                                <button class="delete-button" @onclick="() => _confirmDeleteId = item.Id">Sil</button>
-                            }
+                            <button class="delete-button" @onclick="() => _confirmDeleteId = item.Id">Sil</button>
                         </div>
                     </article>
                 }
@@ -74,6 +67,16 @@
             </div>
         }
     </section>
+    @if (_confirmDeleteId is int deleteId && _items.FirstOrDefault(item => item.Id == deleteId) is RecurringItem deletingItem)
+    {
+        <div class="dialog-backdrop" @onclick="() => _confirmDeleteId = null">
+            <section class="choice-dialog" role="dialog" aria-modal="true" aria-label="Aboneliği sil" @onclick:stopPropagation="true">
+                <h2>Aboneliği sil</h2>
+                <p><strong>@deletingItem.Name</strong> aboneliği silinecek. Bu işlem geri alınamaz.</p>
+                <div class="recurring-delete-actions"><button type="button" class="danger-button" @onclick="() => DeleteAsync(deletingItem)">Evet, aboneliği sil</button><button type="button" class="secondary-button" @onclick="() => _confirmDeleteId = null">Vazgeç</button></div>
+            </section>
+        </div>
+    }
 </div>
 
 @code {

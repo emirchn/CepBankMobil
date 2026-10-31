@@ -265,12 +265,40 @@ public class DatabaseService
         });
     }
 
+    public async Task AdjustCreditCardStatementDebtAsync(int cardId, decimal newAmount)
+    {
+        await ProcessCardPeriodsAsync();
+        await _database.RunInTransactionAsync(connection =>
+        {
+            var card = connection.Find<CreditCard>(cardId);
+            if (card is null || !card.IsActive) throw new InvalidOperationException("Kart bulunamadı.");
+            if (newAmount < 0 || decimal.Round(newAmount, 2) != newAmount)
+                throw new InvalidOperationException("Ekstre borcu sıfır veya daha büyük, iki ondalıklı bir tutar olmalı.");
+            var difference = newAmount - card.StatementDebt;
+            if (difference == 0) return;
+            if (card.CurrentDebt + difference < 0)
+                throw new InvalidOperationException("Güncel borç sıfırın altına düşemez.");
+            card.StatementDebt = newAmount;
+            card.CurrentDebt += difference;
+            connection.Update(card);
+            connection.Insert(new FinancialTransaction
+            {
+                CardId = card.Id, Date = DateTime.Now,
+                Type = difference > 0 ? TransactionType.Expense : TransactionType.Income,
+                Amount = Math.Abs(difference), Description = "Ekstre tutarı güncellemesi",
+                Category = "Ekstre Tutarı Güncellemesi", Source = "StatementAdjustment",
+                CardDebtChange = difference, CardPeriodChange = 0,
+                CardStatementDate = card.LastStatementDate
+            });
+        });
+    }
+
     public async Task DeleteTransactionAsync(FinancialTransaction transaction)
     {
         await ProcessCardPeriodsAsync();
         await _database.RunInTransactionAsync(connection =>
         {
-            if (transaction.Category == "Kredi Kartı Ödemesi" || transaction.BankMovementId.HasValue || transaction.InstallmentCount > 1 || transaction.Source.StartsWith("Carry:") ||
+            if (transaction.Category == "Kredi Kartı Ödemesi" || transaction.Source == "StatementAdjustment" || transaction.BankMovementId.HasValue || transaction.InstallmentCount > 1 || transaction.Source.StartsWith("Carry:") ||
                 transaction.Source.StartsWith("Installment:"))
                 throw new InvalidOperationException("Bu kart hareketi silinemez.");
             if (transaction.CardId is int cardId && transaction.CardDebtChange != 0)
@@ -392,6 +420,32 @@ public class DatabaseService
             existing.Iban = iban;
             existing.BankLogoCode = input.BankLogoCode;
             connection.Update(existing);
+        }
+    });
+
+    public Task DeleteBankAccountAsync(int accountId) => _database.RunInTransactionAsync(connection =>
+    {
+        var account = connection.Find<BankAccount>(accountId) ?? throw new InvalidOperationException("Hesap bulunamadı.");
+        var movements = connection.Table<BankAccountMovement>().Where(item => item.AccountId == accountId).ToList();
+        var movementIds = movements.Select(item => item.Id).ToHashSet();
+        foreach (var transaction in connection.Table<FinancialTransaction>().ToList()
+                     .Where(item => item.BankMovementId.HasValue && movementIds.Contains(item.BankMovementId.Value)))
+        {
+            transaction.BankMovementId = null;
+            connection.Update(transaction);
+        }
+        foreach (var loan in connection.Table<Loan>().Where(item => item.BankAccountId == accountId).ToList())
+        {
+            foreach (var payment in connection.Table<LoanPayment>().Where(item => item.LoanId == loan.Id).ToList())
+                connection.Delete(payment);
+            connection.Delete(loan);
+        }
+        foreach (var movement in movements) connection.Delete(movement);
+        connection.Delete(account);
+        if (account.ShowOnHome)
+        {
+            var next = connection.Table<BankAccount>().OrderBy(item => item.Name).FirstOrDefault();
+            if (next is not null) { next.ShowOnHome = true; connection.Update(next); }
         }
     });
 
@@ -558,7 +612,8 @@ public class DatabaseService
 
     public Task SaveBenefitCardAsync(BenefitCard input) => _database.RunInTransactionAsync(connection =>
     {
-        if (string.IsNullOrWhiteSpace(input.Name) || input.MonthlyAmount <= 0 ||
+        if (string.IsNullOrWhiteSpace(input.Name) ||
+            (input.Kind == BenefitCardKind.Fuel && input.MonthlyAmount <= 0) ||
             input.ExpirationMonth is < 1 or > 12 || input.ExpirationYear < 1 || input.RenewalDay is < 1 or > 31)
             throw new InvalidOperationException("Kart bilgilerini kontrol et.");
         input.Name = input.Name.Trim();
@@ -569,16 +624,17 @@ public class DatabaseService
             if (existing is not null) throw new InvalidOperationException("Bu türde yalnızca bir kart eklenebilir.");
             input.Unit = input.Kind == BenefitCardKind.Meal ? BenefitUnit.Money : input.Unit;
             input.RenewalDay = input.Kind == BenefitCardKind.Meal ? 1 : input.RenewalDay;
-            input.CurrentBalance = input.MonthlyAmount;
+            input.CurrentBalance = input.Kind == BenefitCardKind.Meal ? 0 : input.MonthlyAmount;
             input.UsedThisCycle = 0;
             input.LastRenewalDate = DateTime.Today;
             connection.Insert(input);
-            connection.Insert(new BenefitCardMovement
-            {
-                CardId = input.Id, Kind = input.Kind == BenefitCardKind.Meal ? BenefitMovementKind.Credit : BenefitMovementKind.Renewal,
-                Unit = input.Unit, Amount = input.MonthlyAmount, BalanceAfter = input.CurrentBalance,
-                Description = input.Kind == BenefitCardKind.Meal ? "İlk aylık yükleme" : "İlk limit"
-            });
+            if (input.Kind == BenefitCardKind.Fuel)
+                connection.Insert(new BenefitCardMovement
+                {
+                    CardId = input.Id, Kind = BenefitMovementKind.Renewal,
+                    Unit = input.Unit, Amount = input.MonthlyAmount, BalanceAfter = input.CurrentBalance,
+                    Description = "İlk limit"
+                });
             return;
         }
 
@@ -588,7 +644,7 @@ public class DatabaseService
         existing.Name = input.Name.Trim();
         existing.ExpirationMonth = input.ExpirationMonth;
         existing.ExpirationYear = input.ExpirationYear;
-        existing.MonthlyAmount = input.MonthlyAmount;
+        existing.MonthlyAmount = existing.Kind == BenefitCardKind.Meal ? 0 : input.MonthlyAmount;
         if (existing.Kind == BenefitCardKind.Fuel)
         {
             if (existing.Unit != input.Unit) existing.UsedThisCycle = 0;
@@ -638,6 +694,7 @@ public class DatabaseService
         var today = DateTime.Today;
         foreach (var card in connection.Table<BenefitCard>().ToList())
         {
+            if (card.Kind == BenefitCardKind.Meal) continue;
             var month = new DateTime(card.LastRenewalDate.Year, card.LastRenewalDate.Month, 1);
             while (month <= today)
             {
@@ -645,16 +702,15 @@ public class DatabaseService
                     Math.Min(card.RenewalDay, DateTime.DaysInMonth(month.Year, month.Month)));
                 if (due > card.LastRenewalDate.Date && due <= today)
                 {
-                    if (card.Kind == BenefitCardKind.Meal) card.CurrentBalance += card.MonthlyAmount;
-                    else card.CurrentBalance = card.MonthlyAmount;
+                    card.CurrentBalance = card.MonthlyAmount;
                     card.UsedThisCycle = 0;
                     card.LastRenewalDate = due;
                     connection.Update(card);
                     connection.Insert(new BenefitCardMovement
                     {
-                        CardId = card.Id, Kind = card.Kind == BenefitCardKind.Meal ? BenefitMovementKind.Credit : BenefitMovementKind.Renewal,
+                        CardId = card.Id, Kind = BenefitMovementKind.Renewal,
                         Unit = card.Unit, Amount = card.MonthlyAmount, BalanceAfter = card.CurrentBalance,
-                        Description = card.Kind == BenefitCardKind.Meal ? "Aylık yükleme" : "Aylık limit yenilendi", Date = due
+                        Description = "Aylık limit yenilendi", Date = due
                     });
                 }
                 month = month.AddMonths(1);

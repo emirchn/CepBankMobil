@@ -24,19 +24,19 @@
                 <label class="type-choice @(_unit == BenefitUnit.Liter ? "selected" : "")"><input type="checkbox" checked="@(_unit == BenefitUnit.Liter)" @onclick="() => SetUnit(BenefitUnit.Liter)" @onclick:preventDefault="true" />Litre</label>
             </fieldset>
         }
+        @if (_kind == BenefitCardKind.Fuel)
+        {
         <div class="benefit-setting-row">
-            <label>@(_kind == BenefitCardKind.Meal ? "Aylık yükleme tutarı (TL)" : _unit == BenefitUnit.Liter ? "Kart limiti (L)" : "Kart limiti (TL)")
+            <label>@(_unit == BenefitUnit.Liter ? "Kart limiti (L)" : "Kart limiti (TL)")
                 <input type="number" min="0" step="0.01" @bind="_monthlyAmountText" placeholder="0,00" />
             </label>
-            @if (_kind == BenefitCardKind.Fuel)
-            {
-                <label>Limit yenileme günü
-                    <select @bind="_renewalDay">@for (var day = 1; day <= 31; day++) { <option value="@day">Ayın @day. günü</option> }</select>
-                </label>
-            }
+            <label>Limit yenileme günü
+                <select @bind="_renewalDay">@for (var day = 1; day <= 31; day++) { <option value="@day">Ayın @day. günü</option> }</select>
+            </label>
         </div>
+        }
         <p class="field-hint">@(_kind == BenefitCardKind.Meal
-            ? "Bakiye düzenlenmez. Her ayın 1. günü aylık tutar bakiyeye eklenir; ayrıca Bakiye ekle ile yükleme yapabilirsin."
+            ? "Yemek kartı bakiyesi yalnızca Bakiye ekle ile manuel yüklenir."
             : "Limit seçilen günde yeniden belirlediğin tutara sıfırlanır; önceki aydan kalan miktar eklenmez.")</p>
         @if (!string.IsNullOrWhiteSpace(_error)) { <p class="error-message">@_error</p> }
         <button class="primary-button" type="button" disabled="@_saving" @onclick="SaveAsync">@(_saving ? "Kaydediliyor…" : "Kartı kaydet")</button>
@@ -83,8 +83,10 @@
         if (_saving) return;
         _error = string.Empty;
         if (string.IsNullOrWhiteSpace(_name)) { _error = "Kart adı girin."; return; }
-        if (!decimal.TryParse(_monthlyAmountText, NumberStyles.Number, CultureInfo.InvariantCulture, out var amount) &&
-            !decimal.TryParse(_monthlyAmountText, NumberStyles.Number, new CultureInfo("tr-TR"), out amount) || amount <= 0)
+        decimal amount = 0;
+        if (_kind == BenefitCardKind.Fuel &&
+            ((!decimal.TryParse(_monthlyAmountText, NumberStyles.Number, CultureInfo.InvariantCulture, out amount) &&
+              !decimal.TryParse(_monthlyAmountText, NumberStyles.Number, new CultureInfo("tr-TR"), out amount)) || amount <= 0))
         { _error = "Sıfırdan büyük geçerli bir tutar girin."; return; }
         _saving = true;
         try

@@ -1,16 +1,184 @@
 ﻿<Project>
   <ItemGroup>
-    <StaticWebAssetEndpoint Include="app.9u2j88da3v.css">
-      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\app.css'))</AssetFile>
-      <Selectors><![CDATA[[]]]></Selectors>
-      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"9u2j88da3v"},{"Name":"integrity","Value":"sha256-IQ0B2BWd1yQr0SXRbtjNciKrsS/XkWyn\u002Bhegop1kpp8="},{"Name":"label","Value":"app.css"}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"67990"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022IQ0B2BWd1yQr0SXRbtjNciKrsS/XkWyn\u002Bhegop1kpp8=\u0022"},{"Name":"Last-Modified","Value":"Sat, 31 Oct 2026 22:18:42 GMT"}]]]></ResponseHeaders>
-    </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="app.css">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\app.css'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
-      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-IQ0B2BWd1yQr0SXRbtjNciKrsS/XkWyn\u002Bhegop1kpp8="}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"67990"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022IQ0B2BWd1yQr0SXRbtjNciKrsS/XkWyn\u002Bhegop1kpp8=\u0022"},{"Name":"Last-Modified","Value":"Sat, 31 Oct 2026 22:18:42 GMT"}]]]></ResponseHeaders>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-LV41brHb8Dewu9eaA\u002BTkZg0yMUv29jMDZGoeMuUvY8U="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"72119"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022LV41brHb8Dewu9eaA\u002BTkZg0yMUv29jMDZGoeMuUvY8U=\u0022"},{"Name":"Last-Modified","Value":"Sat, 31 Oct 2026 23:13:07 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="app.z4e140e5tn.css">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\app.css'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"z4e140e5tn"},{"Name":"integrity","Value":"sha256-LV41brHb8Dewu9eaA\u002BTkZg0yMUv29jMDZGoeMuUvY8U="},{"Name":"label","Value":"app.css"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"72119"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022LV41brHb8Dewu9eaA\u002BTkZg0yMUv29jMDZGoeMuUvY8U=\u0022"},{"Name":"Last-Modified","Value":"Sat, 31 Oct 2026 23:13:07 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="bank-logos/akbank.svg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\bank-logos\akbank.svg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-1QCj3fsPuJen/hC28JAs5\u002B3R0TifOHkR/Hk865lj6R4="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"1404"},{"Name":"Content-Type","Value":"image/svg\u002Bxml"},{"Name":"ETag","Value":"\u00221QCj3fsPuJen/hC28JAs5\u002B3R0TifOHkR/Hk865lj6R4=\u0022"},{"Name":"Last-Modified","Value":"Sat, 31 Oct 2026 22:35:41 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="bank-logos/akbank.v32iceqspi.svg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\bank-logos\akbank.svg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"v32iceqspi"},{"Name":"integrity","Value":"sha256-1QCj3fsPuJen/hC28JAs5\u002B3R0TifOHkR/Hk865lj6R4="},{"Name":"label","Value":"bank-logos/akbank.svg"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"1404"},{"Name":"Content-Type","Value":"image/svg\u002Bxml"},{"Name":"ETag","Value":"\u00221QCj3fsPuJen/hC28JAs5\u002B3R0TifOHkR/Hk865lj6R4=\u0022"},{"Name":"Last-Modified","Value":"Sat, 31 Oct 2026 22:35:41 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="bank-logos/denizbank.8m1mtnapz2.svg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\bank-logos\denizbank.svg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"8m1mtnapz2"},{"Name":"integrity","Value":"sha256-sIqhcy6Ai9koz9OekaXsVAnfF6KhEALo6yUXpQR9KkI="},{"Name":"label","Value":"bank-logos/denizbank.svg"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"3518"},{"Name":"Content-Type","Value":"image/svg\u002Bxml"},{"Name":"ETag","Value":"\u0022sIqhcy6Ai9koz9OekaXsVAnfF6KhEALo6yUXpQR9KkI=\u0022"},{"Name":"Last-Modified","Value":"Sat, 31 Oct 2026 22:35:42 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="bank-logos/denizbank.svg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\bank-logos\denizbank.svg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-sIqhcy6Ai9koz9OekaXsVAnfF6KhEALo6yUXpQR9KkI="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"3518"},{"Name":"Content-Type","Value":"image/svg\u002Bxml"},{"Name":"ETag","Value":"\u0022sIqhcy6Ai9koz9OekaXsVAnfF6KhEALo6yUXpQR9KkI=\u0022"},{"Name":"Last-Modified","Value":"Sat, 31 Oct 2026 22:35:42 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="bank-logos/enpara.33aqemjirj.svg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\bank-logos\enpara.svg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"33aqemjirj"},{"Name":"integrity","Value":"sha256-cbSGm4eDY7zb/6Fb2zXzQPzDDoZXVarm7atLoIaXX78="},{"Name":"label","Value":"bank-logos/enpara.svg"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"5357"},{"Name":"Content-Type","Value":"image/svg\u002Bxml"},{"Name":"ETag","Value":"\u0022cbSGm4eDY7zb/6Fb2zXzQPzDDoZXVarm7atLoIaXX78=\u0022"},{"Name":"Last-Modified","Value":"Sat, 31 Oct 2026 22:35:42 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="bank-logos/enpara.svg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\bank-logos\enpara.svg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-cbSGm4eDY7zb/6Fb2zXzQPzDDoZXVarm7atLoIaXX78="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"5357"},{"Name":"Content-Type","Value":"image/svg\u002Bxml"},{"Name":"ETag","Value":"\u0022cbSGm4eDY7zb/6Fb2zXzQPzDDoZXVarm7atLoIaXX78=\u0022"},{"Name":"Last-Modified","Value":"Sat, 31 Oct 2026 22:35:42 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="bank-logos/garanti.ejsi7z75yv.svg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\bank-logos\garanti.svg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"ejsi7z75yv"},{"Name":"integrity","Value":"sha256-\u002BuODwgSeiXFLGWDBYgUlmu4lAmKohKhEUXxHTo11Mj4="},{"Name":"label","Value":"bank-logos/garanti.svg"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"32818"},{"Name":"Content-Type","Value":"image/svg\u002Bxml"},{"Name":"ETag","Value":"\u0022\u002BuODwgSeiXFLGWDBYgUlmu4lAmKohKhEUXxHTo11Mj4=\u0022"},{"Name":"Last-Modified","Value":"Sat, 31 Oct 2026 22:35:41 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="bank-logos/garanti.svg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\bank-logos\garanti.svg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-\u002BuODwgSeiXFLGWDBYgUlmu4lAmKohKhEUXxHTo11Mj4="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"32818"},{"Name":"Content-Type","Value":"image/svg\u002Bxml"},{"Name":"ETag","Value":"\u0022\u002BuODwgSeiXFLGWDBYgUlmu4lAmKohKhEUXxHTo11Mj4=\u0022"},{"Name":"Last-Modified","Value":"Sat, 31 Oct 2026 22:35:41 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="bank-logos/halkbank.svg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\bank-logos\halkbank.svg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-K0fX8gdXDYMvFq49aGPJpY7ckJms\u002B/eTgPhk1XhbuMs="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"8690"},{"Name":"Content-Type","Value":"image/svg\u002Bxml"},{"Name":"ETag","Value":"\u0022K0fX8gdXDYMvFq49aGPJpY7ckJms\u002B/eTgPhk1XhbuMs=\u0022"},{"Name":"Last-Modified","Value":"Sat, 31 Oct 2026 22:35:42 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="bank-logos/halkbank.v7lzh0squ5.svg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\bank-logos\halkbank.svg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"v7lzh0squ5"},{"Name":"integrity","Value":"sha256-K0fX8gdXDYMvFq49aGPJpY7ckJms\u002B/eTgPhk1XhbuMs="},{"Name":"label","Value":"bank-logos/halkbank.svg"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"8690"},{"Name":"Content-Type","Value":"image/svg\u002Bxml"},{"Name":"ETag","Value":"\u0022K0fX8gdXDYMvFq49aGPJpY7ckJms\u002B/eTgPhk1XhbuMs=\u0022"},{"Name":"Last-Modified","Value":"Sat, 31 Oct 2026 22:35:42 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="bank-logos/ing.5zad06jjnh.svg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\bank-logos\ing.svg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"5zad06jjnh"},{"Name":"integrity","Value":"sha256-L79uARcQmvDtosqpBx4/H89capmilQz5/JPSVRKcVIo="},{"Name":"label","Value":"bank-logos/ing.svg"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"18681"},{"Name":"Content-Type","Value":"image/svg\u002Bxml"},{"Name":"ETag","Value":"\u0022L79uARcQmvDtosqpBx4/H89capmilQz5/JPSVRKcVIo=\u0022"},{"Name":"Last-Modified","Value":"Sat, 31 Oct 2026 22:35:42 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="bank-logos/ing.svg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\bank-logos\ing.svg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-L79uARcQmvDtosqpBx4/H89capmilQz5/JPSVRKcVIo="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"18681"},{"Name":"Content-Type","Value":"image/svg\u002Bxml"},{"Name":"ETag","Value":"\u0022L79uARcQmvDtosqpBx4/H89capmilQz5/JPSVRKcVIo=\u0022"},{"Name":"Last-Modified","Value":"Sat, 31 Oct 2026 22:35:42 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="bank-logos/isbank.svg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\bank-logos\isbank.svg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-EZDgohmN8ZPwdlj4b0WomMYUg1psAlyizxpsi\u002BQaYc8="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"8859"},{"Name":"Content-Type","Value":"image/svg\u002Bxml"},{"Name":"ETag","Value":"\u0022EZDgohmN8ZPwdlj4b0WomMYUg1psAlyizxpsi\u002BQaYc8=\u0022"},{"Name":"Last-Modified","Value":"Sat, 31 Oct 2026 22:35:41 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="bank-logos/isbank.vsq1isjvbh.svg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\bank-logos\isbank.svg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"vsq1isjvbh"},{"Name":"integrity","Value":"sha256-EZDgohmN8ZPwdlj4b0WomMYUg1psAlyizxpsi\u002BQaYc8="},{"Name":"label","Value":"bank-logos/isbank.svg"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"8859"},{"Name":"Content-Type","Value":"image/svg\u002Bxml"},{"Name":"ETag","Value":"\u0022EZDgohmN8ZPwdlj4b0WomMYUg1psAlyizxpsi\u002BQaYc8=\u0022"},{"Name":"Last-Modified","Value":"Sat, 31 Oct 2026 22:35:41 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="bank-logos/kuveytturk.2con08eheg.svg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\bank-logos\kuveytturk.svg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"2con08eheg"},{"Name":"integrity","Value":"sha256-DuVG7/f6eC\u002Bmeo/UIb32IgWLW\u002BIAmKM2NNIwhUAANJs="},{"Name":"label","Value":"bank-logos/kuveytturk.svg"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"4731"},{"Name":"Content-Type","Value":"image/svg\u002Bxml"},{"Name":"ETag","Value":"\u0022DuVG7/f6eC\u002Bmeo/UIb32IgWLW\u002BIAmKM2NNIwhUAANJs=\u0022"},{"Name":"Last-Modified","Value":"Sat, 31 Oct 2026 22:35:42 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="bank-logos/kuveytturk.svg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\bank-logos\kuveytturk.svg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-DuVG7/f6eC\u002Bmeo/UIb32IgWLW\u002BIAmKM2NNIwhUAANJs="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"4731"},{"Name":"Content-Type","Value":"image/svg\u002Bxml"},{"Name":"ETag","Value":"\u0022DuVG7/f6eC\u002Bmeo/UIb32IgWLW\u002BIAmKM2NNIwhUAANJs=\u0022"},{"Name":"Last-Modified","Value":"Sat, 31 Oct 2026 22:35:42 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="bank-logos/qnb.svg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\bank-logos\qnb.svg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-9r0Mhhc19WXg40XuBrLfmRo5heBKzREH8G6VgcalWxU="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"4728"},{"Name":"Content-Type","Value":"image/svg\u002Bxml"},{"Name":"ETag","Value":"\u00229r0Mhhc19WXg40XuBrLfmRo5heBKzREH8G6VgcalWxU=\u0022"},{"Name":"Last-Modified","Value":"Sat, 31 Oct 2026 22:35:42 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="bank-logos/qnb.yi2lep7o01.svg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\bank-logos\qnb.svg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"yi2lep7o01"},{"Name":"integrity","Value":"sha256-9r0Mhhc19WXg40XuBrLfmRo5heBKzREH8G6VgcalWxU="},{"Name":"label","Value":"bank-logos/qnb.svg"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"4728"},{"Name":"Content-Type","Value":"image/svg\u002Bxml"},{"Name":"ETag","Value":"\u00229r0Mhhc19WXg40XuBrLfmRo5heBKzREH8G6VgcalWxU=\u0022"},{"Name":"Last-Modified","Value":"Sat, 31 Oct 2026 22:35:42 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="bank-logos/SOURCES.s91vlw1hek.txt">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\bank-logos\SOURCES.txt'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"s91vlw1hek"},{"Name":"integrity","Value":"sha256-0OL75sNJjSqMcaLLA1p7puQMzQDxWT5/UmGQL1Xkl10="},{"Name":"label","Value":"bank-logos/SOURCES.txt"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"315"},{"Name":"Content-Type","Value":"text/plain"},{"Name":"ETag","Value":"\u00220OL75sNJjSqMcaLLA1p7puQMzQDxWT5/UmGQL1Xkl10=\u0022"},{"Name":"Last-Modified","Value":"Sat, 31 Oct 2026 22:42:06 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="bank-logos/SOURCES.txt">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\bank-logos\SOURCES.txt'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-0OL75sNJjSqMcaLLA1p7puQMzQDxWT5/UmGQL1Xkl10="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"315"},{"Name":"Content-Type","Value":"text/plain"},{"Name":"ETag","Value":"\u00220OL75sNJjSqMcaLLA1p7puQMzQDxWT5/UmGQL1Xkl10=\u0022"},{"Name":"Last-Modified","Value":"Sat, 31 Oct 2026 22:42:06 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="bank-logos/teb.fe56jfwry2.svg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\bank-logos\teb.svg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"fe56jfwry2"},{"Name":"integrity","Value":"sha256-16\u002BXuF1/Pq52JrotBynv7j\u002BfhKSAQ4R7XStaBOxjFXs="},{"Name":"label","Value":"bank-logos/teb.svg"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"6902"},{"Name":"Content-Type","Value":"image/svg\u002Bxml"},{"Name":"ETag","Value":"\u002216\u002BXuF1/Pq52JrotBynv7j\u002BfhKSAQ4R7XStaBOxjFXs=\u0022"},{"Name":"Last-Modified","Value":"Sat, 31 Oct 2026 22:35:42 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="bank-logos/teb.svg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\bank-logos\teb.svg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-16\u002BXuF1/Pq52JrotBynv7j\u002BfhKSAQ4R7XStaBOxjFXs="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"6902"},{"Name":"Content-Type","Value":"image/svg\u002Bxml"},{"Name":"ETag","Value":"\u002216\u002BXuF1/Pq52JrotBynv7j\u002BfhKSAQ4R7XStaBOxjFXs=\u0022"},{"Name":"Last-Modified","Value":"Sat, 31 Oct 2026 22:35:42 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="bank-logos/vakifbank.742wyubnmb.svg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\bank-logos\vakifbank.svg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"742wyubnmb"},{"Name":"integrity","Value":"sha256-SSMz7czwzWK07Ai/Q9vH44XZ9wodrGSdjUGHSgrwLoc="},{"Name":"label","Value":"bank-logos/vakifbank.svg"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"4841"},{"Name":"Content-Type","Value":"image/svg\u002Bxml"},{"Name":"ETag","Value":"\u0022SSMz7czwzWK07Ai/Q9vH44XZ9wodrGSdjUGHSgrwLoc=\u0022"},{"Name":"Last-Modified","Value":"Sat, 31 Oct 2026 22:35:42 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="bank-logos/vakifbank.svg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\bank-logos\vakifbank.svg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-SSMz7czwzWK07Ai/Q9vH44XZ9wodrGSdjUGHSgrwLoc="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"4841"},{"Name":"Content-Type","Value":"image/svg\u002Bxml"},{"Name":"ETag","Value":"\u0022SSMz7czwzWK07Ai/Q9vH44XZ9wodrGSdjUGHSgrwLoc=\u0022"},{"Name":"Last-Modified","Value":"Sat, 31 Oct 2026 22:35:42 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="bank-logos/yapikredi.4sr0nd5hxj.svg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\bank-logos\yapikredi.svg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"4sr0nd5hxj"},{"Name":"integrity","Value":"sha256-XBgtgW7IDtH\u002B1X09Xbv1MF86es2Cy1GfHFoTpP9YfwQ="},{"Name":"label","Value":"bank-logos/yapikredi.svg"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"4734"},{"Name":"Content-Type","Value":"image/svg\u002Bxml"},{"Name":"ETag","Value":"\u0022XBgtgW7IDtH\u002B1X09Xbv1MF86es2Cy1GfHFoTpP9YfwQ=\u0022"},{"Name":"Last-Modified","Value":"Sat, 31 Oct 2026 22:35:41 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="bank-logos/yapikredi.svg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\bank-logos\yapikredi.svg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-XBgtgW7IDtH\u002B1X09Xbv1MF86es2Cy1GfHFoTpP9YfwQ="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"4734"},{"Name":"Content-Type","Value":"image/svg\u002Bxml"},{"Name":"ETag","Value":"\u0022XBgtgW7IDtH\u002B1X09Xbv1MF86es2Cy1GfHFoTpP9YfwQ=\u0022"},{"Name":"Last-Modified","Value":"Sat, 31 Oct 2026 22:35:41 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="bank-logos/ziraat.sbh6efxmgp.svg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\bank-logos\ziraat.svg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"sbh6efxmgp"},{"Name":"integrity","Value":"sha256-OJfJnFzzei9A/tQrsv7oGVN6O9bUa7mtEZ70wk3s3dc="},{"Name":"label","Value":"bank-logos/ziraat.svg"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"22672"},{"Name":"Content-Type","Value":"image/svg\u002Bxml"},{"Name":"ETag","Value":"\u0022OJfJnFzzei9A/tQrsv7oGVN6O9bUa7mtEZ70wk3s3dc=\u0022"},{"Name":"Last-Modified","Value":"Sat, 31 Oct 2026 22:35:41 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="bank-logos/ziraat.svg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\bank-logos\ziraat.svg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-OJfJnFzzei9A/tQrsv7oGVN6O9bUa7mtEZ70wk3s3dc="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"22672"},{"Name":"Content-Type","Value":"image/svg\u002Bxml"},{"Name":"ETag","Value":"\u0022OJfJnFzzei9A/tQrsv7oGVN6O9bUa7mtEZ70wk3s3dc=\u0022"},{"Name":"Last-Modified","Value":"Sat, 31 Oct 2026 22:35:41 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="brand-mark.jnai2x0zbx.svg">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\brand-mark.svg'))</AssetFile>
@@ -24,17 +192,17 @@
       <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-byxBUnC\u002Bh3AINRkAoHXXoRJHKGlgPJVGA/sTvesfN8c="}]]]></EndpointProperties>
       <ResponseHeaders><![CDATA[[{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"996"},{"Name":"Content-Type","Value":"image/svg\u002Bxml"},{"Name":"ETag","Value":"\u0022byxBUnC\u002Bh3AINRkAoHXXoRJHKGlgPJVGA/sTvesfN8c=\u0022"},{"Name":"Last-Modified","Value":"Thu, 29 Oct 2026 22:32:44 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
-    <StaticWebAssetEndpoint Include="CepBankApp.e1qejl5m86.styles.css">
+    <StaticWebAssetEndpoint Include="CepBankApp.rdhh6pyx62.styles.css">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\CepBankApp.styles.css'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
-      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"e1qejl5m86"},{"Name":"integrity","Value":"sha256-UrJVhCcskgRsVTrMhuYRDOlTP6yXVG294rC7uSogLBw="},{"Name":"label","Value":"CepBankApp.styles.css"}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"6850"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022UrJVhCcskgRsVTrMhuYRDOlTP6yXVG294rC7uSogLBw=\u0022"},{"Name":"Last-Modified","Value":"Thu, 29 Oct 2026 22:53:24 GMT"}]]]></ResponseHeaders>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"rdhh6pyx62"},{"Name":"integrity","Value":"sha256-P5yEou7YpjZSM0HlBYIOysRaLIN61nGMmFYSNnat3Vc="},{"Name":"label","Value":"CepBankApp.styles.css"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"8195"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022P5yEou7YpjZSM0HlBYIOysRaLIN61nGMmFYSNnat3Vc=\u0022"},{"Name":"Last-Modified","Value":"Sat, 31 Oct 2026 23:14:05 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="CepBankApp.styles.css">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\CepBankApp.styles.css'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
-      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-UrJVhCcskgRsVTrMhuYRDOlTP6yXVG294rC7uSogLBw="}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"6850"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022UrJVhCcskgRsVTrMhuYRDOlTP6yXVG294rC7uSogLBw=\u0022"},{"Name":"Last-Modified","Value":"Thu, 29 Oct 2026 22:53:24 GMT"}]]]></ResponseHeaders>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-P5yEou7YpjZSM0HlBYIOysRaLIN61nGMmFYSNnat3Vc="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"8195"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022P5yEou7YpjZSM0HlBYIOysRaLIN61nGMmFYSNnat3Vc=\u0022"},{"Name":"Last-Modified","Value":"Sat, 31 Oct 2026 23:14:05 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="glassy-wallpaper.png">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\glassy-wallpaper.png'))</AssetFile>
