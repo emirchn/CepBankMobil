@@ -30,7 +30,7 @@
         <MauiXamlInflator>SourceGen</MauiXamlInflator>
 
         <!-- Display name -->
-        <ApplicationTitle>CepBank</ApplicationTitle>
+        <ApplicationTitle>EC Apps</ApplicationTitle>
 
         <!-- App Identifier -->
         <ApplicationId>com.emir.cepbankapp.cepbankapp</ApplicationId>
@@ -82,10 +82,10 @@
 
     <ItemGroup>
         <!-- App Icon -->
-        <MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#17394B" />
+        <MauiIcon Include="Resources\AppIcon\appicon.svg" Color="#172444" />
 
         <!-- Splash Screen -->
-        <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#17394B" BaseSize="128,128" />
+        <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#172444" BaseSize="128,128" />
 
         <!-- Images -->
         <MauiImage Include="Resources\Images\*" />

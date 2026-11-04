@@ -8,6 +8,7 @@
 @using CepBankApp.Services
 @inject DatabaseService Database
 @inject NotificationService NotificationService
+@inject NotesReminderService NotesReminders
 @inject WidgetSummaryService WidgetSummary
 @inject IJSRuntime JS
 
@@ -194,6 +195,7 @@
             await WidgetSummary.TryRefreshAsync();
             SecureStorage.Default.RemoveAll();
             LocalNotificationCenter.Current.CancelAll();
+            await NotesReminders.RefreshAsync();
             _statementDays = NotificationSettings.StatementDays = 1 << 3;
             _paymentDays = NotificationSettings.PaymentDays = 1 << 3;
             _dailyBalanceEnabled = NotificationSettings.DailyBalanceEnabled = true;

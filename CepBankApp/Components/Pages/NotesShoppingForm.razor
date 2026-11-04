@@ -1,0 +1,134 @@
+@page "/notes/shopping/new"
+@page "/notes/shopping/edit/{Id:int}"
+@layout NotesLayout
+@implements IDisposable
+@using CepBankApp.Data
+@using CepBankApp.Models
+@using CepBankApp.Services
+@inject NotesStore Store
+@inject NavigationManager Navigation
+
+<section class="notes-page">
+    <div class="notes-heading"><div><p class="notes-kicker">ALINACAKLAR</p><h1>@(Id == 0 ? "Ürün ekle" : "Ürünü düzenle")</h1></div><NavLink href="notes/shopping">Vazgeç</NavLink></div>
+    @if (Id != 0 && !_authorized)
+    {
+        <div class="notes-panel notes-form"><p class="notes-error">@_error</p><button type="button" class="notes-primary" @onclick="UnlockForEditingAsync">Face ID ile aç</button></div>
+    }
+    else
+    {
+    <div class="notes-panel notes-form">
+        <label>Ürün adı <input maxlength="160" @bind="_item.Name" /></label>
+        <label>Fiyat <span>(opsiyonel, TL)</span><input type="number" min="0" step="0.01" inputmode="decimal" @bind="_priceText" /></label>
+        <label>Kategori <select @bind="_item.Category">@foreach (var category in ShoppingCategories.All) { <option value="@category">@ShoppingCategories.Label(category)</option> }</select></label>
+        <label>Bağlantı <span>(opsiyonel)</span><input type="url" placeholder="https://" @bind="_item.Link" /></label>
+        <div class="photo-field"><span>Resim (opsiyonel)</span><button type="button" @onclick="ChoosePhotoAsync">@(string.IsNullOrEmpty(_item.ImageDataUrl) ? "Resim seç" : "Resmi değiştir")</button>@if (!string.IsNullOrEmpty(_item.ImageDataUrl)) { <img src="@_item.ImageDataUrl" alt="Seçilen ürün resmi" /><button type="button" @onclick="RemovePhoto">Resmi kaldır</button> }</div>
+        @if (!string.IsNullOrWhiteSpace(_error)) { <p class="notes-error">@_error</p> }
+        <button type="button" class="notes-primary" disabled="@_saving" @onclick="SaveAsync">Kaydet</button>
+    </div>
+    }
+</section>
+
+@code {
+    [Parameter] public int Id { get; set; }
+    private ShoppingItem _item = new();
+    private string _priceText = "", _error = "";
+    private ShoppingItem? _pendingSecret;
+    private bool _authorized;
+    private bool _saving;
+    private Window? _window;
+    protected override void OnInitialized()
+    {
+        _window = Application.Current?.Windows.FirstOrDefault();
+        if (_window is not null) _window.Stopped += OnWindowStopped;
+    }
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Id == 0) { _authorized = true; return; }
+        var stored = await Store.GetShoppingItemAsync(Id);
+        if (stored is null) { _error = "Ürün bulunamadı."; return; }
+        if (stored.Category == ShoppingCategory.Gizli)
+        {
+            _pendingSecret = stored;
+            _authorized = false;
+            await UnlockForEditingAsync();
+        }
+        else SetEditableItem(stored);
+    }
+    private async Task UnlockForEditingAsync()
+    {
+        if (_pendingSecret is null) return;
+        try
+        {
+            var result = await SecretItemAuthentication.AuthenticateAsync();
+            if (result.Succeeded) SetEditableItem(_pendingSecret);
+            else _error = result.Message;
+        }
+        catch { _error = "Face ID doğrulaması başlatılamadı."; }
+    }
+    private void SetEditableItem(ShoppingItem item)
+    {
+        _item = item;
+        _priceText = _item.Price?.ToString(System.Globalization.CultureInfo.InvariantCulture) ?? "";
+        _authorized = true;
+        _error = "";
+    }
+    private void OnWindowStopped(object? sender, EventArgs args) => _ = InvokeAsync(() =>
+    {
+        if (_item.Category != ShoppingCategory.Gizli || !_authorized) return;
+        _pendingSecret = _item;
+        _item = new ShoppingItem();
+        _priceText = "";
+        _authorized = false;
+        _error = "Gizli ürünü yeniden açmak için Face ID kullan.";
+        StateHasChanged();
+    });
+    public void Dispose()
+    {
+        if (_window is not null) _window.Stopped -= OnWindowStopped;
+    }
+    private async Task ChoosePhotoAsync()
+    {
+        try
+        {
+            var photo = (await MediaPicker.Default.PickPhotosAsync()).FirstOrDefault();
+            if (photo is null) return;
+            await using var stream = await photo.OpenReadAsync();
+            using var buffer = new MemoryStream();
+            var chunk = new byte[81920];
+            int count;
+            while ((count = await stream.ReadAsync(chunk)) > 0)
+            {
+                if (buffer.Length + count > 5_000_000) { _error = "Resim 5 MB'den küçük olmalı."; return; }
+                buffer.Write(chunk, 0, count);
+            }
+            var mime = photo.ContentType?.StartsWith("image/", StringComparison.OrdinalIgnoreCase) == true
+                ? photo.ContentType
+                : Path.GetExtension(photo.FileName).ToLowerInvariant() switch
+                {
+                    ".png" => "image/png", ".webp" => "image/webp", ".gif" => "image/gif",
+                    ".heic" => "image/heic", ".heif" => "image/heif", _ => "image/jpeg"
+                };
+            _item.ImageDataUrl = $"data:{mime};base64,{Convert.ToBase64String(buffer.ToArray())}";
+            _error = "";
+        }
+        catch (Exception ex) { _error = "Resim seçilemedi: " + ex.Message; }
+    }
+    private void RemovePhoto() => _item.ImageDataUrl = "";
+    private async Task SaveAsync()
+    {
+        if (_saving) return;
+        if (string.IsNullOrWhiteSpace(_item.Name)) { _error = "Ürün adı gerekli."; return; }
+        if (!string.IsNullOrWhiteSpace(_priceText))
+        {
+            if (!decimal.TryParse(_priceText, System.Globalization.NumberStyles.Number, System.Globalization.CultureInfo.InvariantCulture, out var price) || price < 0) { _error = "Geçerli bir fiyat gir."; return; }
+            _item.Price = price;
+        }
+        else _item.Price = null;
+        if (!string.IsNullOrWhiteSpace(_item.Link) && (!Uri.TryCreate(_item.Link, UriKind.Absolute, out var uri) || uri.Scheme is not ("https" or "http"))) { _error = "Bağlantı http veya https ile başlamalı."; return; }
+        _saving = true;
+        if (_item.Id == 0) _item.CreatedAt = DateTime.Now;
+        _item.Name = _item.Name.Trim(); _item.Link = _item.Link.Trim();
+        try { await Store.SaveShoppingItemAsync(_item); Navigation.NavigateTo("notes/shopping"); }
+        catch (Exception ex) { _error = "Ürün kaydedilemedi: " + ex.Message; _saving = false; }
+    }
+}

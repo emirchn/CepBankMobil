@@ -10,19 +10,19 @@
 		</data>
 		<key>Assets.car</key>
 		<data>
-		97QIfmynYHBvKPVzZABmpNxV568=
+		PIwq6TEY217Cj3b3gUKnQIrwLdI=
 		</data>
 		<key>CepBankApp.dll</key>
 		<data>
-		zbksn4H5nxunGUlPKc8u5ybalwc=
+		UiX0n4y8Cdr8yMq9l2OHi9MBOhU=
 		</data>
 		<key>CepBankApp.pdb</key>
 		<data>
-		d5Mkf7tedf334Mn0xA0Se+Ze7mg=
+		/rLj7W6S7u341elYhJ942Ypl0OA=
 		</data>
 		<key>Info.plist</key>
 		<data>
-		eX7MBd7hlitOMy8X8nZu5AX7RQI=
+		8IaqTOgq4ksAxJ3hNYKIdAIy9z4=
 		</data>
 		<key>MauiInfo.plist</key>
 		<data>
@@ -30,7 +30,7 @@
 		</data>
 		<key>MauiSplash.storyboardc/01J-lp-oVM-view-Ze5-6b-2t3.nib</key>
 		<data>
-		may+9E4Lx4OGTirwAMnhjO2f8ZE=
+		rrMBHmYdZuqi1hlswyI1MI3n0Xc=
 		</data>
 		<key>MauiSplash.storyboardc/Info.plist</key>
 		<data>
@@ -230,7 +230,7 @@
 		</data>
 		<key>PrivacyInfo.xcprivacy</key>
 		<data>
-		pScV0m/ScDO7ioQvtmSZMpAwQyg=
+		+59cRc8ev+HwAO70fp1P8R6hyjc=
 		</data>
 		<key>SQLite-net.dll</key>
 		<data>
@@ -914,11 +914,11 @@
 		</data>
 		<key>appicon60x60@2x.png</key>
 		<data>
-		3M1ySX6ZcuVy+RqKhAsb9tNpOFQ=
+		nOMj6XPattDW10mrqiKLWzdO08E=
 		</data>
 		<key>appicon76x76@2x~ipad.png</key>
 		<data>
-		3Ki3Tzm/mZ3giQCvzULcxM3EeE8=
+		XZoCbItH2yTZMO4hQBCT7OF3EpU=
 		</data>
 		<key>ar/Microsoft.Maui.Controls.resources.dll</key>
 		<data>
@@ -1002,47 +1002,47 @@
 		</data>
 		<key>libSystem.Globalization.Native.dylib</key>
 		<data>
-		CWHBPRCNpKK3NWXjoj8Km38tras=
+		Duo/tG3of0Kf7z6R+3DKiyUXL2Y=
 		</data>
 		<key>libSystem.IO.Compression.Native.dylib</key>
 		<data>
-		jkFfQxcjO+3Ff1z6OGgVbQLnbas=
+		5nE40xk/N+mqPYMV3pzO8D9x2uY=
 		</data>
 		<key>libSystem.Native.dylib</key>
 		<data>
-		Et9LZnHIuUY/G1LCKWDLjcGE4tA=
+		Cs8ZPMOIs4FhS8I5W6wNz1KqaKs=
 		</data>
 		<key>libSystem.Net.Security.Native.dylib</key>
 		<data>
-		e1rAdgVtvui2c923YrF/rF3WXEY=
+		UYLZxduHV9buoI2boG5hLSU530g=
 		</data>
 		<key>libSystem.Security.Cryptography.Native.Apple.dylib</key>
 		<data>
-		mWyLWtS5RL41W/e2DKZZUuLxc5I=
+		08yESIE+PihMqYJmtxIzYlueBlI=
 		</data>
 		<key>libmono-component-debugger.dylib</key>
 		<data>
-		IxCW1MgNF1vRMe4Kv1NIrHPWG4g=
+		ojTom9wYQKcMI6jRFhuxmtuifHA=
 		</data>
 		<key>libmono-component-diagnostics_tracing.dylib</key>
 		<data>
-		Nylpw3r377yPrwoZmwClMkKP4Hk=
+		cnDbMeUHFo79HRktCfGKOPuLpZw=
 		</data>
 		<key>libmono-component-hot_reload.dylib</key>
 		<data>
-		9yVQt54dVRQ3i3RiWa4jNk6O5kY=
+		wtOev0Xg2KIZ4N5nM1+c20q2cEQ=
 		</data>
 		<key>libmono-component-marshal-ilgen.dylib</key>
 		<data>
-		Cin7tPyhMpVXOiDCdEMBVkHAzu0=
+		hKLjeoMUY6a3uiSF/BygqannfmA=
 		</data>
 		<key>libmonosgen-2.0.dylib</key>
 		<data>
-		v67msmEj7sejwCDA4ScOoFDvFAs=
+		9FLTodQUhv0VjQzCpwSOD8RyL1c=
 		</data>
 		<key>libxamarin-dotnet-debug.dylib</key>
 		<data>
-		EMe+gHU4SPck5Yyte3yKXsCVn7I=
+		/fQxTerJG74cswGdCWCciLhK2Rs=
 		</data>
 		<key>ms/Microsoft.Maui.Controls.resources.dll</key>
 		<data>
@@ -1092,29 +1092,29 @@
 		<data>
 		2fWVubiaG81rO+4kJQAbOFcR/Zg=
 		</data>
-		<key>splash_7CF9AE42DA2017EC6621B726A870D40F01970097ED8F3D99ABBC1EC8470F119D.png</key>
+		<key>splash_74069E9B5124FBAEA077C3049582362159ECFAB1703AF21518F4C9F6909B06A9.png</key>
 		<data>
-		e6LlBMI9b91XaCSQDhDOglC5cA8=
+		waNAvLSyOtxRbFGc+85ICTgjOwI=
 		</data>
-		<key>splash_7CF9AE42DA2017EC6621B726A870D40F01970097ED8F3D99ABBC1EC8470F119D@2x.png</key>
+		<key>splash_74069E9B5124FBAEA077C3049582362159ECFAB1703AF21518F4C9F6909B06A9@2x.png</key>
 		<data>
-		gr+pgKyzNNxtcT1JaZIj7N80Fxc=
+		8WBKWtuE/mkeu7IcfUqv+Z3nYiY=
 		</data>
-		<key>splash_7CF9AE42DA2017EC6621B726A870D40F01970097ED8F3D99ABBC1EC8470F119D@3x.png</key>
+		<key>splash_74069E9B5124FBAEA077C3049582362159ECFAB1703AF21518F4C9F6909B06A9@3x.png</key>
 		<data>
-		V9uL2U0a2H/Rg28AStjUugC+RP4=
+		vHqyXl/hdnXDis3ZZTdbpT84DRU=
 		</data>
-		<key>splash_E9DF7C44A9A8B6B3150A3D403549BB4D52CFB4F7A5D913DFFD04312EFBAD3877.png</key>
+		<key>startup_logo.png</key>
 		<data>
-		Q1jR6MRcvAdQCldrHvTtGg877n8=
+		CjxWRm3XzTwYXgy7U2px1g0m5x4=
 		</data>
-		<key>splash_E9DF7C44A9A8B6B3150A3D403549BB4D52CFB4F7A5D913DFFD04312EFBAD3877@2x.png</key>
+		<key>startup_logo@2x.png</key>
 		<data>
-		4Wqg2ZKexSaXoJO5bmLatmStuD4=
+		um+7CSJ+1jO6UepOHubfedx6A+I=
 		</data>
-		<key>splash_E9DF7C44A9A8B6B3150A3D403549BB4D52CFB4F7A5D913DFFD04312EFBAD3877@3x.png</key>
+		<key>startup_logo@3x.png</key>
 		<data>
-		h+QA1TG9kWKEMHtmLVt5Vhl9TZc=
+		O6u3mcMtYIcE1DUZGAhwTfWwKUQ=
 		</data>
 		<key>sv/Microsoft.Maui.Controls.resources.dll</key>
 		<data>
@@ -1136,21 +1136,17 @@
 		<data>
 		q0Q0GZp7YrERJ+3t3OVCHrHw/wA=
 		</data>
-		<key>wwwroot/CepBankApp.bah57o3tzc.bundle.scp.css</key>
+		<key>wwwroot/CepBankApp.i1ewvqdnc1.bundle.scp.css</key>
 		<data>
-		ghpyGkwNwwvsX8nBnDXCg1ETG5Q=
-		</data>
-		<key>wwwroot/CepBankApp.jxh52crhnj.bundle.scp.css</key>
-		<data>
-		kjJuOh8Xp14H78ax6ByTMuPHTyo=
-		</data>
-		<key>wwwroot/CepBankApp.scm9idynid.bundle.scp.css</key>
-		<data>
-		pONw3RxyrP3YgEYMpll3AdVEong=
+		knYZRlQs4SKn+OdUrpkpf791sb4=
 		</data>
 		<key>wwwroot/CepBankApp.styles.css</key>
 		<data>
-		ghpyGkwNwwvsX8nBnDXCg1ETG5Q=
+		0E6S5GP12g1clmB8pID+ZKDxPfA=
+		</data>
+		<key>wwwroot/CepBankApp.z70fgqfr9w.bundle.scp.css</key>
+		<data>
+		0E6S5GP12g1clmB8pID+ZKDxPfA=
 		</data>
 		<key>wwwroot/_framework/blazor.modules.json</key>
 		<data>
@@ -1162,11 +1158,75 @@
 		</data>
 		<key>wwwroot/app.css</key>
 		<data>
-		p0t++JI/alFzPuNRoWVZHSiCX4E=
+		ZdzeIAQ1G2mJr1FYvSdL3PRtg1c=
+		</data>
+		<key>wwwroot/bank-logos/SOURCES.txt</key>
+		<data>
+		wS/H71odDWLd/C2gyV6/gBayECc=
+		</data>
+		<key>wwwroot/bank-logos/akbank.svg</key>
+		<data>
+		/mTynrqwtSShnBHsFFcEDMR8eYE=
+		</data>
+		<key>wwwroot/bank-logos/denizbank.svg</key>
+		<data>
+		hqxvCRVd67GtqkzCOl9mOGL9JTI=
+		</data>
+		<key>wwwroot/bank-logos/enpara.svg</key>
+		<data>
+		vYTdUJnqyPwZrTEoHil9s8RBvd8=
+		</data>
+		<key>wwwroot/bank-logos/garanti.svg</key>
+		<data>
+		QQdtTbPAZQ//Po27R/ltkDSLNTM=
+		</data>
+		<key>wwwroot/bank-logos/halkbank.svg</key>
+		<data>
+		qgfZOnNAO35OCCdSk09FcmF23eY=
+		</data>
+		<key>wwwroot/bank-logos/ing.svg</key>
+		<data>
+		DrFtHzTCDEgWfPPTB/65kLGhSHg=
+		</data>
+		<key>wwwroot/bank-logos/isbank.svg</key>
+		<data>
+		0YftH90HKF7UMgvfrfZMMYWGPI4=
+		</data>
+		<key>wwwroot/bank-logos/kuveytturk.svg</key>
+		<data>
+		5WoVyivyuQMGpjsxycMHMf3nouE=
+		</data>
+		<key>wwwroot/bank-logos/qnb.svg</key>
+		<data>
+		dr6aHjJa3+hwL9I4sbjDnOIcHDM=
+		</data>
+		<key>wwwroot/bank-logos/teb.svg</key>
+		<data>
+		zLNq7ITdc/F3zzoIdwgoM9GVWIY=
+		</data>
+		<key>wwwroot/bank-logos/vakifbank.svg</key>
+		<data>
+		LIBuxyBXH0zsw3iJCkdgicqIFNo=
+		</data>
+		<key>wwwroot/bank-logos/yapikredi.svg</key>
+		<data>
+		sPdU23CQPdrFf6LRGozP9PUOxmA=
+		</data>
+		<key>wwwroot/bank-logos/ziraat.svg</key>
+		<data>
+		D7nrUhnHnlzZyTl2x2+/bSldZVg=
+		</data>
+		<key>wwwroot/brand-mark.svg</key>
+		<data>
+		gZxr4nCKOQ8uZODGyYpcI0PKGRE=
+		</data>
+		<key>wwwroot/glassy-wallpaper.png</key>
+		<data>
+		jZprxF3lCb/g46BHMrEE7huuoYY=
 		</data>
 		<key>wwwroot/index.html</key>
 		<data>
-		QAQk6JHN/Xp1BlRs0/xXmYIh6iE=
+		WTFKcaKlEqhnTG5g2r+WIoiZ0ko=
 		</data>
 		<key>wwwroot/lib/bootstrap/dist/css/bootstrap.min.css</key>
 		<data>
@@ -1176,9 +1236,17 @@
 		<data>
 		8FELN4/El8aW3HAYSomSCkWBVBY=
 		</data>
+		<key>wwwroot/notes.css</key>
+		<data>
+		kYRS7TpdjD6tCfhyteMDU68l4+M=
+		</data>
 		<key>wwwroot/theme.js</key>
 		<data>
-		nco3w2JpYS9uLyMdCTH0jCuU5ck=
+		/f7fTvYN07bipLq7US5HsEuP6tc=
+		</data>
+		<key>xml/microsoft_maui_essentials_fileprovider_file_paths.xml</key>
+		<data>
+		0ZugOR08oYUyn+ivNzk266eEOoY=
 		</data>
 		<key>zh-HK/Microsoft.Maui.Controls.resources.dll</key>
 		<data>
@@ -1206,21 +1274,21 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			Pbi+ja79DNOsgNMo0CkGFzTEFUH7stwfIorfai18fu0=
+			yq3AzbtXoL6PJM0++Y2RcxcvUU2Qb42lF0ufQUuydsY=
 			</data>
 		</dict>
 		<key>CepBankApp.dll</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			QQisx47tedtBevFt1NsMDg++X9tQyk4G/bFzp7vDZNs=
+			DGvtzSX1J7u7JDh2RRc/vPPY2yq+EREAymb1YR8M6UE=
 			</data>
 		</dict>
 		<key>CepBankApp.pdb</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			YS5YjWRBHB/WbOpik6ASeeaOGlYqPnIF8nFUAd/80EI=
+			F9xCdPBpOC6XN4hY/d8fV5vinnWfhWPLhDDAtEgn7lc=
 			</data>
 		</dict>
 		<key>MauiInfo.plist</key>
@@ -1234,7 +1302,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			thvdQQLf+xuC8zOeETYaae0PHQoA5QE67O6SC/lELPk=
+			U/2TABuugwWU3ytvxh0axB+fNFXYTTNuXuAeiwboFEA=
 			</data>
 		</dict>
 		<key>MauiSplash.storyboardc/Info.plist</key>
@@ -1577,7 +1645,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			LUmvxR+AnYD/ZW+eu2U/E662nGbklYRBNGFxJ0PKEjI=
+			vSdOCYnhm9fj+qcbPQi0IfGVKZjXx/f8EMHfqNdMxU8=
 			</data>
 		</dict>
 		<key>SQLite-net.dll</key>
@@ -2774,14 +2842,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			JRSoQ3Ae4I5/EkXyDOLJ6g5rT+E9UgF06+vEMZdwbsc=
+			2mMgTS81bV0nP9wEkeXPTWpJAnDIwqcbZFn/uOf3Vm4=
 			</data>
 		</dict>
 		<key>appicon76x76@2x~ipad.png</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			8uIuMHbDbZtK46RPWcMbTUKcLMLiC0JyVUcNZwW935I=
+			a04y6HPu4rj0mPDLVP1eJEC0DRaCaWGAE93iDOnmgcU=
 			</data>
 		</dict>
 		<key>ar/Microsoft.Maui.Controls.resources.dll</key>
@@ -2928,77 +2996,77 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			gKxC22jSYT7LaI6AKPS3x+jhEKxSShD++opWjGCAFro=
+			irRTuRBcdl+59UeQJoxXJog9M7GKKXNh8XkeXLlkQUk=
 			</data>
 		</dict>
 		<key>libSystem.IO.Compression.Native.dylib</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			N6d85fAM5YqBZzC+L80KkW51OlJBKtH7VG7tc7dBrdA=
+			Jf5KtI8a1ch9UoWXYbUurpyXW94MoOsjJpO0JqrSJJA=
 			</data>
 		</dict>
 		<key>libSystem.Native.dylib</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			2qxZ58eCmzVYJZa0WdYFlq+3aur8K+1Ed4VOg3vA9Mo=
+			ozSZFudBOd/tsSmrL3SBEOat1fw6cRUDfwICLm1STJ4=
 			</data>
 		</dict>
 		<key>libSystem.Net.Security.Native.dylib</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			D2Ur+G6ZqzB0CL6MWixI3gahpemwWSWyN4opb5jT1pw=
+			OmBSyS9lr2WshE2H9hsQH4QEHIvEWPFt6hqPTfChpO8=
 			</data>
 		</dict>
 		<key>libSystem.Security.Cryptography.Native.Apple.dylib</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			CrPBE9CUJr/TezJARIQg4NRW4Hy1LWsjfCoQ59oN16I=
+			UhbHdsqpUmrRMWBUBioM+q6x+jJSPrRFdpO6fHiuDDs=
 			</data>
 		</dict>
 		<key>libmono-component-debugger.dylib</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			7bhRQpJ5fhumo6dfjFazeD3IEmaX5X4cATPRcSV0uks=
+			5sOL8v6N7KESGyIJtZPjVhJE32c7slUcchbSHq5+9Ag=
 			</data>
 		</dict>
 		<key>libmono-component-diagnostics_tracing.dylib</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			FW0VZI7cMJqY6/7lLt6CH734wMcjtPI5C4yxI1EEf78=
+			xNdv5kwfjTwpz6UOxTUEPRgcsO9QYKsBsoZ4MoeBBJk=
 			</data>
 		</dict>
 		<key>libmono-component-hot_reload.dylib</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			0nSvgMVpTuiS9aRPGGvbKpAY3C/8c7LEWmq5terKWTc=
+			Jk80wkwOjcSXJ3q8xXNgC0TR9mqkytiAVATZQ2Eiir8=
 			</data>
 		</dict>
 		<key>libmono-component-marshal-ilgen.dylib</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			c+eOEZqK26H2Mz1IKxf03B5K/Omx+63oCFl6bEirrg8=
+			SAURpmgF7g0PhBoEpkQvkty6Nak9prBW9wDoc/g32os=
 			</data>
 		</dict>
 		<key>libmonosgen-2.0.dylib</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			WmYvnMaNqK5hjeV71PAsvG5MqFylvjYBeCipsSN62Ik=
+			MsReFOe6I3sHkkZ60T+Z/4WqCtf3A9DhfLA5g2tBSJk=
 			</data>
 		</dict>
 		<key>libxamarin-dotnet-debug.dylib</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			3S2PLZYSeoPJyl8KnsWVksaZ/kP5stFVBNkxaauJDmw=
+			cXxA/7Wt5QL3f3hui7InkuTFi9fttg5QeffuslpT6+g=
 			</data>
 		</dict>
 		<key>ms/Microsoft.Maui.Controls.resources.dll</key>
@@ -3085,46 +3153,46 @@
 			6D/KVv1aG96e/QdSUUOC/pOee/79rm/uTJUJ7IIneNU=
 			</data>
 		</dict>
-		<key>splash_7CF9AE42DA2017EC6621B726A870D40F01970097ED8F3D99ABBC1EC8470F119D.png</key>
+		<key>splash_74069E9B5124FBAEA077C3049582362159ECFAB1703AF21518F4C9F6909B06A9.png</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			Dpf6ieSaphEudmfGWM4o56pf3pK2gzcp9vYU5dZF9S0=
+			smdFQjNW4IhOhdriuj6Oo0ngh5JVV48/FRFss7zWniM=
 			</data>
 		</dict>
-		<key>splash_7CF9AE42DA2017EC6621B726A870D40F01970097ED8F3D99ABBC1EC8470F119D@2x.png</key>
+		<key>splash_74069E9B5124FBAEA077C3049582362159ECFAB1703AF21518F4C9F6909B06A9@2x.png</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			YMCf+Kl7v6nI7SmNKxsD3oxz8b7W8NbOK9pl/268poY=
+			1K1l9c25ft7DFx4TSoWC4GbhGZWqQ5SXpaO1mMQQ1qQ=
 			</data>
 		</dict>
-		<key>splash_7CF9AE42DA2017EC6621B726A870D40F01970097ED8F3D99ABBC1EC8470F119D@3x.png</key>
+		<key>splash_74069E9B5124FBAEA077C3049582362159ECFAB1703AF21518F4C9F6909B06A9@3x.png</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			TR5wkKzih6lYQ3pqkvy+F+ZIOuoGZ1uEfeG93l0BSfE=
+			T78aHSeqEI5DeMRWjs09V/eRVTMQIQ2sduD4GIXHf+A=
 			</data>
 		</dict>
-		<key>splash_E9DF7C44A9A8B6B3150A3D403549BB4D52CFB4F7A5D913DFFD04312EFBAD3877.png</key>
+		<key>startup_logo.png</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			ZipBzagDXl+D4Wr61eVvDS3N93msAqmfEaM6Ds4/FTQ=
+			lHDqaze4WlDqcRdCgLl3kM/J+8+OOKLCrh1GuHCpxEo=
 			</data>
 		</dict>
-		<key>splash_E9DF7C44A9A8B6B3150A3D403549BB4D52CFB4F7A5D913DFFD04312EFBAD3877@2x.png</key>
+		<key>startup_logo@2x.png</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			Mlykrfs/NmCU89Lopwj9HogqGqf1OoTkRrFsiRt5ogE=
+			78GixA5QhVkEWs6tiAVZhXnUexfvwZ8941fwJErUrzs=
 			</data>
 		</dict>
-		<key>splash_E9DF7C44A9A8B6B3150A3D403549BB4D52CFB4F7A5D913DFFD04312EFBAD3877@3x.png</key>
+		<key>startup_logo@3x.png</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			vqMG6UlFbs00MkFRH61grmxN+e89ng856Mvqv06kjOk=
+			u9I9WPBPISfaNhFeXCZGqVHlosdQicheY5MnkRfRtEw=
 			</data>
 		</dict>
 		<key>sv/Microsoft.Maui.Controls.resources.dll</key>
@@ -3162,32 +3230,25 @@
 			Wf9q44Kvhilmt2Ye+a3VrOjp5IjJBJpLZzzwW2ZDyPw=
 			</data>
 		</dict>
-		<key>wwwroot/CepBankApp.bah57o3tzc.bundle.scp.css</key>
+		<key>wwwroot/CepBankApp.i1ewvqdnc1.bundle.scp.css</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			wx0UV/YeV7AFJLZ44er+UIZT8zpR5M6oeGrR4e11Lio=
-			</data>
-		</dict>
-		<key>wwwroot/CepBankApp.jxh52crhnj.bundle.scp.css</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			+TP9ljPFRlSqHj3nvDs8EjCRrl+Vk1/Z0N+RH31ha9o=
-			</data>
-		</dict>
-		<key>wwwroot/CepBankApp.scm9idynid.bundle.scp.css</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			bF+siPi27iR/ZjeoGO3Tzh2NlXKbVvo+jbc1x22uQP0=
+			6jm+L9dUrZ3vB4QYIrBLrla6n+GbBG1vyYsVn+yUSWw=
 			</data>
 		</dict>
 		<key>wwwroot/CepBankApp.styles.css</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			wx0UV/YeV7AFJLZ44er+UIZT8zpR5M6oeGrR4e11Lio=
+			3xa1eGRv85tBWclROz/4q+9BpujJSMGoPe2MtQFI3H4=
+			</data>
+		</dict>
+		<key>wwwroot/CepBankApp.z70fgqfr9w.bundle.scp.css</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			3xa1eGRv85tBWclROz/4q+9BpujJSMGoPe2MtQFI3H4=
 			</data>
 		</dict>
 		<key>wwwroot/_framework/blazor.modules.json</key>
@@ -3208,14 +3269,126 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			ispXOBSrjWFrEN5Z/5/VmYiRSNYgeqyj2mP/eybZtoQ=
+			LV41brHb8Dewu9eaA+TkZg0yMUv29jMDZGoeMuUvY8U=
+			</data>
+		</dict>
+		<key>wwwroot/bank-logos/SOURCES.txt</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			0OL75sNJjSqMcaLLA1p7puQMzQDxWT5/UmGQL1Xkl10=
+			</data>
+		</dict>
+		<key>wwwroot/bank-logos/akbank.svg</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			1QCj3fsPuJen/hC28JAs5+3R0TifOHkR/Hk865lj6R4=
+			</data>
+		</dict>
+		<key>wwwroot/bank-logos/denizbank.svg</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			sIqhcy6Ai9koz9OekaXsVAnfF6KhEALo6yUXpQR9KkI=
+			</data>
+		</dict>
+		<key>wwwroot/bank-logos/enpara.svg</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			cbSGm4eDY7zb/6Fb2zXzQPzDDoZXVarm7atLoIaXX78=
+			</data>
+		</dict>
+		<key>wwwroot/bank-logos/garanti.svg</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			+uODwgSeiXFLGWDBYgUlmu4lAmKohKhEUXxHTo11Mj4=
+			</data>
+		</dict>
+		<key>wwwroot/bank-logos/halkbank.svg</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			K0fX8gdXDYMvFq49aGPJpY7ckJms+/eTgPhk1XhbuMs=
+			</data>
+		</dict>
+		<key>wwwroot/bank-logos/ing.svg</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			L79uARcQmvDtosqpBx4/H89capmilQz5/JPSVRKcVIo=
+			</data>
+		</dict>
+		<key>wwwroot/bank-logos/isbank.svg</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			EZDgohmN8ZPwdlj4b0WomMYUg1psAlyizxpsi+QaYc8=
+			</data>
+		</dict>
+		<key>wwwroot/bank-logos/kuveytturk.svg</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			DuVG7/f6eC+meo/UIb32IgWLW+IAmKM2NNIwhUAANJs=
+			</data>
+		</dict>
+		<key>wwwroot/bank-logos/qnb.svg</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			9r0Mhhc19WXg40XuBrLfmRo5heBKzREH8G6VgcalWxU=
+			</data>
+		</dict>
+		<key>wwwroot/bank-logos/teb.svg</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			16+XuF1/Pq52JrotBynv7j+fhKSAQ4R7XStaBOxjFXs=
+			</data>
+		</dict>
+		<key>wwwroot/bank-logos/vakifbank.svg</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			SSMz7czwzWK07Ai/Q9vH44XZ9wodrGSdjUGHSgrwLoc=
+			</data>
+		</dict>
+		<key>wwwroot/bank-logos/yapikredi.svg</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			XBgtgW7IDtH+1X09Xbv1MF86es2Cy1GfHFoTpP9YfwQ=
+			</data>
+		</dict>
+		<key>wwwroot/bank-logos/ziraat.svg</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			OJfJnFzzei9A/tQrsv7oGVN6O9bUa7mtEZ70wk3s3dc=
+			</data>
+		</dict>
+		<key>wwwroot/brand-mark.svg</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			byxBUnC+h3AINRkAoHXXoRJHKGlgPJVGA/sTvesfN8c=
+			</data>
+		</dict>
+		<key>wwwroot/glassy-wallpaper.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			3atul+fg0O+/LZksi3fGfp56cNGMuqCpJ1dq44kfF34=
 			</data>
 		</dict>
 		<key>wwwroot/index.html</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			748h4FfwVb3SqZ+sbuLcfzgp1wisruf1kmwDH6MAesk=
+			L3m6oanva3sN9CkIgxSArdq/lAf1zbFUAEWVKGGUG2A=
 			</data>
 		</dict>
 		<key>wwwroot/lib/bootstrap/dist/css/bootstrap.min.css</key>
@@ -3232,11 +3405,25 @@
 			dLjmWc4YRAp7XkxEmYm7/xV1ebW+YQ0LrlrrKVB8kXY=
 			</data>
 		</dict>
+		<key>wwwroot/notes.css</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			jP2uvkSXYpdrHkYI5EeMXiNvtoSpbcA2G+mnoqQTMLA=
+			</data>
+		</dict>
 		<key>wwwroot/theme.js</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			l84Nkn9DElCm1wAvnODDMI+QHPJEx/7mC+7furPWTP4=
+			a9PviINbKMT6ujq7Yht44wpSqmHEljSHL7KV1uQQUVA=
+			</data>
+		</dict>
+		<key>xml/microsoft_maui_essentials_fileprovider_file_paths.xml</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			W4mBx+OWozujR6fIlOuqppzspq5DXmkX1Oo5zBuPD6Q=
 			</data>
 		</dict>
 		<key>zh-HK/Microsoft.Maui.Controls.resources.dll</key>

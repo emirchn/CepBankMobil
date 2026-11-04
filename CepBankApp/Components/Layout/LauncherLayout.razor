@@ -1,0 +1,17 @@
+@inherits LayoutComponentBase
+@using Microsoft.Maui.Storage
+@inject IJSRuntime JS
+@inject CepBankApp.Services.NotesReminderService NotesReminders
+
+<main class="launcher-shell">@Body</main>
+
+@code {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender) return;
+        await JS.InvokeVoidAsync("cepbankTheme.apply", Preferences.Default.Get("theme_mode", "device"), Preferences.Default.Get("custom_accent", "#6268d5"), await CepBankApp.Services.AppAppearance.GetWallpaperDataUrlAsync());
+        await CepBankApp.MainPage.CompleteStartupAsync();
+        try { await NotesReminders.RefreshAsync(); }
+        catch { /* Notification services can be unavailable before permission is granted. */ }
+    }
+}

@@ -1,0 +1,14 @@
+@page "/notes"
+@layout NotesLayout
+
+<div class="notes-home">
+    <p class="notes-kicker">KİŞİSEL ALAN</p>
+    <h1>Notlarım</h1>
+    <p>Planlarını, almak istediklerini ve gitmek istediğin yerleri bir arada tut.</p>
+    <div class="notes-home-grid">
+        <NavLink href="notes/reminders"><span aria-hidden="true">◷</span><strong>Hatırlatıcı</strong><small>Yaklaşan etkinlikler</small></NavLink>
+        <NavLink href="notes/shopping"><span aria-hidden="true">◇</span><strong>Alınacaklar</strong><small>Almayı planladıkların</small></NavLink>
+        <NavLink href="notes/places"><span aria-hidden="true">⌖</span><strong>Gidilecek Yerler</strong><small>Keşfetmek istediğin mekânlar</small></NavLink>
+        <NavLink href="notes/groceries"><span aria-hidden="true">☑</span><strong>Market Listesi</strong><small>Günlük alışveriş</small></NavLink>
+    </div>
+</div>

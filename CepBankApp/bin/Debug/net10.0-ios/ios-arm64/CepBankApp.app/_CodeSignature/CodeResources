@@ -10,19 +10,19 @@
 		</data>
 		<key>Assets.car</key>
 		<data>
-		WYYBnPN0O504kyR5h+0d8bH5Hng=
+		PIwq6TEY217Cj3b3gUKnQIrwLdI=
 		</data>
 		<key>CepBankApp.dll</key>
 		<data>
-		VVXexsbh9ZBN7+hPJ0arMx6J2Pk=
+		9naQtvftgvWSjUJklX8XBPbB2z0=
 		</data>
 		<key>CepBankApp.pdb</key>
 		<data>
-		rm2r6wur2bZTZw4AlwfzLjBcmUw=
+		HT3B+uQ+Aw9FZTLZRCVsSRo0LOA=
 		</data>
 		<key>Info.plist</key>
 		<data>
-		1oUDy2xncUU4i5QFkNrug4MtREw=
+		E+s/iBGilTMkguwu5j2WHjMV6/s=
 		</data>
 		<key>MauiInfo.plist</key>
 		<data>
@@ -30,7 +30,7 @@
 		</data>
 		<key>MauiSplash.storyboardc/01J-lp-oVM-view-Ze5-6b-2t3.nib</key>
 		<data>
-		TtiNkojowqF4Pga2mIMEnHlB0m4=
+		rrMBHmYdZuqi1hlswyI1MI3n0Xc=
 		</data>
 		<key>MauiSplash.storyboardc/Info.plist</key>
 		<data>
@@ -246,7 +246,7 @@
 		</data>
 		<key>PrivacyInfo.xcprivacy</key>
 		<data>
-		+59cRc8ev+HwAO70fp1P8R6hyjc=
+		pScV0m/ScDO7ioQvtmSZMpAwQyg=
 		</data>
 		<key>SQLite-net.dll</key>
 		<data>
@@ -930,11 +930,11 @@
 		</data>
 		<key>appicon60x60@2x.png</key>
 		<data>
-		SsnzZSsee5Qq1Fs065U0XlPqyME=
+		sEit0FSK2AwGOjMNL1tQ8Nw6WEA=
 		</data>
 		<key>appicon76x76@2x~ipad.png</key>
 		<data>
-		JVcqyRs+sEWwujE65m+X6ney4qg=
+		vcH7B/mW7oqASqh64dEgSc1HJ9k=
 		</data>
 		<key>ar/Microsoft.Maui.Controls.resources.dll</key>
 		<data>
@@ -1072,89 +1072,29 @@
 		<data>
 		2fWVubiaG81rO+4kJQAbOFcR/Zg=
 		</data>
-		<key>splash_1F92A6BC321B96F3F3B3424169D280E46DAC20C9D8FC36D746C3BC4BB2288139.png</key>
+		<key>splash_74069E9B5124FBAEA077C3049582362159ECFAB1703AF21518F4C9F6909B06A9.png</key>
 		<data>
-		197V7uQlL667CTuwmX9PFYV8lfs=
+		waNAvLSyOtxRbFGc+85ICTgjOwI=
 		</data>
-		<key>splash_1F92A6BC321B96F3F3B3424169D280E46DAC20C9D8FC36D746C3BC4BB2288139@2x.png</key>
+		<key>splash_74069E9B5124FBAEA077C3049582362159ECFAB1703AF21518F4C9F6909B06A9@2x.png</key>
 		<data>
-		e2bdSs3nYQcUHxWi4+TK6BKmNu8=
+		8WBKWtuE/mkeu7IcfUqv+Z3nYiY=
 		</data>
-		<key>splash_1F92A6BC321B96F3F3B3424169D280E46DAC20C9D8FC36D746C3BC4BB2288139@3x.png</key>
+		<key>splash_74069E9B5124FBAEA077C3049582362159ECFAB1703AF21518F4C9F6909B06A9@3x.png</key>
 		<data>
-		lvPsWbNnLrgjhxBdeANugYvAmwI=
-		</data>
-		<key>splash_64E32B789C0C2015B96DE4017C5ECB7724FADC31CC728E3659643297D837CDC3.png</key>
-		<data>
-		hXNKd8Wu4SmM4/GKpGokGT/uU20=
-		</data>
-		<key>splash_64E32B789C0C2015B96DE4017C5ECB7724FADC31CC728E3659643297D837CDC3@2x.png</key>
-		<data>
-		qYSCi7OI0E7kjiCtMyjUCRUxk74=
-		</data>
-		<key>splash_64E32B789C0C2015B96DE4017C5ECB7724FADC31CC728E3659643297D837CDC3@3x.png</key>
-		<data>
-		KzpV2ciibsgg00JkXJOHjzYs2U0=
-		</data>
-		<key>splash_7CF9AE42DA2017EC6621B726A870D40F01970097ED8F3D99ABBC1EC8470F119D.png</key>
-		<data>
-		e6LlBMI9b91XaCSQDhDOglC5cA8=
-		</data>
-		<key>splash_7CF9AE42DA2017EC6621B726A870D40F01970097ED8F3D99ABBC1EC8470F119D@2x.png</key>
-		<data>
-		gr+pgKyzNNxtcT1JaZIj7N80Fxc=
-		</data>
-		<key>splash_7CF9AE42DA2017EC6621B726A870D40F01970097ED8F3D99ABBC1EC8470F119D@3x.png</key>
-		<data>
-		V9uL2U0a2H/Rg28AStjUugC+RP4=
-		</data>
-		<key>splash_AA1DDDD1CC0157F044984059825C109F4D0166241EE9A9E204528453D21994E6.png</key>
-		<data>
-		fCYLTuA6MuExyazhA/HM/g70A8c=
-		</data>
-		<key>splash_AA1DDDD1CC0157F044984059825C109F4D0166241EE9A9E204528453D21994E6@2x.png</key>
-		<data>
-		24L3H3UPr5P9Xrq9xkhuc16NuMU=
-		</data>
-		<key>splash_AA1DDDD1CC0157F044984059825C109F4D0166241EE9A9E204528453D21994E6@3x.png</key>
-		<data>
-		9+EqlxEHVxB1gQldXaj/qM5e82c=
-		</data>
-		<key>splash_DF1AEF317359EF030C28371F66EC349720EB0DA75DDF6C07D005C781C9350CAC.png</key>
-		<data>
-		RaedP8yDrqJM/twOm2oBPk7/PYA=
-		</data>
-		<key>splash_DF1AEF317359EF030C28371F66EC349720EB0DA75DDF6C07D005C781C9350CAC@2x.png</key>
-		<data>
-		7jTzdWGuX2wgmqLJ7PUPNm91LEM=
-		</data>
-		<key>splash_DF1AEF317359EF030C28371F66EC349720EB0DA75DDF6C07D005C781C9350CAC@3x.png</key>
-		<data>
-		Az3pVOYVDAMjRGKO7Omw351wznI=
-		</data>
-		<key>splash_E9DF7C44A9A8B6B3150A3D403549BB4D52CFB4F7A5D913DFFD04312EFBAD3877.png</key>
-		<data>
-		Q1jR6MRcvAdQCldrHvTtGg877n8=
-		</data>
-		<key>splash_E9DF7C44A9A8B6B3150A3D403549BB4D52CFB4F7A5D913DFFD04312EFBAD3877@2x.png</key>
-		<data>
-		4Wqg2ZKexSaXoJO5bmLatmStuD4=
-		</data>
-		<key>splash_E9DF7C44A9A8B6B3150A3D403549BB4D52CFB4F7A5D913DFFD04312EFBAD3877@3x.png</key>
-		<data>
-		h+QA1TG9kWKEMHtmLVt5Vhl9TZc=
+		vHqyXl/hdnXDis3ZZTdbpT84DRU=
 		</data>
 		<key>startup_logo.png</key>
 		<data>
-		xEwpW8V7bWSHVyOFVQAXE9htkVU=
+		CjxWRm3XzTwYXgy7U2px1g0m5x4=
 		</data>
 		<key>startup_logo@2x.png</key>
 		<data>
-		H4k+fnoMMuJ/j5UEdQQftMMotcU=
+		um+7CSJ+1jO6UepOHubfedx6A+I=
 		</data>
 		<key>startup_logo@3x.png</key>
 		<data>
-		grLwyeLL2I69RRAF9sHQOBNXh38=
+		O6u3mcMtYIcE1DUZGAhwTfWwKUQ=
 		</data>
 		<key>sv/Microsoft.Maui.Controls.resources.dll</key>
 		<data>
@@ -1176,45 +1116,13 @@
 		<data>
 		q0Q0GZp7YrERJ+3t3OVCHrHw/wA=
 		</data>
-		<key>wwwroot/CepBankApp.3o8fooo3h1.bundle.scp.css</key>
+		<key>wwwroot/CepBankApp.0cm02h7cfh.bundle.scp.css</key>
 		<data>
-		EonWdC/SICUgf5aLfe8FuLbr1DU=
-		</data>
-		<key>wwwroot/CepBankApp.3sqvjuhqoz.bundle.scp.css</key>
-		<data>
-		jilrkHNnPC+9Y8TYIBS7mdRzces=
-		</data>
-		<key>wwwroot/CepBankApp.6t245y9nd5.bundle.scp.css</key>
-		<data>
-		A+ctDVja3x/mw73CYJqkYMBqfUc=
-		</data>
-		<key>wwwroot/CepBankApp.bah57o3tzc.bundle.scp.css</key>
-		<data>
-		ghpyGkwNwwvsX8nBnDXCg1ETG5Q=
-		</data>
-		<key>wwwroot/CepBankApp.e1qejl5m86.bundle.scp.css</key>
-		<data>
-		GtaoTI2UFUg71pYeZESpg4m0LuU=
-		</data>
-		<key>wwwroot/CepBankApp.rdhh6pyx62.bundle.scp.css</key>
-		<data>
-		6L1Cl/tVF280wj0a4FGy0EiRV90=
-		</data>
-		<key>wwwroot/CepBankApp.scm9idynid.bundle.scp.css</key>
-		<data>
-		pONw3RxyrP3YgEYMpll3AdVEong=
+		hIC8RavU0anI3pzmxSA+Dg4k/As=
 		</data>
 		<key>wwwroot/CepBankApp.styles.css</key>
 		<data>
-		6L1Cl/tVF280wj0a4FGy0EiRV90=
-		</data>
-		<key>wwwroot/CepBankApp.ur9w6jzk35.bundle.scp.css</key>
-		<data>
-		3fxQ/GuUVogt2mJagVmm+/olBak=
-		</data>
-		<key>wwwroot/CepBankApp.v0xp6oq7qp.bundle.scp.css</key>
-		<data>
-		4pavDG8DXgsqmbxmcLt4mesUqhY=
+		hIC8RavU0anI3pzmxSA+Dg4k/As=
 		</data>
 		<key>wwwroot/_framework/blazor.modules.json</key>
 		<data>
@@ -1288,17 +1196,13 @@
 		<data>
 		gZxr4nCKOQ8uZODGyYpcI0PKGRE=
 		</data>
-		<key>wwwroot/glassy-wallpaper.jpg</key>
-		<data>
-		H4etAnj0bxDRO7AzaudNvOI0Kqc=
-		</data>
 		<key>wwwroot/glassy-wallpaper.png</key>
 		<data>
 		jZprxF3lCb/g46BHMrEE7huuoYY=
 		</data>
 		<key>wwwroot/index.html</key>
 		<data>
-		pb9383OCgty7nhH7ojSxrcmqxio=
+		WTFKcaKlEqhnTG5g2r+WIoiZ0ko=
 		</data>
 		<key>wwwroot/lib/bootstrap/dist/css/bootstrap.min.css</key>
 		<data>
@@ -1308,13 +1212,17 @@
 		<data>
 		8FELN4/El8aW3HAYSomSCkWBVBY=
 		</data>
-		<key>wwwroot/startup.js</key>
+		<key>wwwroot/notes.css</key>
 		<data>
-		D/D5LR0q5RjpwRBJ+qsiBMVqgEU=
+		3LV42HK3gu71GnXvGC5ThIUJaIM=
 		</data>
 		<key>wwwroot/theme.js</key>
 		<data>
-		/f7fTvYN07bipLq7US5HsEuP6tc=
+		2eixgtTvOpTtXKliFALoIDmXHTg=
+		</data>
+		<key>xml/microsoft_maui_essentials_fileprovider_file_paths.xml</key>
+		<data>
+		0ZugOR08oYUyn+ivNzk266eEOoY=
 		</data>
 		<key>zh-HK/Microsoft.Maui.Controls.resources.dll</key>
 		<data>
@@ -1342,21 +1250,21 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			VTr6WfGVNKLJxcJAi9nr6u+9N9fGA2ati42oH7d3FhU=
+			yq3AzbtXoL6PJM0++Y2RcxcvUU2Qb42lF0ufQUuydsY=
 			</data>
 		</dict>
 		<key>CepBankApp.dll</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			AZNy0nShSxPI/D4xtaaJY2irXYvjSqyKc/y+GsrpcEY=
+			8h3Cg3AMIwVqi2hIXHN9KJiKcZaAwRnHpWJvvfes7qc=
 			</data>
 		</dict>
 		<key>CepBankApp.pdb</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			zZK20HpaFafzNWHrbw7MKdGfIPGW1dg2el0Rs5Id24M=
+			gyPckDJMRdkSs6sJllD3gPp3GfpndxGJX+eh7vz+3h8=
 			</data>
 		</dict>
 		<key>MauiInfo.plist</key>
@@ -1370,7 +1278,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			fpG86GBXU7aHhBEfq5q9GXN7TzBatekVm7n3p6aEVMc=
+			U/2TABuugwWU3ytvxh0axB+fNFXYTTNuXuAeiwboFEA=
 			</data>
 		</dict>
 		<key>MauiSplash.storyboardc/Info.plist</key>
@@ -1741,7 +1649,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			vSdOCYnhm9fj+qcbPQi0IfGVKZjXx/f8EMHfqNdMxU8=
+			LUmvxR+AnYD/ZW+eu2U/E662nGbklYRBNGFxJ0PKEjI=
 			</data>
 		</dict>
 		<key>SQLite-net.dll</key>
@@ -2938,14 +2846,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			YQpGCeT255l9HbKDdWKuZGm5ryTxJfhjHUUuuii/mAM=
+			pFax5T7N8tfdUr7z2th6ivqISl4jjmdK6KNep0QBeDw=
 			</data>
 		</dict>
 		<key>appicon76x76@2x~ipad.png</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			akyPW80U7nOqy4Vgh8hATO7FO9PJi2Qq9vigVz1JcKg=
+			RtuwcWPgcFvIPqMKRyGoqpBxrolR/33td5Zoz2c+zdw=
 			</data>
 		</dict>
 		<key>ar/Microsoft.Maui.Controls.resources.dll</key>
@@ -3186,151 +3094,46 @@
 			6D/KVv1aG96e/QdSUUOC/pOee/79rm/uTJUJ7IIneNU=
 			</data>
 		</dict>
-		<key>splash_1F92A6BC321B96F3F3B3424169D280E46DAC20C9D8FC36D746C3BC4BB2288139.png</key>
+		<key>splash_74069E9B5124FBAEA077C3049582362159ECFAB1703AF21518F4C9F6909B06A9.png</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			w2asVZgRL7vpE/uH7U6k5TyV5AoEO7l03/v5XTg0PUs=
+			smdFQjNW4IhOhdriuj6Oo0ngh5JVV48/FRFss7zWniM=
 			</data>
 		</dict>
-		<key>splash_1F92A6BC321B96F3F3B3424169D280E46DAC20C9D8FC36D746C3BC4BB2288139@2x.png</key>
+		<key>splash_74069E9B5124FBAEA077C3049582362159ECFAB1703AF21518F4C9F6909B06A9@2x.png</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			KJyU4SbidayGdBf6khz73qb4a+IkqMFVmwJg3EMYu7M=
+			1K1l9c25ft7DFx4TSoWC4GbhGZWqQ5SXpaO1mMQQ1qQ=
 			</data>
 		</dict>
-		<key>splash_1F92A6BC321B96F3F3B3424169D280E46DAC20C9D8FC36D746C3BC4BB2288139@3x.png</key>
+		<key>splash_74069E9B5124FBAEA077C3049582362159ECFAB1703AF21518F4C9F6909B06A9@3x.png</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			bZRWoSeiDgJFHbP8p5wzTjZlMr22t4vfT7kWrOD0ID0=
-			</data>
-		</dict>
-		<key>splash_64E32B789C0C2015B96DE4017C5ECB7724FADC31CC728E3659643297D837CDC3.png</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			YcHYxKOHh7ECExNGvcWJjg2zASJw83QphRnsnF0MgII=
-			</data>
-		</dict>
-		<key>splash_64E32B789C0C2015B96DE4017C5ECB7724FADC31CC728E3659643297D837CDC3@2x.png</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			2otGKASrJ1+qSTDlwDDDs05H+viJOjyyvV3Ey/5KYI8=
-			</data>
-		</dict>
-		<key>splash_64E32B789C0C2015B96DE4017C5ECB7724FADC31CC728E3659643297D837CDC3@3x.png</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			VAaIAqhvLnPOsetOXnR6lrKh2FNTei6zFN5uejzFDMw=
-			</data>
-		</dict>
-		<key>splash_7CF9AE42DA2017EC6621B726A870D40F01970097ED8F3D99ABBC1EC8470F119D.png</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			Dpf6ieSaphEudmfGWM4o56pf3pK2gzcp9vYU5dZF9S0=
-			</data>
-		</dict>
-		<key>splash_7CF9AE42DA2017EC6621B726A870D40F01970097ED8F3D99ABBC1EC8470F119D@2x.png</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			YMCf+Kl7v6nI7SmNKxsD3oxz8b7W8NbOK9pl/268poY=
-			</data>
-		</dict>
-		<key>splash_7CF9AE42DA2017EC6621B726A870D40F01970097ED8F3D99ABBC1EC8470F119D@3x.png</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			TR5wkKzih6lYQ3pqkvy+F+ZIOuoGZ1uEfeG93l0BSfE=
-			</data>
-		</dict>
-		<key>splash_AA1DDDD1CC0157F044984059825C109F4D0166241EE9A9E204528453D21994E6.png</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			iy9qCG0KyGGhV5UOKiAZ3JutrXIunInMQKVrixto4aU=
-			</data>
-		</dict>
-		<key>splash_AA1DDDD1CC0157F044984059825C109F4D0166241EE9A9E204528453D21994E6@2x.png</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			58aCOtYEgRTisuFmqRl4LQ/nhpQDW5Lf3nYeDfZFW4I=
-			</data>
-		</dict>
-		<key>splash_AA1DDDD1CC0157F044984059825C109F4D0166241EE9A9E204528453D21994E6@3x.png</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			Tj+Ao/Nfz/qhZySUBncIjyGf10ZVtQ6dVsrWrYTlQg4=
-			</data>
-		</dict>
-		<key>splash_DF1AEF317359EF030C28371F66EC349720EB0DA75DDF6C07D005C781C9350CAC.png</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			LT+MrMae1fF1SLiFE5vBbl+KCbqDEPpLJOwC/TwaKXU=
-			</data>
-		</dict>
-		<key>splash_DF1AEF317359EF030C28371F66EC349720EB0DA75DDF6C07D005C781C9350CAC@2x.png</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			8m/0hUx0ssWIVITiVFVhWWZDUPT0PzYoBztZKm88bBk=
-			</data>
-		</dict>
-		<key>splash_DF1AEF317359EF030C28371F66EC349720EB0DA75DDF6C07D005C781C9350CAC@3x.png</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			+d7+G7GkfEmRLpPmPgLVNScgpRp3GNco1t2z2FL9+fs=
-			</data>
-		</dict>
-		<key>splash_E9DF7C44A9A8B6B3150A3D403549BB4D52CFB4F7A5D913DFFD04312EFBAD3877.png</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			ZipBzagDXl+D4Wr61eVvDS3N93msAqmfEaM6Ds4/FTQ=
-			</data>
-		</dict>
-		<key>splash_E9DF7C44A9A8B6B3150A3D403549BB4D52CFB4F7A5D913DFFD04312EFBAD3877@2x.png</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			Mlykrfs/NmCU89Lopwj9HogqGqf1OoTkRrFsiRt5ogE=
-			</data>
-		</dict>
-		<key>splash_E9DF7C44A9A8B6B3150A3D403549BB4D52CFB4F7A5D913DFFD04312EFBAD3877@3x.png</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			vqMG6UlFbs00MkFRH61grmxN+e89ng856Mvqv06kjOk=
+			T78aHSeqEI5DeMRWjs09V/eRVTMQIQ2sduD4GIXHf+A=
 			</data>
 		</dict>
 		<key>startup_logo.png</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			dObivIZGgTajW/nQ2gI5hzOwX0JRGed5rWbxGt+pM28=
+			lHDqaze4WlDqcRdCgLl3kM/J+8+OOKLCrh1GuHCpxEo=
 			</data>
 		</dict>
 		<key>startup_logo@2x.png</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			ZuONnSLaaXFe2gRUUdjhsqvrug9flllh1P1qySOCSWI=
+			78GixA5QhVkEWs6tiAVZhXnUexfvwZ8941fwJErUrzs=
 			</data>
 		</dict>
 		<key>startup_logo@3x.png</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			kvfe5akmG2gTHbSU+EBj5IbXoRIp2igRK/eq9FAj4kw=
+			u9I9WPBPISfaNhFeXCZGqVHlosdQicheY5MnkRfRtEw=
 			</data>
 		</dict>
 		<key>sv/Microsoft.Maui.Controls.resources.dll</key>
@@ -3368,74 +3171,18 @@
 			Wf9q44Kvhilmt2Ye+a3VrOjp5IjJBJpLZzzwW2ZDyPw=
 			</data>
 		</dict>
-		<key>wwwroot/CepBankApp.3o8fooo3h1.bundle.scp.css</key>
+		<key>wwwroot/CepBankApp.0cm02h7cfh.bundle.scp.css</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			o5E6Uux9cch1BOSU08CyQ5wbFpIHKgMKEu52w/DVbBE=
-			</data>
-		</dict>
-		<key>wwwroot/CepBankApp.3sqvjuhqoz.bundle.scp.css</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			U1RzkDAgrDkYRRKREjziTPND9UC3hruramgKfPAWuls=
-			</data>
-		</dict>
-		<key>wwwroot/CepBankApp.6t245y9nd5.bundle.scp.css</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			OiR9BX3/YPI59FCnyBBBuwuAQnkW6vRxGxSfvPlyQaw=
-			</data>
-		</dict>
-		<key>wwwroot/CepBankApp.bah57o3tzc.bundle.scp.css</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			wx0UV/YeV7AFJLZ44er+UIZT8zpR5M6oeGrR4e11Lio=
-			</data>
-		</dict>
-		<key>wwwroot/CepBankApp.e1qejl5m86.bundle.scp.css</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			UrJVhCcskgRsVTrMhuYRDOlTP6yXVG294rC7uSogLBw=
-			</data>
-		</dict>
-		<key>wwwroot/CepBankApp.rdhh6pyx62.bundle.scp.css</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			P5yEou7YpjZSM0HlBYIOysRaLIN61nGMmFYSNnat3Vc=
-			</data>
-		</dict>
-		<key>wwwroot/CepBankApp.scm9idynid.bundle.scp.css</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			bF+siPi27iR/ZjeoGO3Tzh2NlXKbVvo+jbc1x22uQP0=
+			EAdAp9lijaJzhrflo8KHgpNKtRC5vP824vQ+DDXkfnw=
 			</data>
 		</dict>
 		<key>wwwroot/CepBankApp.styles.css</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			P5yEou7YpjZSM0HlBYIOysRaLIN61nGMmFYSNnat3Vc=
-			</data>
-		</dict>
-		<key>wwwroot/CepBankApp.ur9w6jzk35.bundle.scp.css</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			ehvu0oCg3AkC1xmnrqWceA0CxVHEEsU7QXdMWj6nFj4=
-			</data>
-		</dict>
-		<key>wwwroot/CepBankApp.v0xp6oq7qp.bundle.scp.css</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			kQY7buqAwvvT6uFkk4FWEe/JqG28i1ZxnDq2k17kh24=
+			EAdAp9lijaJzhrflo8KHgpNKtRC5vP824vQ+DDXkfnw=
 			</data>
 		</dict>
 		<key>wwwroot/_framework/blazor.modules.json</key>
@@ -3564,13 +3311,6 @@
 			byxBUnC+h3AINRkAoHXXoRJHKGlgPJVGA/sTvesfN8c=
 			</data>
 		</dict>
-		<key>wwwroot/glassy-wallpaper.jpg</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			0YX80k9MdHXkGJDPqgKx9W77y71+gmA3ujSVmiYaPR8=
-			</data>
-		</dict>
 		<key>wwwroot/glassy-wallpaper.png</key>
 		<dict>
 			<key>hash2</key>
@@ -3582,7 +3322,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			DdlBX6CTTDhz4orWVPhghiRg9AQr9jdZJlXGSemj+Rc=
+			L3m6oanva3sN9CkIgxSArdq/lAf1zbFUAEWVKGGUG2A=
 			</data>
 		</dict>
 		<key>wwwroot/lib/bootstrap/dist/css/bootstrap.min.css</key>
@@ -3599,18 +3339,25 @@
 			dLjmWc4YRAp7XkxEmYm7/xV1ebW+YQ0LrlrrKVB8kXY=
 			</data>
 		</dict>
-		<key>wwwroot/startup.js</key>
+		<key>wwwroot/notes.css</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			tcYLCZgX0Hq5F1uDQg0G52LTeeBtYZY6KB9oA5xLfz4=
+			KJBmWzC+j3d0EIfhb2kbN0kI2u1W5VIvfPp5MlWjMPQ=
 			</data>
 		</dict>
 		<key>wwwroot/theme.js</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			a9PviINbKMT6ujq7Yht44wpSqmHEljSHL7KV1uQQUVA=
+			xDkHdEBlBD3krmPPEDvPqq/A/lkvTUq7yV+XcjBxymI=
+			</data>
+		</dict>
+		<key>xml/microsoft_maui_essentials_fileprovider_file_paths.xml</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			W4mBx+OWozujR6fIlOuqppzspq5DXmkX1Oo5zBuPD6Q=
 			</data>
 		</dict>
 		<key>zh-HK/Microsoft.Maui.Controls.resources.dll</key>

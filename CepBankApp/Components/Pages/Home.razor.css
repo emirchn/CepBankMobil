@@ -1,0 +1,5 @@
+.overview-page .finance-header { align-items: center; flex-wrap: nowrap; }
+.overview-page .finance-header .eyebrow { margin-bottom: 0; }
+.overview-page .finance-header ::deep .overview-apps-link { display: inline-flex; align-items: center; gap: 4px; flex: none; min-height: 32px; color: var(--muted); font-size: .78rem; font-weight: 750; text-decoration: none; }
+.overview-page .finance-header ::deep .overview-apps-link span { font-size: 1.3rem; line-height: 1; }
+.overview-page .finance-header ::deep .overview-apps-link:focus-visible { outline: 2px solid var(--primary); border-radius: 5px; }

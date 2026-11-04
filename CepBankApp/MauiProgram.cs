@@ -27,6 +27,9 @@ public static class MauiProgram
 #endif
 
 		builder.Services.AddSingleton<DatabaseService>();
+		builder.Services.AddSingleton<NotesStore>();
+		builder.Services.AddSingleton<NotesReminderService>();
+		builder.Services.AddSingleton<NotesAppearance>();
 		builder.Services.AddSingleton<RecurringTransactionService>();
 		builder.Services.AddSingleton<NotificationService>();
 		builder.Services.AddSingleton<MarketRatesService>();

@@ -11,6 +11,17 @@ window.cepbankTheme = {
             selected === "device" ? (systemTheme.matches ? "dark" : "light") : selected);
     }
 };
+window.notesSurface = {
+    apply(dark) {
+        const color = dark ? "#11161C" : "#F7F8FA";
+        document.documentElement.style.background = color;
+        document.body.style.background = color;
+    },
+    restore() {
+        document.documentElement.style.removeProperty("background");
+        document.body.style.removeProperty("background");
+    }
+};
 systemTheme.addEventListener("change", () => {
     if (document.documentElement.getAttribute("data-theme") === "device")
         window.cepbankTheme.apply("device");

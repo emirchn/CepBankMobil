@@ -1,0 +1,31 @@
+.notes-shell[b-p3e4jc0abl] {
+    --background: #f7f8fa; --surface: #ffffff; --text: #2d3748; --muted: #687585;
+    --border: #dfe4e9; --primary: #83aac2; --soft-primary: #e3edf4;
+    --soft-peach: #f4e5e9; --soft-mint: #e4f0eb; --soft-blue: #e7edf4;
+    box-sizing: border-box; height: 100dvh; display: flex; flex-direction: column; overflow: hidden;
+    background: var(--background);
+    color: var(--text);
+}
+.notes-shell.dark[b-p3e4jc0abl] {
+    --background: #11161c; --surface: #242832; --text: #f7fafc; --muted: #aeb7c4;
+    --border: #333b47; --primary: #94a9c1; --soft-primary: #2b3949;
+    --soft-peach: #493d48; --soft-mint: #304843; --soft-blue: #293a4c;
+    background: var(--background);
+}
+.notes-content[b-p3e4jc0abl] { box-sizing: border-box; flex: 1; min-height: 0; width: 100%; max-width: 760px; margin: 0 auto; padding: calc(14px + env(safe-area-inset-top, 0px)) 20px 24px; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+.notes-nav[b-p3e4jc0abl] {
+    box-sizing: border-box; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr));
+    position: relative; z-index: 40; flex: none;
+    width: 100%; max-width: none; margin: 0; padding: 7px 8px max(4px, calc(env(safe-area-inset-bottom, 0px) - 8px));
+    border: 0; border-top: 1px solid var(--border); border-radius: 0; background: var(--background);
+}
+.notes-nav-indicator[b-p3e4jc0abl] {
+    position: absolute; top: 7px; bottom: max(4px, calc(env(safe-area-inset-bottom, 0px) - 8px)); left: 8px; width: calc((100% - 16px) / 5);
+    border-radius: 14px; background: var(--soft-primary);
+    transition: transform .34s cubic-bezier(.22, 1, .36, 1);
+}
+.notes-nav[b-p3e4jc0abl]  a { position: relative; z-index: 1; display: grid; place-items: center; min-width: 0; min-height: 55px; border-radius: 14px; color: var(--muted); text-decoration: none; transition: color .2s, transform .25s; }
+.notes-nav[b-p3e4jc0abl]  a.active { color: var(--primary); transform: translateY(-2px); }
+.notes-nav[b-p3e4jc0abl]  a svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
+.notes-nav[b-p3e4jc0abl]  a:focus-visible { outline: 2px solid var(--primary); outline-offset: -3px; }
+@media (prefers-reduced-motion: reduce) { .notes-nav-indicator[b-p3e4jc0abl], .notes-nav[b-p3e4jc0abl]  a { transition: none; } }

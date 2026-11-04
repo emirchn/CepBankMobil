@@ -1,0 +1,60 @@
+@page "/notes/places/new"
+@page "/notes/places/edit/{Id:int}"
+@layout NotesLayout
+@using CepBankApp.Data
+@using CepBankApp.Models
+@using CepBankApp.Services
+@inject NotesStore Store
+@inject NavigationManager Navigation
+
+<section class="notes-page">
+    <div class="notes-heading">
+        <div><p class="notes-kicker">GİDİLECEK YERLER</p><h1>@(Id == 0 ? "Mekân ekle" : "Mekânı düzenle")</h1></div>
+        <NavLink href="notes/places">Vazgeç</NavLink>
+    </div>
+    @if (_notFound)
+    {
+        <div class="notes-empty">Mekân bulunamadı.</div>
+    }
+    else
+    {
+        <div class="notes-panel notes-form">
+            <label>Mekân adı <input maxlength="160" @bind="_place.Name" /></label>
+            <label>Konum <span>(opsiyonel, harita bağlantısı)</span><input type="url" placeholder="https://maps.app.goo.gl/..." @bind="_place.MapLink" /></label>
+            <label>Kategori <select @bind="_place.Category">@foreach (var category in PlaceOptions.Categories) { <option value="@category">@PlaceOptions.CategoryLabel(category)</option> }</select></label>
+            <label>Bütçe <select @bind="_place.Budget">@foreach (var budget in PlaceOptions.Budgets) { <option value="@budget">@PlaceOptions.BudgetLabel(budget)</option> }</select></label>
+            @if (!string.IsNullOrWhiteSpace(_error)) { <p class="notes-error">@_error</p> }
+            <button type="button" class="notes-primary" disabled="@_saving" @onclick="SaveAsync">Kaydet</button>
+        </div>
+    }
+</section>
+
+@code {
+    [Parameter] public int Id { get; set; }
+    private PlaceToVisit _place = new();
+    private string _error = "";
+    private bool _notFound, _saving;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        _notFound = false;
+        _place = Id == 0 ? new PlaceToVisit() : await Store.GetPlaceAsync(Id) ?? new PlaceToVisit();
+        if (Id != 0 && _place.Id == 0) _notFound = true;
+    }
+
+    private async Task SaveAsync()
+    {
+        if (_saving || _notFound) return;
+        var name = _place.Name.Trim();
+        var link = _place.MapLink.Trim();
+        if (string.IsNullOrWhiteSpace(name)) { _error = "Mekân adı gerekli."; return; }
+        if (link.Length > 0 && (!Uri.TryCreate(link, UriKind.Absolute, out var uri) || uri.Scheme is not ("https" or "http")))
+        { _error = "Konum için geçerli bir harita bağlantısı gir."; return; }
+        _saving = true;
+        _place.Name = name;
+        _place.MapLink = link;
+        if (_place.Id == 0) _place.CreatedAt = DateTime.Now;
+        try { await Store.SavePlaceAsync(_place); Navigation.NavigateTo("notes/places"); }
+        catch (Exception ex) { _error = "Mekân kaydedilemedi: " + ex.Message; _saving = false; }
+    }
+}

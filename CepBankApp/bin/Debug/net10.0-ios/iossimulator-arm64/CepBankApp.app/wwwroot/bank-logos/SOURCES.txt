@@ -1,0 +1,5 @@
+Bank logos in this directory are from:
+https://github.com/murattahtaci/turkish-bank-logos-svg/tree/main/svg
+
+The source repository lists the origin and license or trademark status of each logo in its README and logos.json.
+These files are bundled locally so the account screen works without an internet connection.

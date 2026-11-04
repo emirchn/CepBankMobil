@@ -17,6 +17,6 @@ public partial class App : Application
 
 	protected override Window CreateWindow(IActivationState? activationState)
 	{
-		return new Window(new MainPage()) { Title = "CepBank" };
+		return new Window(new MainPage()) { Title = "EC Apps" };
 	}
 }

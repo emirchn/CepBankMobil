@@ -28,5 +28,9 @@
     </array>
     <key>XSAppIconAssets</key>
     <string>Assets.xcassets/appicon.appiconset</string>
+    <key>NSFaceIDUsageDescription</key>
+    <string>Gizli ürünlerin ayrıntılarını göstermek için Face ID kullanılır.</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Ürünlere fotoğraf eklemek için fotoğraf arşivinize erişilir.</string>
 </dict>
 </plist>

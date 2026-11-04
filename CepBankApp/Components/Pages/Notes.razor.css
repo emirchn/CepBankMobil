@@ -1,0 +1,13 @@
+.notes-home { padding-top: clamp(12px, 4vh, 42px); }
+.notes-kicker { color: var(--primary); font-size: .69rem; font-weight: 850; letter-spacing: .16em; }
+h1 { margin: 0 0 8px; color: var(--text); font-size: clamp(2.5rem, 9vw, 3.5rem); letter-spacing: -.065em; }
+.notes-home > p:nth-of-type(2) { max-width: 29rem; color: var(--muted); line-height: 1.5; }
+.notes-home-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 13px; margin-top: 32px; }
+.notes-home-grid ::deep a { display: grid; align-content: space-between; min-height: 142px; padding: 18px; border: 1px solid var(--border); border-radius: 24px; background: var(--soft-primary); color: var(--text); text-decoration: none; box-shadow: 0 10px 26px #51465f0c; }
+.notes-home-grid ::deep a:nth-child(2) { background: var(--soft-peach); }
+.notes-home-grid ::deep a:nth-child(3) { background: var(--soft-mint); }
+.notes-home-grid ::deep a:nth-child(4) { background: var(--soft-blue); }
+.notes-home-grid ::deep a > span { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 14px; background: var(--surface); color: var(--primary); font-size: 1.5rem; }
+.notes-home-grid ::deep a strong { align-self: end; margin-top: 15px; font-size: 1.03rem; }
+.notes-home-grid ::deep a small { color: var(--muted); font-size: .73rem; }
+@media (max-width: 360px) { .notes-home-grid { gap: 9px; } .notes-home-grid ::deep a { min-height: 135px; padding: 13px; } }

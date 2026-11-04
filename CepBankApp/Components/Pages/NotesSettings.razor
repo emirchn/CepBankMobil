@@ -1,0 +1,58 @@
+@page "/notes/settings"
+@layout NotesLayout
+@using CepBankApp.Data
+@using CepBankApp.Services
+@inject NotesStore Store
+@inject NotesReminderService Notifications
+@inject NotesAppearance Appearance
+
+<section class="notes-page">
+    <div class="notes-heading"><div><p class="notes-kicker">NOTLARIM</p><h1>Ayarlar</h1></div><NavLink href="/" class="notes-return">‹ EC Apps</NavLink></div>
+    <div class="notes-panel settings-block"><div class="settings-title"><span class="settings-symbol" aria-hidden="true">◷</span><div><h2>Hatırlatıcı bildirimleri</h2><p>Yalnızca Hatırlatıcı etkinlikleri için kullanılır.</p></div></div>
+        <div class="notes-setting-group"><strong>Kaç gün önce?</strong><div class="notes-option-row" role="group" aria-label="Hatırlatıcı bildirim günleri">@foreach (var day in NotesReminderService.Days) { <button type="button" class="@OptionClass(NotesReminderService.HasDay(NotesReminderService.ReminderDaysMask, day))" aria-pressed="@NotesReminderService.HasDay(NotesReminderService.ReminderDaysMask, day)" @onclick="() => ToggleDayAsync(day)">@day gün</button> }</div></div>
+        <div class="notes-setting-group"><strong>Bildirim saati</strong><div class="notes-option-row" role="group" aria-label="Bildirim saati">@foreach (var hour in Hours) { <button type="button" class="@OptionClass(NotesReminderService.DeliveryHour == hour)" aria-pressed="@(NotesReminderService.DeliveryHour == hour)" @onclick="() => SetHourAsync(hour)">@hour.ToString("00"):00</button> }</div></div>
+        <p class="settings-footnote">En yakın bildirimler planlanır. Uygulamayı açtığında ileri tarihliler güncellenir.</p><button type="button" class="notes-text-button" @onclick="EnableNotificationsAsync">Bildirim iznini kontrol et</button>
+    </div>
+    <div class="notes-panel settings-block"><div class="settings-title"><span class="settings-symbol" aria-hidden="true">◐</span><div><h2>Görünüm</h2><p>Notlarım için ayrı tema.</p></div></div><div class="notes-theme-row" role="radiogroup" aria-label="Notlarım teması">
+        <button type="button" role="radio" aria-checked="@(Appearance.Mode == "device")" class="@ThemeClass("device")" @onclick="SelectDeviceTheme"><span aria-hidden="true">◐</span>Cihaz</button>
+        <button type="button" role="radio" aria-checked="@(Appearance.Mode == "light")" class="@ThemeClass("light")" @onclick="SelectLightTheme"><span aria-hidden="true">☼</span>Açık</button>
+        <button type="button" role="radio" aria-checked="@(Appearance.Mode == "dark")" class="@ThemeClass("dark")" @onclick="SelectDarkTheme"><span aria-hidden="true">☾</span>Koyu</button>
+    </div></div>
+    <div class="notes-panel settings-block"><h2>Veriler</h2><p>Notlarım verileri bu cihazda saklanır. Sıfırlama; etkinlikleri, alınacak ürünleri, resimlerini, market listesini ve gidilecek yerleri siler.</p><button type="button" class="notes-text-button danger" @onclick="() => _confirmReset = true">Notlarım verilerini sıfırla</button>
+        @if (_confirmReset) { <div class="inline-confirm" role="alertdialog" aria-label="Notlarım verilerini sıfırla"><strong>Bu işlem geri alınamaz. Tüm Notlarım verileri silinsin mi?</strong><div class="notes-actions"><button type="button" class="danger" @onclick="ResetAsync">Evet, sil</button><button type="button" @onclick="() => _confirmReset = false">Vazgeç</button></div></div> }
+    </div>
+    @if (!string.IsNullOrWhiteSpace(_message)) { <p class="notes-message">@_message</p> }
+</section>
+
+@code {
+    private bool _confirmReset;
+    private string _message = "";
+    private static readonly int[] Hours = [9, 12, 16, 20];
+    private static string OptionClass(bool selected) => selected ? "notes-option selected" : "notes-option";
+    private string ThemeClass(string mode) => Appearance.Mode == mode ? "notes-theme-choice selected" : "notes-theme-choice";
+    private async Task ToggleDayAsync(int day)
+    {
+        NotesReminderService.ReminderDaysMask ^= 1 << day;
+        await Notifications.RefreshAsync();
+        _message = "Bildirim günleri güncellendi.";
+    }
+    private async Task SetHourAsync(int hour)
+    {
+        NotesReminderService.DeliveryHour = hour;
+        await Notifications.RefreshAsync();
+        _message = "Bildirim saati güncellendi.";
+    }
+    private void SelectDeviceTheme() => Appearance.Mode = "device";
+    private void SelectLightTheme() => Appearance.Mode = "light";
+    private void SelectDarkTheme() => Appearance.Mode = "dark";
+    private async Task EnableNotificationsAsync() { await Notifications.RequestPermissionAndRefreshAsync(); _message = "Bildirim izni kontrol edildi."; }
+    private async Task ResetAsync()
+    {
+        await Store.ClearAllAsync();
+        NotesReminderService.DeliveryHour = 9;
+        NotesReminderService.ReminderDaysMask = 1 << 3;
+        Appearance.Mode = "device";
+        await Notifications.RefreshAsync();
+        _confirmReset = false; _message = "Notlarım verileri silindi.";
+    }
+}

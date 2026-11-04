@@ -1,0 +1,13 @@
+.notes-home[b-m4oz1kow5i] { padding-top: clamp(12px, 4vh, 42px); }
+.notes-kicker[b-m4oz1kow5i] { color: var(--primary); font-size: .69rem; font-weight: 850; letter-spacing: .16em; }
+h1[b-m4oz1kow5i] { margin: 0 0 8px; color: var(--text); font-size: clamp(2.5rem, 9vw, 3.5rem); letter-spacing: -.065em; }
+.notes-home > p:nth-of-type(2)[b-m4oz1kow5i] { max-width: 29rem; color: var(--muted); line-height: 1.5; }
+.notes-home-grid[b-m4oz1kow5i] { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 13px; margin-top: 32px; }
+.notes-home-grid[b-m4oz1kow5i]  a { display: grid; align-content: space-between; min-height: 142px; padding: 18px; border: 1px solid var(--border); border-radius: 24px; background: var(--soft-primary); color: var(--text); text-decoration: none; box-shadow: 0 10px 26px #51465f0c; }
+.notes-home-grid[b-m4oz1kow5i]  a:nth-child(2) { background: var(--soft-peach); }
+.notes-home-grid[b-m4oz1kow5i]  a:nth-child(3) { background: var(--soft-mint); }
+.notes-home-grid[b-m4oz1kow5i]  a:nth-child(4) { background: var(--soft-blue); }
+.notes-home-grid[b-m4oz1kow5i]  a > span { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 14px; background: var(--surface); color: var(--primary); font-size: 1.5rem; }
+.notes-home-grid[b-m4oz1kow5i]  a strong { align-self: end; margin-top: 15px; font-size: 1.03rem; }
+.notes-home-grid[b-m4oz1kow5i]  a small { color: var(--muted); font-size: .73rem; }
+@media (max-width: 360px) { .notes-home-grid[b-m4oz1kow5i] { gap: 9px; } .notes-home-grid[b-m4oz1kow5i]  a { min-height: 135px; padding: 13px; } }

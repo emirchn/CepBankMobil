@@ -29,7 +29,7 @@ public class NotificationService
             var today = DateTime.Today;
             var pending = await LocalNotificationCenter.Current.GetPendingNotificationList();
             var oldReminderIds = pending.Select(item => item.NotificationId)
-                .Where(id => id != DailyBalanceId).ToArray();
+                .Where(id => id != DailyBalanceId && !NotesReminderService.IsNotesId(id)).ToArray();
             if (oldReminderIds.Length > 0) LocalNotificationCenter.Current.Cancel(oldReminderIds);
             var horizon = today.AddDays(60);
             var planned = new List<(DateTime When, NotificationRequest Request)>();
@@ -85,7 +85,7 @@ public class NotificationService
                         "Kredi ödemesi bugün", $"Bugün {loan.Name} kredinizin ödeme günü.", payment.DueDate, horizon);
                 }
             }
-            foreach (var reminder in planned.OrderBy(item => item.When).Take(58))
+            foreach (var reminder in planned.OrderBy(item => item.When).Take(36))
                 await LocalNotificationCenter.Current.Show(reminder.Request);
         }
         finally { _scheduleGate.Release(); }

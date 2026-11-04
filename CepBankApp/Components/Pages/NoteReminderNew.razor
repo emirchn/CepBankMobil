@@ -1,0 +1,39 @@
+@page "/notes/reminders/new"
+@layout NotesLayout
+@using CepBankApp.Data
+@using CepBankApp.Models
+@using CepBankApp.Services
+@inject NotesStore Store
+@inject NotesReminderService Notifications
+@inject NavigationManager Navigation
+
+<section class="notes-page">
+    <div class="notes-heading"><div><p class="notes-kicker">HATIRLATICI</p><h1>Etkinlik ekle</h1></div><NavLink href="notes/reminders">Vazgeç</NavLink></div>
+    <div class="notes-panel notes-form">
+        <label>Etkinlik adı <input maxlength="120" @bind="_name" /></label>
+        <label>Açıklama <span>(opsiyonel)</span><textarea maxlength="1000" rows="4" @bind="_description"></textarea></label>
+        <label>Tarih <input type="date" min="@DateTime.Today.AddDays(1).ToString("yyyy-MM-dd")" @bind="_date" /></label>
+        @if (!string.IsNullOrWhiteSpace(_error)) { <p class="notes-error">@_error</p> }
+        <button type="button" class="notes-primary" disabled="@_saving" @onclick="SaveAsync">Etkinliği kaydet</button>
+    </div>
+</section>
+
+@code {
+    private string _name = "", _description = "", _error = "";
+    private DateTime _date = DateTime.Today.AddDays(1);
+    private bool _saving;
+    private async Task SaveAsync()
+    {
+        if (_saving) return;
+        if (string.IsNullOrWhiteSpace(_name)) { _error = "Etkinlik adı gerekli."; return; }
+        if (_date.Date <= DateTime.Today) { _error = "Gelecekteki bir tarih seç."; return; }
+        _saving = true;
+        try
+        {
+            await Store.SaveReminderAsync(new NoteReminder { Name = _name.Trim(), Description = _description.Trim(), EventDate = _date.Date });
+            await Notifications.RequestPermissionAndRefreshAsync();
+            Navigation.NavigateTo("notes/reminders");
+        }
+        catch (Exception ex) { _error = "Etkinlik kaydedildi; bildirim ayarlanamadı: " + ex.Message; _saving = false; }
+    }
+}

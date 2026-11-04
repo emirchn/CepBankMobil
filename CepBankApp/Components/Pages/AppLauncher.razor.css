@@ -1,0 +1,11 @@
+.launcher-page { box-sizing: border-box; display: grid; place-items: center; min-height: 100dvh; padding: calc(32px + env(safe-area-inset-top, 0px)) 24px calc(32px + env(safe-area-inset-bottom, 0px)); }
+.launcher-options { display: grid; gap: 18px; width: min(100%, 560px); }
+.launcher-options ::deep .launcher-card { display: flex; align-items: center; gap: 22px; min-height: 136px; padding: 22px; border: 1px solid var(--border); border-radius: 28px; background: var(--surface); color: var(--text); text-decoration: none; box-shadow: 0 16px 36px #17244412; transition: transform .15s, box-shadow .15s; }
+.launcher-options ::deep .launcher-card:active { transform: scale(.985); }
+.launcher-options ::deep .launcher-card:focus-visible { outline: 3px solid var(--primary); outline-offset: 3px; }
+.launcher-options ::deep .launcher-card strong { font-size: clamp(1.45rem, 6vw, 1.8rem); font-weight: 800; letter-spacing: -.035em; }
+.launcher-card-icon { flex: none; width: 76px; height: 76px; display: grid; place-items: center; border-radius: 23px; }
+.launcher-card-icon svg { width: 44px; height: 44px; fill: none; stroke: currentColor; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+.bank-icon { color: #ecfffa; background: linear-gradient(140deg, #163e53, #257d77); }
+.notes-icon { color: #fff9ec; background: linear-gradient(140deg, #8c5d73, #c38b6f); }
+@media (max-width: 380px) { .launcher-options ::deep .launcher-card { gap: 16px; min-height: 116px; padding: 17px; } .launcher-card-icon { width: 64px; height: 64px; } .launcher-card-icon svg { width: 38px; height: 38px; } }

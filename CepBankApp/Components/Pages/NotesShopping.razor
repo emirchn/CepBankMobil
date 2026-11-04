@@ -1,0 +1,155 @@
+@page "/notes/shopping"
+@layout NotesLayout
+@implements IDisposable
+@using CepBankApp.Data
+@using CepBankApp.Models
+@using CepBankApp.Services
+@inject NotesStore Store
+
+<section class="notes-page">
+    <div class="notes-heading"><div><p class="notes-kicker">NOTLARIM</p><h1>Alınacaklar</h1></div><NavLink class="notes-primary" href="notes/shopping/new">+ Ürün ekle</NavLink></div>
+    <div class="notes-toolbar shopping-toolbar"><input type="search" placeholder="Ürün ara" aria-label="Ürün ara" @bind="_search" @bind:event="oninput" /><select aria-label="Alınma durumu" @bind="_status"><option value="open">Alınacaklar</option><option value="bought">Alınanlar</option><option value="all">Tümü</option></select><select aria-label="Kategori filtresi" @bind="_category"><option value="">Tüm kategoriler</option>@foreach (var category in ShoppingCategories.All) { <option value="@category">@ShoppingCategories.Label(category)</option> }</select></div>
+    <div class="notes-list">
+        @if (!_loaded) { <div class="notes-empty" role="status">Ürünler yükleniyor…</div> }
+        @foreach (var item in FilteredItems())
+        {
+            @if (item.Category == ShoppingCategory.Gizli)
+            {
+                <button type="button" class="notes-panel secret-shopping-row" aria-label="Gizli ürünü Face ID ile aç" @key="item.Id" @onclick="() => UnlockAsync(item)">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><circle cx="12" cy="15.5" r="1"/></svg>
+                    <span>Gizli ürün</span>
+                </button>
+            }
+            else
+            {
+            <article class="notes-panel shopping-row" @key="item.Id">
+                @if (!string.IsNullOrWhiteSpace(item.ImageDataUrl)) { <img class="shopping-thumb" src="@item.ImageDataUrl" alt="@item.Name" /> }
+                else { <div class="shopping-thumb placeholder" aria-hidden="true">◇</div> }
+                <div class="shopping-info">
+                    <strong>@item.Name</strong><small>@ShoppingCategories.Label(item.Category) · @item.CreatedAt.ToString("dd.MM.yyyy")</small>
+                    @if (item.Price.HasValue) { <b>@item.Price.Value.ToString("N2", Turkish) TL</b> }
+                    @if (item.IsPurchased && item.PurchasedAt.HasValue) { <small>@item.PurchasedAt.Value.ToString("dd.MM.yyyy") tarihinde alındı</small> }
+                    @if (SafeLink(item.Link) is string link) { <a href="@link" target="_blank" rel="noopener noreferrer">Ürün bağlantısı ↗</a> }
+                    <div class="notes-actions"><button type="button" @onclick="() => TogglePurchasedAsync(item)">@(item.IsPurchased ? "Geri al" : "Aldım")</button><NavLink href="@($"notes/shopping/edit/{item.Id}")">Düzenle</NavLink><button type="button" class="danger" @onclick="() => _deleteId = item.Id">Sil</button></div>
+                    @if (_deleteId == item.Id) { <div class="inline-confirm"><span>Ürün silinsin mi?</span><button type="button" @onclick="() => DeleteAsync(item)">Evet, sil</button><button type="button" @onclick="() => _deleteId = null">Vazgeç</button></div> }
+                </div>
+            </article>
+            }
+        }
+        @if (_loaded && !FilteredItems().Any()) { <div class="notes-empty">Bu filtreye uygun ürün yok.</div> }
+    </div>
+    @if (!string.IsNullOrWhiteSpace(_secretError)) { <p class="notes-error" role="alert">@_secretError</p> }
+    @if (_revealedItem is { } secret)
+    {
+        <div class="notes-modal-backdrop" @onclick="CloseSecret">
+            <div class="notes-modal secret-detail" role="dialog" aria-modal="true" aria-label="Gizli ürün ayrıntıları" @onclick:stopPropagation="true">
+                <div class="notes-heading"><h2>Ürün ayrıntıları</h2><button type="button" aria-label="Kapat" @onclick="CloseSecret">✕</button></div>
+                @if (!string.IsNullOrWhiteSpace(secret.ImageDataUrl)) { <img class="secret-detail-photo" src="@secret.ImageDataUrl" alt="Ürün resmi" /> }
+                <strong>@secret.Name</strong>
+                <small>@ShoppingCategories.Label(secret.Category) · @secret.CreatedAt.ToString("dd.MM.yyyy")</small>
+                @if (secret.Price.HasValue) { <b>@secret.Price.Value.ToString("N2", Turkish) TL</b> }
+                @if (secret.IsPurchased && secret.PurchasedAt.HasValue) { <small>@secret.PurchasedAt.Value.ToString("dd.MM.yyyy") tarihinde alındı</small> }
+                @if (SafeLink(secret.Link) is string secretLink) { <a href="@secretLink" target="_blank" rel="noopener noreferrer">Ürün bağlantısı ↗</a> }
+                <div class="notes-actions"><button type="button" @onclick="() => TogglePurchasedAsync(secret)">@(secret.IsPurchased ? "Geri al" : "Aldım")</button><NavLink href="@($"notes/shopping/edit/{secret.Id}")">Düzenle</NavLink><button type="button" class="danger" @onclick="() => _deleteId = secret.Id">Sil</button></div>
+                @if (_deleteId == secret.Id) { <div class="inline-confirm"><span>Ürün silinsin mi?</span><button type="button" @onclick="() => DeleteAsync(secret)">Evet, sil</button><button type="button" @onclick="() => _deleteId = null">Vazgeç</button></div> }
+            </div>
+        </div>
+    }
+</section>
+
+@code {
+    private static readonly System.Globalization.CultureInfo Turkish = new("tr-TR");
+    private List<ShoppingItem> _items = [];
+    private string _search = "", _status = "open", _category = "";
+    private string _secretError = "";
+    private ShoppingItem? _revealedItem;
+    private int? _deleteId;
+    private Window? _window;
+    private bool _loaded, _imageLoadStarted, _disposed;
+    protected override async Task OnInitializedAsync()
+    {
+        _window = Application.Current?.Windows.FirstOrDefault();
+        if (_window is not null) _window.Stopped += OnWindowStopped;
+        _items = await Store.GetShoppingItemsAsync();
+        _loaded = true;
+    }
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (_loaded && !_imageLoadStarted)
+        {
+            _imageLoadStarted = true;
+            _ = LoadImagesAsync();
+        }
+        return Task.CompletedTask;
+    }
+    private async Task LoadImagesAsync()
+    {
+        try
+        {
+            var changed = false;
+            var checkedCount = 0;
+            foreach (var item in _items.Where(x => x.Category != ShoppingCategory.Gizli))
+            {
+                if (_disposed) return;
+                var stored = await Store.GetShoppingItemAsync(item.Id);
+                if (_disposed) return;
+                if (stored is not null && !string.IsNullOrWhiteSpace(stored.ImageDataUrl))
+                {
+                    item.ImageDataUrl = stored.ImageDataUrl;
+                    changed = true;
+                }
+                if (++checkedCount % 4 == 0 && changed)
+                {
+                    await InvokeAsync(StateHasChanged);
+                    changed = false;
+                }
+            }
+            if (changed && !_disposed) await InvokeAsync(StateHasChanged);
+        }
+        catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"Shopping images could not be loaded: {ex}"); }
+    }
+    private IEnumerable<ShoppingItem> FilteredItems() => _items.Where(x =>
+        (_status == "all" || (_status == "open" ? !x.IsPurchased : x.IsPurchased)) &&
+        (string.IsNullOrEmpty(_category) || x.Category.ToString() == _category) &&
+        (x.Category == ShoppingCategory.Gizli
+            ? string.IsNullOrWhiteSpace(_search)
+            : string.IsNullOrWhiteSpace(_search) || x.Name.Contains(_search, StringComparison.CurrentCultureIgnoreCase) || ShoppingCategories.Label(x.Category).Contains(_search, StringComparison.CurrentCultureIgnoreCase)));
+    private static string? SafeLink(string value) => Uri.TryCreate(value, UriKind.Absolute, out var uri) && uri.Scheme is "https" or "http" ? uri.ToString() : null;
+    private async Task UnlockAsync(ShoppingItem item)
+    {
+        _secretError = "";
+        try
+        {
+            var result = await SecretItemAuthentication.AuthenticateAsync();
+            if (result.Succeeded) _revealedItem = await Store.GetShoppingItemAsync(item.Id);
+            else _secretError = result.Message;
+        }
+        catch { _secretError = "Face ID doğrulaması başlatılamadı."; }
+    }
+    private void CloseSecret() { _revealedItem = null; _deleteId = null; }
+    private void OnWindowStopped(object? sender, EventArgs args) => _ = InvokeAsync(() => { CloseSecret(); StateHasChanged(); });
+    public void Dispose()
+    {
+        _disposed = true;
+        if (_window is not null) _window.Stopped -= OnWindowStopped;
+    }
+    private async Task TogglePurchasedAsync(ShoppingItem item)
+    {
+        var purchased = !item.IsPurchased;
+        var purchasedAt = purchased ? DateTime.Today : (DateTime?)null;
+        await Store.SetShoppingPurchasedAsync(item.Id, purchased, purchasedAt);
+        item.IsPurchased = purchased;
+        item.PurchasedAt = purchasedAt;
+        if (_revealedItem?.Id == item.Id)
+        {
+            _revealedItem.IsPurchased = purchased;
+            _revealedItem.PurchasedAt = purchasedAt;
+            var listed = _items.FirstOrDefault(x => x.Id == item.Id);
+            if (listed is not null) { listed.IsPurchased = purchased; listed.PurchasedAt = purchasedAt; }
+        }
+    }
+    private async Task DeleteAsync(ShoppingItem item)
+    {
+        await Store.DeleteShoppingItemAsync(item); _items.Remove(item); CloseSecret();
+    }
+}

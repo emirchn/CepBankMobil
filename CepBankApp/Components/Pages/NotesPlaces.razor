@@ -1,0 +1,76 @@
+@page "/notes/places"
+@layout NotesLayout
+@using CepBankApp.Data
+@using CepBankApp.Models
+@using CepBankApp.Services
+@inject NotesStore Store
+
+<section class="notes-page">
+    <div class="notes-heading">
+        <div><p class="notes-kicker">NOTLARIM</p><h1>Gidilecek Yerler</h1></div>
+        <NavLink class="notes-primary" href="notes/places/new">+ Mekân ekle</NavLink>
+    </div>
+
+    <div class="notes-toolbar places-toolbar">
+        <input type="search" placeholder="Mekân ara" aria-label="Mekân ara" @bind="_search" @bind:event="oninput" />
+        <select aria-label="Kategori filtresi" @bind="_category">
+            <option value="">Tüm kategoriler</option>
+            @foreach (var category in PlaceOptions.Categories) { <option value="@category">@PlaceOptions.CategoryLabel(category)</option> }
+        </select>
+        <select aria-label="Bütçe filtresi" @bind="_budget">
+            <option value="">Tüm bütçeler</option>
+            @foreach (var budget in PlaceOptions.Budgets) { <option value="@budget">@PlaceOptions.BudgetLabel(budget)</option> }
+        </select>
+    </div>
+
+    <div class="notes-list">
+        @foreach (var place in FilteredPlaces())
+        {
+            <article class="notes-panel place-row" @key="place.Id">
+                <div class="place-symbol" aria-hidden="true">⌖</div>
+                <div class="place-info">
+                    <strong>@place.Name</strong>
+                    <div class="place-tags"><span>@PlaceOptions.CategoryLabel(place.Category)</span><span>Bütçe: @PlaceOptions.BudgetLabel(place.Budget)</span></div>
+                    <div class="notes-actions">
+                        @if (!string.IsNullOrWhiteSpace(place.MapLink)) { <button type="button" @onclick="() => OpenMapAsync(place.MapLink)">Haritada aç ↗</button> }
+                        <NavLink href="@($"notes/places/edit/{place.Id}")">Düzenle</NavLink>
+                        <button type="button" class="danger" @onclick="() => _deleteId = place.Id">Sil</button>
+                    </div>
+                    @if (_deleteId == place.Id)
+                    {
+                        <div class="inline-confirm"><span>@place.Name silinsin mi?</span><div class="notes-actions"><button type="button" class="danger" @onclick="() => DeleteAsync(place)">Evet, sil</button><button type="button" @onclick="() => _deleteId = null">Vazgeç</button></div></div>
+                    }
+                </div>
+            </article>
+        }
+        @if (!FilteredPlaces().Any()) { <div class="notes-empty">Bu filtreye uygun mekân yok.</div> }
+    </div>
+    @if (!string.IsNullOrWhiteSpace(_message)) { <p class="notes-error">@_message</p> }
+</section>
+
+@code {
+    private List<PlaceToVisit> _places = [];
+    private string _search = "", _category = "", _budget = "", _message = "";
+    private int? _deleteId;
+
+    protected override async Task OnInitializedAsync() => _places = await Store.GetPlacesAsync();
+
+    private IEnumerable<PlaceToVisit> FilteredPlaces() => _places.Where(place =>
+        (string.IsNullOrWhiteSpace(_search) || place.Name.Contains(_search, StringComparison.CurrentCultureIgnoreCase)) &&
+        (string.IsNullOrEmpty(_category) || place.Category.ToString() == _category) &&
+        (string.IsNullOrEmpty(_budget) || place.Budget.ToString() == _budget));
+
+    private async Task OpenMapAsync(string link)
+    {
+        if (!Uri.TryCreate(link, UriKind.Absolute, out var uri) || uri.Scheme is not ("https" or "http")) return;
+        try { await Microsoft.Maui.ApplicationModel.Launcher.Default.OpenAsync(uri); _message = ""; }
+        catch { _message = "Harita bağlantısı açılamadı."; }
+    }
+
+    private async Task DeleteAsync(PlaceToVisit place)
+    {
+        await Store.DeletePlaceAsync(place);
+        _places.Remove(place);
+        _deleteId = null;
+    }
+}

@@ -1,0 +1,43 @@
+@page "/notes/groceries"
+@layout NotesLayout
+@using CepBankApp.Data
+@using CepBankApp.Models
+@inject NotesStore Store
+
+<section class="notes-page">
+    <div class="notes-heading"><div><p class="notes-kicker">NOTLARIM</p><h1>Market Listesi</h1></div><button type="button" class="notes-text-button danger" @onclick="() => _confirmClear = true">Temizle</button></div>
+    <div class="notes-panel grocery-panel">
+        <div class="grocery-add"><input aria-label="Yeni ürün adı" placeholder="Listeye ürün ekle" maxlength="120" @bind="_newName" @bind:event="oninput" @onkeydown="OnKeyDown" /><button type="button" @onclick="AddAsync">Ekle</button></div>
+        @if (!string.IsNullOrWhiteSpace(_error)) { <p class="notes-error">@_error</p> }
+        @foreach (var item in _items.OrderBy(x => x.IsChecked).ThenBy(x => x.CreatedAt).ThenBy(x => x.Id))
+        {
+            <div class="grocery-row @(item.IsChecked ? "checked" : "")" @key="item.Id">
+                <button type="button" class="grocery-check" aria-label="@(item.IsChecked ? "İşareti kaldır" : "Alındı olarak işaretle")" aria-pressed="@item.IsChecked" @onclick="() => ToggleAsync(item)">@(item.IsChecked ? "✓" : "")</button>
+                <span>@item.Name</span>
+                <button type="button" class="grocery-delete" aria-label="@($"{item.Name} ürününü sil")" @onclick="() => DeleteAsync(item)">×</button>
+            </div>
+        }
+        @if (_items.Count == 0) { <p class="notes-empty">Liste boş. İlk ürünü ekle.</p> }
+    </div>
+    @if (_confirmClear)
+    {
+        <div class="notes-panel clear-confirm" role="alertdialog" aria-label="Listeyi temizle"><strong>Tüm market listesi silinsin mi?</strong><p>Bu işlem geri alınamaz.</p><div class="notes-actions"><button type="button" class="danger" @onclick="ClearAsync">Evet, temizle</button><button type="button" @onclick="() => _confirmClear = false">Vazgeç</button></div></div>
+    }
+</section>
+
+@code {
+    private List<GroceryItem> _items = [];
+    private string _newName = "", _error = "";
+    private bool _confirmClear;
+    protected override async Task OnInitializedAsync() => _items = await Store.GetGroceriesAsync();
+    private async Task OnKeyDown(KeyboardEventArgs args) { if (args.Key == "Enter") await AddAsync(); }
+    private async Task AddAsync()
+    {
+        if (string.IsNullOrWhiteSpace(_newName)) { _error = "Ürün adı gerekli."; return; }
+        var item = new GroceryItem { Name = _newName.Trim(), CreatedAt = DateTime.Now };
+        await Store.SaveGroceryAsync(item); _items.Add(item); _newName = ""; _error = "";
+    }
+    private async Task ToggleAsync(GroceryItem item) { item.IsChecked = !item.IsChecked; await Store.SaveGroceryAsync(item); }
+    private async Task DeleteAsync(GroceryItem item) { await Store.DeleteGroceryAsync(item); _items.Remove(item); }
+    private async Task ClearAsync() { await Store.ClearGroceriesAsync(); _items.Clear(); _confirmClear = false; }
+}
