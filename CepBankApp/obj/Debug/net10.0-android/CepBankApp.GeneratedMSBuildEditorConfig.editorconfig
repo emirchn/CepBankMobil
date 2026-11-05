@@ -1,14 +1,4 @@
 is_global = true
-build_property.EnableAotAnalyzer = 
-build_property.EnableSingleFileAnalyzer = true
-build_property.EnableTrimAnalyzer = false
-build_property.IncludeAllContentForSelfExtract = 
-build_property.VerifyReferenceTrimCompatibility = 
-build_property.VerifyReferenceAotCompatibility = 
-build_property.MauiXamlNoWarn = 
-build_property.EnableMauiXamlDiagnostics = true
-build_property.MauiXamlLineInfo = 
-build_property.Configuration = Debug
 build_property.TargetFramework = net10.0-android
 build_property.TargetFrameworkIdentifier = .NETCoreApp
 build_property.TargetFrameworkVersion = v10.0
@@ -32,420 +22,146 @@ build_property._RazorSourceGeneratorDebug =
 build_property.EffectiveAnalysisLevelStyle = 10.0
 build_property.EnableCodeStyleSeverity = 
 
-[/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/App.xaml]
-build_metadata.AdditionalFiles.GenKind = Xaml
-build_metadata.AdditionalFiles.ManifestResourceName = CepBankApp.App.xaml
-build_metadata.AdditionalFiles.TargetPath = App.xaml
-build_metadata.AdditionalFiles.RelativePath = App.xaml
-build_metadata.AdditionalFiles.Inflator = SourceGen
-build_metadata.AdditionalFiles.NoWarn = 
-build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.LineInfo = 
-build_metadata.AdditionalFiles.CssScope = 
-
-[/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/MainPage.xaml]
-build_metadata.AdditionalFiles.GenKind = Xaml
-build_metadata.AdditionalFiles.ManifestResourceName = CepBankApp.MainPage.xaml
-build_metadata.AdditionalFiles.TargetPath = MainPage.xaml
-build_metadata.AdditionalFiles.RelativePath = MainPage.xaml
-build_metadata.AdditionalFiles.Inflator = SourceGen
-build_metadata.AdditionalFiles.NoWarn = 
-build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.LineInfo = 
-build_metadata.AdditionalFiles.CssScope = 
-
 [/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/Components/BankLogo.razor]
-build_metadata.AdditionalFiles.GenKind = 
-build_metadata.AdditionalFiles.ManifestResourceName = 
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9CYW5rTG9nby5yYXpvcg==
-build_metadata.AdditionalFiles.RelativePath = 
-build_metadata.AdditionalFiles.Inflator = 
-build_metadata.AdditionalFiles.NoWarn = 
-build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.LineInfo = 
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/Components/BenefitCardPanel.razor]
-build_metadata.AdditionalFiles.GenKind = 
-build_metadata.AdditionalFiles.ManifestResourceName = 
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9CZW5lZml0Q2FyZFBhbmVsLnJhem9y
-build_metadata.AdditionalFiles.RelativePath = 
-build_metadata.AdditionalFiles.Inflator = 
-build_metadata.AdditionalFiles.NoWarn = 
-build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.LineInfo = 
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/Components/CardIcon.razor]
-build_metadata.AdditionalFiles.GenKind = 
-build_metadata.AdditionalFiles.ManifestResourceName = 
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9DYXJkSWNvbi5yYXpvcg==
-build_metadata.AdditionalFiles.RelativePath = 
-build_metadata.AdditionalFiles.Inflator = 
-build_metadata.AdditionalFiles.NoWarn = 
-build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.LineInfo = 
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/Components/Pages/AllCardMovements.razor]
-build_metadata.AdditionalFiles.GenKind = 
-build_metadata.AdditionalFiles.ManifestResourceName = 
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9BbGxDYXJkTW92ZW1lbnRzLnJhem9y
-build_metadata.AdditionalFiles.RelativePath = 
-build_metadata.AdditionalFiles.Inflator = 
-build_metadata.AdditionalFiles.NoWarn = 
-build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.LineInfo = 
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/Components/Pages/BankAccountDetail.razor]
-build_metadata.AdditionalFiles.GenKind = 
-build_metadata.AdditionalFiles.ManifestResourceName = 
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9CYW5rQWNjb3VudERldGFpbC5yYXpvcg==
-build_metadata.AdditionalFiles.RelativePath = 
-build_metadata.AdditionalFiles.Inflator = 
-build_metadata.AdditionalFiles.NoWarn = 
-build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.LineInfo = 
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/Components/Pages/BankAccounts.razor]
-build_metadata.AdditionalFiles.GenKind = 
-build_metadata.AdditionalFiles.ManifestResourceName = 
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9CYW5rQWNjb3VudHMucmF6b3I=
-build_metadata.AdditionalFiles.RelativePath = 
-build_metadata.AdditionalFiles.Inflator = 
-build_metadata.AdditionalFiles.NoWarn = 
-build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.LineInfo = 
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/Components/Pages/BenefitCardForm.razor]
-build_metadata.AdditionalFiles.GenKind = 
-build_metadata.AdditionalFiles.ManifestResourceName = 
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9CZW5lZml0Q2FyZEZvcm0ucmF6b3I=
-build_metadata.AdditionalFiles.RelativePath = 
-build_metadata.AdditionalFiles.Inflator = 
-build_metadata.AdditionalFiles.NoWarn = 
-build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.LineInfo = 
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/Components/Pages/CardActivity.razor]
-build_metadata.AdditionalFiles.GenKind = 
-build_metadata.AdditionalFiles.ManifestResourceName = 
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9DYXJkQWN0aXZpdHkucmF6b3I=
-build_metadata.AdditionalFiles.RelativePath = 
-build_metadata.AdditionalFiles.Inflator = 
-build_metadata.AdditionalFiles.NoWarn = 
-build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.LineInfo = 
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/Components/Pages/CardStatementDetail.razor]
-build_metadata.AdditionalFiles.GenKind = 
-build_metadata.AdditionalFiles.ManifestResourceName = 
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9DYXJkU3RhdGVtZW50RGV0YWlsLnJhem9y
-build_metadata.AdditionalFiles.RelativePath = 
-build_metadata.AdditionalFiles.Inflator = 
-build_metadata.AdditionalFiles.NoWarn = 
-build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.LineInfo = 
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/Components/Pages/Counter.razor]
-build_metadata.AdditionalFiles.GenKind = 
-build_metadata.AdditionalFiles.ManifestResourceName = 
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9Db3VudGVyLnJhem9y
-build_metadata.AdditionalFiles.RelativePath = 
-build_metadata.AdditionalFiles.Inflator = 
-build_metadata.AdditionalFiles.NoWarn = 
-build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.LineInfo = 
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/Components/Pages/CreditCards.razor]
-build_metadata.AdditionalFiles.GenKind = 
-build_metadata.AdditionalFiles.ManifestResourceName = 
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9DcmVkaXRDYXJkcy5yYXpvcg==
-build_metadata.AdditionalFiles.RelativePath = 
-build_metadata.AdditionalFiles.Inflator = 
-build_metadata.AdditionalFiles.NoWarn = 
-build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.LineInfo = 
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/Components/Pages/Loans.razor]
-build_metadata.AdditionalFiles.GenKind = 
-build_metadata.AdditionalFiles.ManifestResourceName = 
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9Mb2Fucy5yYXpvcg==
-build_metadata.AdditionalFiles.RelativePath = 
-build_metadata.AdditionalFiles.Inflator = 
-build_metadata.AdditionalFiles.NoWarn = 
-build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.LineInfo = 
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/Components/Pages/NewCard.razor]
-build_metadata.AdditionalFiles.GenKind = 
-build_metadata.AdditionalFiles.ManifestResourceName = 
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9OZXdDYXJkLnJhem9y
-build_metadata.AdditionalFiles.RelativePath = 
-build_metadata.AdditionalFiles.Inflator = 
-build_metadata.AdditionalFiles.NoWarn = 
-build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.LineInfo = 
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/Components/Pages/NewTransaction.razor]
-build_metadata.AdditionalFiles.GenKind = 
-build_metadata.AdditionalFiles.ManifestResourceName = 
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9OZXdUcmFuc2FjdGlvbi5yYXpvcg==
-build_metadata.AdditionalFiles.RelativePath = 
-build_metadata.AdditionalFiles.Inflator = 
-build_metadata.AdditionalFiles.NoWarn = 
-build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.LineInfo = 
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/Components/Pages/NoteReminderNew.razor]
-build_metadata.AdditionalFiles.GenKind = 
-build_metadata.AdditionalFiles.ManifestResourceName = 
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9Ob3RlUmVtaW5kZXJOZXcucmF6b3I=
-build_metadata.AdditionalFiles.RelativePath = 
-build_metadata.AdditionalFiles.Inflator = 
-build_metadata.AdditionalFiles.NoWarn = 
-build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.LineInfo = 
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/Components/Pages/NotesGroceries.razor]
-build_metadata.AdditionalFiles.GenKind = 
-build_metadata.AdditionalFiles.ManifestResourceName = 
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9Ob3Rlc0dyb2Nlcmllcy5yYXpvcg==
-build_metadata.AdditionalFiles.RelativePath = 
-build_metadata.AdditionalFiles.Inflator = 
-build_metadata.AdditionalFiles.NoWarn = 
-build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.LineInfo = 
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/Components/Pages/NotesPlaceForm.razor]
-build_metadata.AdditionalFiles.GenKind = 
-build_metadata.AdditionalFiles.ManifestResourceName = 
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9Ob3Rlc1BsYWNlRm9ybS5yYXpvcg==
-build_metadata.AdditionalFiles.RelativePath = 
-build_metadata.AdditionalFiles.Inflator = 
-build_metadata.AdditionalFiles.NoWarn = 
-build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.LineInfo = 
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/Components/Pages/NotesPlaces.razor]
-build_metadata.AdditionalFiles.GenKind = 
-build_metadata.AdditionalFiles.ManifestResourceName = 
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9Ob3Rlc1BsYWNlcy5yYXpvcg==
-build_metadata.AdditionalFiles.RelativePath = 
-build_metadata.AdditionalFiles.Inflator = 
-build_metadata.AdditionalFiles.NoWarn = 
-build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.LineInfo = 
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/Components/Pages/NotesReminders.razor]
-build_metadata.AdditionalFiles.GenKind = 
-build_metadata.AdditionalFiles.ManifestResourceName = 
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9Ob3Rlc1JlbWluZGVycy5yYXpvcg==
-build_metadata.AdditionalFiles.RelativePath = 
-build_metadata.AdditionalFiles.Inflator = 
-build_metadata.AdditionalFiles.NoWarn = 
-build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.LineInfo = 
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/Components/Pages/NotesSettings.razor]
-build_metadata.AdditionalFiles.GenKind = 
-build_metadata.AdditionalFiles.ManifestResourceName = 
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9Ob3Rlc1NldHRpbmdzLnJhem9y
-build_metadata.AdditionalFiles.RelativePath = 
-build_metadata.AdditionalFiles.Inflator = 
-build_metadata.AdditionalFiles.NoWarn = 
-build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.LineInfo = 
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/Components/Pages/NotesShopping.razor]
-build_metadata.AdditionalFiles.GenKind = 
-build_metadata.AdditionalFiles.ManifestResourceName = 
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9Ob3Rlc1Nob3BwaW5nLnJhem9y
-build_metadata.AdditionalFiles.RelativePath = 
-build_metadata.AdditionalFiles.Inflator = 
-build_metadata.AdditionalFiles.NoWarn = 
-build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.LineInfo = 
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/Components/Pages/NotesShoppingForm.razor]
-build_metadata.AdditionalFiles.GenKind = 
-build_metadata.AdditionalFiles.ManifestResourceName = 
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9Ob3Rlc1Nob3BwaW5nRm9ybS5yYXpvcg==
-build_metadata.AdditionalFiles.RelativePath = 
-build_metadata.AdditionalFiles.Inflator = 
-build_metadata.AdditionalFiles.NoWarn = 
-build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.LineInfo = 
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/Components/Pages/NotFound.razor]
-build_metadata.AdditionalFiles.GenKind = 
-build_metadata.AdditionalFiles.ManifestResourceName = 
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9Ob3RGb3VuZC5yYXpvcg==
-build_metadata.AdditionalFiles.RelativePath = 
-build_metadata.AdditionalFiles.Inflator = 
-build_metadata.AdditionalFiles.NoWarn = 
-build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.LineInfo = 
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/Components/Pages/Recurring.razor]
-build_metadata.AdditionalFiles.GenKind = 
-build_metadata.AdditionalFiles.ManifestResourceName = 
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9SZWN1cnJpbmcucmF6b3I=
-build_metadata.AdditionalFiles.RelativePath = 
-build_metadata.AdditionalFiles.Inflator = 
-build_metadata.AdditionalFiles.NoWarn = 
-build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.LineInfo = 
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/Components/Pages/Settings.razor]
-build_metadata.AdditionalFiles.GenKind = 
-build_metadata.AdditionalFiles.ManifestResourceName = 
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9TZXR0aW5ncy5yYXpvcg==
-build_metadata.AdditionalFiles.RelativePath = 
-build_metadata.AdditionalFiles.Inflator = 
-build_metadata.AdditionalFiles.NoWarn = 
-build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.LineInfo = 
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/Components/Pages/TransactionChoice.razor]
-build_metadata.AdditionalFiles.GenKind = 
-build_metadata.AdditionalFiles.ManifestResourceName = 
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9UcmFuc2FjdGlvbkNob2ljZS5yYXpvcg==
-build_metadata.AdditionalFiles.RelativePath = 
-build_metadata.AdditionalFiles.Inflator = 
-build_metadata.AdditionalFiles.NoWarn = 
-build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.LineInfo = 
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/Components/Pages/Weather.razor]
-build_metadata.AdditionalFiles.GenKind = 
-build_metadata.AdditionalFiles.ManifestResourceName = 
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9XZWF0aGVyLnJhem9y
-build_metadata.AdditionalFiles.RelativePath = 
-build_metadata.AdditionalFiles.Inflator = 
-build_metadata.AdditionalFiles.NoWarn = 
-build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.LineInfo = 
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/Components/Routes.razor]
-build_metadata.AdditionalFiles.GenKind = 
-build_metadata.AdditionalFiles.ManifestResourceName = 
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9Sb3V0ZXMucmF6b3I=
-build_metadata.AdditionalFiles.RelativePath = 
-build_metadata.AdditionalFiles.Inflator = 
-build_metadata.AdditionalFiles.NoWarn = 
-build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.LineInfo = 
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/Components/_Imports.razor]
-build_metadata.AdditionalFiles.GenKind = 
-build_metadata.AdditionalFiles.ManifestResourceName = 
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9fSW1wb3J0cy5yYXpvcg==
-build_metadata.AdditionalFiles.RelativePath = 
-build_metadata.AdditionalFiles.Inflator = 
-build_metadata.AdditionalFiles.NoWarn = 
-build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.LineInfo = 
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/Components/Layout/LauncherLayout.razor]
-build_metadata.AdditionalFiles.GenKind = 
-build_metadata.AdditionalFiles.ManifestResourceName = 
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9MYXlvdXQvTGF1bmNoZXJMYXlvdXQucmF6b3I=
-build_metadata.AdditionalFiles.RelativePath = 
-build_metadata.AdditionalFiles.Inflator = 
-build_metadata.AdditionalFiles.NoWarn = 
-build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.LineInfo = 
 build_metadata.AdditionalFiles.CssScope = b-13sdtpzmr8
 
 [/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/Components/Layout/MainLayout.razor]
-build_metadata.AdditionalFiles.GenKind = 
-build_metadata.AdditionalFiles.ManifestResourceName = 
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9MYXlvdXQvTWFpbkxheW91dC5yYXpvcg==
-build_metadata.AdditionalFiles.RelativePath = 
-build_metadata.AdditionalFiles.Inflator = 
-build_metadata.AdditionalFiles.NoWarn = 
-build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.LineInfo = 
 build_metadata.AdditionalFiles.CssScope = b-3o0sclnggo
 
 [/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/Components/Layout/NavMenu.razor]
-build_metadata.AdditionalFiles.GenKind = 
-build_metadata.AdditionalFiles.ManifestResourceName = 
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9MYXlvdXQvTmF2TWVudS5yYXpvcg==
-build_metadata.AdditionalFiles.RelativePath = 
-build_metadata.AdditionalFiles.Inflator = 
-build_metadata.AdditionalFiles.NoWarn = 
-build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.LineInfo = 
 build_metadata.AdditionalFiles.CssScope = b-uc9r7kdrx8
 
 [/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/Components/Layout/NotesLayout.razor]
-build_metadata.AdditionalFiles.GenKind = 
-build_metadata.AdditionalFiles.ManifestResourceName = 
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9MYXlvdXQvTm90ZXNMYXlvdXQucmF6b3I=
-build_metadata.AdditionalFiles.RelativePath = 
-build_metadata.AdditionalFiles.Inflator = 
-build_metadata.AdditionalFiles.NoWarn = 
-build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.LineInfo = 
 build_metadata.AdditionalFiles.CssScope = b-p3e4jc0abl
 
 [/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/Components/Pages/AppLauncher.razor]
-build_metadata.AdditionalFiles.GenKind = 
-build_metadata.AdditionalFiles.ManifestResourceName = 
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9BcHBMYXVuY2hlci5yYXpvcg==
-build_metadata.AdditionalFiles.RelativePath = 
-build_metadata.AdditionalFiles.Inflator = 
-build_metadata.AdditionalFiles.NoWarn = 
-build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.LineInfo = 
 build_metadata.AdditionalFiles.CssScope = b-o018ktyxzr
 
 [/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/Components/Pages/Home.razor]
-build_metadata.AdditionalFiles.GenKind = 
-build_metadata.AdditionalFiles.ManifestResourceName = 
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9Ib21lLnJhem9y
-build_metadata.AdditionalFiles.RelativePath = 
-build_metadata.AdditionalFiles.Inflator = 
-build_metadata.AdditionalFiles.NoWarn = 
-build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.LineInfo = 
 build_metadata.AdditionalFiles.CssScope = b-t3nlny91fu
 
 [/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/Components/Pages/Notes.razor]
-build_metadata.AdditionalFiles.GenKind = 
-build_metadata.AdditionalFiles.ManifestResourceName = 
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9Ob3Rlcy5yYXpvcg==
-build_metadata.AdditionalFiles.RelativePath = 
-build_metadata.AdditionalFiles.Inflator = 
-build_metadata.AdditionalFiles.NoWarn = 
-build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.LineInfo = 
 build_metadata.AdditionalFiles.CssScope = b-m4oz1kow5i

@@ -45,14 +45,14 @@ static const char *xamarin_runtime_libraries_array[] = {
 	"libbrotlidec",
 	"libbrotlienc",
 	"libmono-component-debugger-static",
-	"libmono-component-diagnostics_tracing-static",
+	"libmono-component-diagnostics_tracing-stub-static",
 	"libmono-component-hot_reload-static",
 	"libmono-component-marshal-ilgen-static",
 	"libmonosgen-2.0",
 	"libmono-component-debugger-static",
 	"libmono-component-hot_reload-static",
-	"libmono-component-diagnostics_tracing-static",
 	"libmono-component-marshal-ilgen-static",
+	"libmono-component-diagnostics_tracing-stub-static",
 	NULL
 };
 void xamarin_setup_impl ()
@@ -74,7 +74,6 @@ void xamarin_setup_impl ()
 	xamarin_marshal_objectivec_exception_mode = MarshalObjectiveCExceptionModeThrowManagedException;
 	xamarin_debug_mode = TRUE;
 	setenv ("MONO_GC_PARAMS", "nursery-size=512k,major=marksweep", 1);
-	setenv ("DOTNET_DiagnosticPorts", "127.0.0.1:9000,listen,nosuspend", 0);
 	xamarin_supports_dynamic_registration = TRUE;
 	xamarin_runtime_configuration_name = "runtimeconfig.bin";
 	xamarin_set_is_managed_static_registrar (true);

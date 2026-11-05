@@ -73,6 +73,10 @@
 /Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/bin/Debug/net10.0-ios/iossimulator-arm64/publish/../CepBankApp.app/SQLite-net.dll
 /Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/bin/Debug/net10.0-ios/iossimulator-arm64/publish/../CepBankApp.app/SQLitePCLRaw.core.dll
 /Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/bin/Debug/net10.0-ios/iossimulator-arm64/publish/../CepBankApp.app/SQLitePCLRaw.provider.sqlite3.dll
+/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/bin/Debug/net10.0-ios/iossimulator-arm64/publish/../CepBankApp.app/Microsoft.Maui.Controls.HotReload.Forms.dll
+/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/bin/Debug/net10.0-ios/iossimulator-arm64/publish/../CepBankApp.app/Microsoft.VisualStudio.DesignTools.MobileTapContracts.dll
+/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/bin/Debug/net10.0-ios/iossimulator-arm64/publish/../CepBankApp.app/Microsoft.VisualStudio.DesignTools.TapContract.dll
+/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/bin/Debug/net10.0-ios/iossimulator-arm64/publish/../CepBankApp.app/Microsoft.VisualStudio.DesignTools.XamlTapContract.dll
 /Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/bin/Debug/net10.0-ios/iossimulator-arm64/publish/../CepBankApp.app/CepBankApp.dll
 /Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/bin/Debug/net10.0-ios/iossimulator-arm64/publish/../CepBankApp.app/Microsoft.CSharp.dll
 /Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/bin/Debug/net10.0-ios/iossimulator-arm64/publish/../CepBankApp.app/Microsoft.VisualBasic.Core.dll

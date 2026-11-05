@@ -67,6 +67,7 @@ void xamarin_setup_impl ()
 	xamarin_marshal_objectivec_exception_mode = MarshalObjectiveCExceptionModeThrowManagedException;
 	xamarin_debug_mode = TRUE;
 	setenv ("MONO_GC_PARAMS", "nursery-size=512k,major=marksweep", 1);
+	setenv ("DOTNET_DiagnosticPorts", "127.0.0.1:9000,listen,nosuspend", 0);
 	xamarin_supports_dynamic_registration = TRUE;
 	xamarin_runtime_configuration_name = "runtimeconfig.bin";
 }

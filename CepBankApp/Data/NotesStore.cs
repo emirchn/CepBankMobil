@@ -18,6 +18,11 @@ public sealed class NotesStore
     {
         await _db.CreateTableAsync<NoteReminder>();
         await _db.CreateTableAsync<ShoppingItem>();
+        if (!Preferences.Default.Get("notes_shopping_has_image_migrated", false))
+        {
+            await _db.ExecuteAsync("UPDATE ShoppingItem SET HasImage = CASE WHEN ImageDataUrl IS NOT NULL AND ImageDataUrl != '' THEN 1 ELSE 0 END");
+            Preferences.Default.Set("notes_shopping_has_image_migrated", true);
+        }
         await _db.CreateTableAsync<GroceryItem>();
         await _db.CreateTableAsync<PlaceToVisit>();
     }
@@ -49,11 +54,30 @@ public sealed class NotesStore
     public async Task<List<ShoppingItem>> GetShoppingItemsAsync()
     {
         await InitializeAsync();
-        // Images are base64 strings and can be several MB each. Fetch the list first,
-        // then let the page load images after product information is visible.
+        // The list never reads the base64 image payload.
         return await _db.QueryAsync<ShoppingItem>(
-            "SELECT Id, Name, Price, Category, Link, CreatedAt, IsPurchased, PurchasedAt " +
+            "SELECT Id, Name, Price, Category, Link, CreatedAt, IsPurchased, PurchasedAt, HasImage " +
             "FROM ShoppingItem ORDER BY CreatedAt DESC");
+    }
+
+    public async Task<string?> GetShoppingItemImageAsync(int id, bool secret = false)
+    {
+        await InitializeAsync();
+        var images = await _db.QueryAsync<ShoppingItem>(
+            secret
+                ? "SELECT ImageDataUrl FROM ShoppingItem WHERE Id = ? AND Category = ?"
+                : "SELECT ImageDataUrl FROM ShoppingItem WHERE Id = ? AND Category != ?",
+            id, (int)ShoppingCategory.Gizli);
+        return images.FirstOrDefault()?.ImageDataUrl;
+    }
+
+    public async Task<ShoppingItem?> GetSecretShoppingItemDetailsAsync(int id)
+    {
+        await InitializeAsync();
+        var items = await _db.QueryAsync<ShoppingItem>(
+            "SELECT Id, Name, Price, Category, Link, CreatedAt, IsPurchased, PurchasedAt, HasImage " +
+            "FROM ShoppingItem WHERE Id = ? AND Category = ?", id, (int)ShoppingCategory.Gizli);
+        return items.FirstOrDefault();
     }
 
     public async Task<ShoppingItem?> GetShoppingItemAsync(int id)
@@ -65,6 +89,7 @@ public sealed class NotesStore
     public async Task SaveShoppingItemAsync(ShoppingItem item)
     {
         await InitializeAsync();
+        item.HasImage = !string.IsNullOrWhiteSpace(item.ImageDataUrl);
         if (item.Id == 0) await _db.InsertAsync(item); else await _db.UpdateAsync(item);
     }
 

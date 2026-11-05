@@ -1230,6 +1230,7 @@
 
 @interface AppDelegate : Microsoft_Maui_MauiUIApplicationDelegate<UIApplicationDelegate> {
 }
+	-(BOOL) application:(UIApplication *)p0 openURL:(NSURL *)p1 options:(NSDictionary *)p2;
 	-(id) init;
 @end
 

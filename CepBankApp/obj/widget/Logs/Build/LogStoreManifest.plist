@@ -6,7 +6,7 @@
 	<integer>12</integer>
 	<key>logs</key>
 	<dict>
-		<key>475B3F91-2FA5-4152-A099-AAE2202D0021</key>
+		<key>98E1200B-BFA2-4A44-8B5B-155C346A47EF</key>
 		<dict>
 			<key>className</key>
 			<string>IDECommandLineBuildLog</string>
@@ -15,49 +15,7 @@
 			<key>domainType</key>
 			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
 			<key>fileName</key>
-			<string>475B3F91-2FA5-4152-A099-AAE2202D0021.xcactivitylog</string>
-			<key>hasPrimaryLog</key>
-			<true/>
-			<key>primaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>E</string>
-				<key>totalNumberOfAnalyzerIssues</key>
-				<integer>0</integer>
-				<key>totalNumberOfErrors</key>
-				<integer>1</integer>
-				<key>totalNumberOfTestFailures</key>
-				<integer>0</integer>
-				<key>totalNumberOfWarnings</key>
-				<integer>0</integer>
-			</dict>
-			<key>schemeIdentifier-containerName</key>
-			<string>CepBankWidget project</string>
-			<key>schemeIdentifier-schemeName</key>
-			<string>CepBankWidget</string>
-			<key>schemeIdentifier-sharedScheme</key>
-			<integer>1</integer>
-			<key>signature</key>
-			<string>Building project CepBankWidget with scheme CepBankWidget and configuration Debug</string>
-			<key>timeStartedRecording</key>
-			<real>815044836.34388494</real>
-			<key>timeStoppedRecording</key>
-			<real>815044841.91165602</real>
-			<key>title</key>
-			<string>Building project CepBankWidget with scheme CepBankWidget and configuration Debug</string>
-			<key>uniqueIdentifier</key>
-			<string>475B3F91-2FA5-4152-A099-AAE2202D0021</string>
-		</dict>
-		<key>C60695F8-B413-4A58-8254-C12FC9925E2A</key>
-		<dict>
-			<key>className</key>
-			<string>IDECommandLineBuildLog</string>
-			<key>documentTypeString</key>
-			<string>&lt;nil&gt;</string>
-			<key>domainType</key>
-			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
-			<key>fileName</key>
-			<string>C60695F8-B413-4A58-8254-C12FC9925E2A.xcactivitylog</string>
+			<string>98E1200B-BFA2-4A44-8B5B-155C346A47EF.xcactivitylog</string>
 			<key>hasPrimaryLog</key>
 			<true/>
 			<key>primaryObservable</key>
@@ -82,55 +40,13 @@
 			<key>signature</key>
 			<string>Building project CepBankWidget with scheme CepBankWidget and configuration Debug</string>
 			<key>timeStartedRecording</key>
-			<real>815044329.54188704</real>
+			<real>815604653.94074202</real>
 			<key>timeStoppedRecording</key>
-			<real>815044331.50689995</real>
+			<real>815604657.03223395</real>
 			<key>title</key>
 			<string>Building project CepBankWidget with scheme CepBankWidget and configuration Debug</string>
 			<key>uniqueIdentifier</key>
-			<string>C60695F8-B413-4A58-8254-C12FC9925E2A</string>
-		</dict>
-		<key>EF4D6F7B-41C9-4CAC-8D43-B9990F824EFD</key>
-		<dict>
-			<key>className</key>
-			<string>IDECommandLineBuildLog</string>
-			<key>documentTypeString</key>
-			<string>&lt;nil&gt;</string>
-			<key>domainType</key>
-			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
-			<key>fileName</key>
-			<string>EF4D6F7B-41C9-4CAC-8D43-B9990F824EFD.xcactivitylog</string>
-			<key>hasPrimaryLog</key>
-			<true/>
-			<key>primaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>E</string>
-				<key>totalNumberOfAnalyzerIssues</key>
-				<integer>0</integer>
-				<key>totalNumberOfErrors</key>
-				<integer>1</integer>
-				<key>totalNumberOfTestFailures</key>
-				<integer>0</integer>
-				<key>totalNumberOfWarnings</key>
-				<integer>0</integer>
-			</dict>
-			<key>schemeIdentifier-containerName</key>
-			<string>CepBankWidget project</string>
-			<key>schemeIdentifier-schemeName</key>
-			<string>CepBankWidget</string>
-			<key>schemeIdentifier-sharedScheme</key>
-			<integer>1</integer>
-			<key>signature</key>
-			<string>Building project CepBankWidget with scheme CepBankWidget and configuration Debug</string>
-			<key>timeStartedRecording</key>
-			<real>815044264.05697894</real>
-			<key>timeStoppedRecording</key>
-			<real>815044268.68977404</real>
-			<key>title</key>
-			<string>Building project CepBankWidget with scheme CepBankWidget and configuration Debug</string>
-			<key>uniqueIdentifier</key>
-			<string>EF4D6F7B-41C9-4CAC-8D43-B9990F824EFD</string>
+			<string>98E1200B-BFA2-4A44-8B5B-155C346A47EF</string>
 		</dict>
 	</dict>
 </dict>

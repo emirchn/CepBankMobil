@@ -337,7 +337,7 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <FileLength>14912</FileLength>
-      <LastWriteTime>Wed, 04 Nov 2026 19:54:19 GMT</LastWriteTime>
+      <LastWriteTime>Thu, 05 Nov 2026 20:26:04 GMT</LastWriteTime>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\CepBankApp.styles.css'))</OriginalItemSpec>
     </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\glassy-wallpaper.png'))">
@@ -432,12 +432,12 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>0md19nz85l</Fingerprint>
-      <Integrity>KJBmWzC+j3d0EIfhb2kbN0kI2u1W5VIvfPp5MlWjMPQ=</Integrity>
+      <Fingerprint>di1hlt7k61</Fingerprint>
+      <Integrity>G6WUW7U58ILdqSTBUpt0uTL5AQgU4duut0OmY/TQ2lw=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <FileLength>13590</FileLength>
-      <LastWriteTime>Wed, 04 Nov 2026 19:49:12 GMT</LastWriteTime>
+      <FileLength>16010</FileLength>
+      <LastWriteTime>Thu, 05 Nov 2026 19:37:46 GMT</LastWriteTime>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\notes.css'))</OriginalItemSpec>
     </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\theme.js'))">

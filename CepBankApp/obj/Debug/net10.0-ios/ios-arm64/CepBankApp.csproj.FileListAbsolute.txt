@@ -369,11 +369,3 @@
 /Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/Debug/net10.0-ios/ios-arm64/CepBankApp.genruntimeconfig.cache
 /Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/Debug/net10.0-ios/ios-arm64/ref/CepBankApp.dll
 /Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/Debug/net10.0-ios/ios-arm64/scopedcss/Components/Layout/NotesLayout.razor.rz.scp.css
-/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/bin/Debug/net10.0-ios/ios-arm64/Microsoft.Maui.Controls.HotReload.Forms.dll
-/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/bin/Debug/net10.0-ios/ios-arm64/Microsoft.VisualStudio.DesignTools.MobileTapContracts.dll
-/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/bin/Debug/net10.0-ios/ios-arm64/Microsoft.VisualStudio.DesignTools.TapContract.dll
-/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/bin/Debug/net10.0-ios/ios-arm64/Microsoft.VisualStudio.DesignTools.XamlTapContract.dll
-/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/Debug/net10.0-ios/ios-arm64/resourcestamps/Microsoft.Maui.Controls.HotReload.Forms.stamp
-/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/Debug/net10.0-ios/ios-arm64/resourcestamps/Microsoft.VisualStudio.DesignTools.MobileTapContracts.stamp
-/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/Debug/net10.0-ios/ios-arm64/resourcestamps/Microsoft.VisualStudio.DesignTools.TapContract.stamp
-/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/Debug/net10.0-ios/ios-arm64/resourcestamps/Microsoft.VisualStudio.DesignTools.XamlTapContract.stamp

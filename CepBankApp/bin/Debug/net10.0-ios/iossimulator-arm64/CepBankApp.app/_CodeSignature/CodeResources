@@ -14,11 +14,11 @@
 		</data>
 		<key>CepBankApp.dll</key>
 		<data>
-		UiX0n4y8Cdr8yMq9l2OHi9MBOhU=
+		miVrFm0MfXTDI2tmbf5o80NAclI=
 		</data>
 		<key>CepBankApp.pdb</key>
 		<data>
-		/rLj7W6S7u341elYhJ942Ypl0OA=
+		xD7oHaPBbg87fXKKdFNhEao4MMQ=
 		</data>
 		<key>Info.plist</key>
 		<data>
@@ -164,6 +164,10 @@
 		<data>
 		qtcOeLoQI5ahuhFbSBZuto2piw4=
 		</data>
+		<key>Microsoft.Maui.Controls.HotReload.Forms.dll</key>
+		<data>
+		Yw1Hv4WZiS9Q1Snq8EHpj7557Nw=
+		</data>
 		<key>Microsoft.Maui.Controls.Xaml.dll</key>
 		<data>
 		Okfx/VA5vnf898IcbFWSuAjMSt4=
@@ -191,6 +195,18 @@
 		<key>Microsoft.VisualBasic.dll</key>
 		<data>
 		JqCgHdEhww79V915LGg/M9kyHGA=
+		</data>
+		<key>Microsoft.VisualStudio.DesignTools.MobileTapContracts.dll</key>
+		<data>
+		G7yCLhRnxVixhZQpKoGR0TIZN/A=
+		</data>
+		<key>Microsoft.VisualStudio.DesignTools.TapContract.dll</key>
+		<data>
+		hOy70PcyGfkMrvD4RZnxsa7gtx0=
+		</data>
+		<key>Microsoft.VisualStudio.DesignTools.XamlTapContract.dll</key>
+		<data>
+		AWe4jRKeyvLIIF2AWfQsDTGKRE0=
 		</data>
 		<key>Microsoft.Win32.Primitives.dll</key>
 		<data>
@@ -230,7 +246,7 @@
 		</data>
 		<key>PrivacyInfo.xcprivacy</key>
 		<data>
-		+59cRc8ev+HwAO70fp1P8R6hyjc=
+		pScV0m/ScDO7ioQvtmSZMpAwQyg=
 		</data>
 		<key>SQLite-net.dll</key>
 		<data>
@@ -1002,47 +1018,47 @@
 		</data>
 		<key>libSystem.Globalization.Native.dylib</key>
 		<data>
-		Duo/tG3of0Kf7z6R+3DKiyUXL2Y=
+		CWHBPRCNpKK3NWXjoj8Km38tras=
 		</data>
 		<key>libSystem.IO.Compression.Native.dylib</key>
 		<data>
-		5nE40xk/N+mqPYMV3pzO8D9x2uY=
+		jkFfQxcjO+3Ff1z6OGgVbQLnbas=
 		</data>
 		<key>libSystem.Native.dylib</key>
 		<data>
-		Cs8ZPMOIs4FhS8I5W6wNz1KqaKs=
+		Et9LZnHIuUY/G1LCKWDLjcGE4tA=
 		</data>
 		<key>libSystem.Net.Security.Native.dylib</key>
 		<data>
-		UYLZxduHV9buoI2boG5hLSU530g=
+		e1rAdgVtvui2c923YrF/rF3WXEY=
 		</data>
 		<key>libSystem.Security.Cryptography.Native.Apple.dylib</key>
 		<data>
-		08yESIE+PihMqYJmtxIzYlueBlI=
+		mWyLWtS5RL41W/e2DKZZUuLxc5I=
 		</data>
 		<key>libmono-component-debugger.dylib</key>
 		<data>
-		ojTom9wYQKcMI6jRFhuxmtuifHA=
+		IxCW1MgNF1vRMe4Kv1NIrHPWG4g=
 		</data>
 		<key>libmono-component-diagnostics_tracing.dylib</key>
 		<data>
-		cnDbMeUHFo79HRktCfGKOPuLpZw=
+		Nylpw3r377yPrwoZmwClMkKP4Hk=
 		</data>
 		<key>libmono-component-hot_reload.dylib</key>
 		<data>
-		wtOev0Xg2KIZ4N5nM1+c20q2cEQ=
+		9yVQt54dVRQ3i3RiWa4jNk6O5kY=
 		</data>
 		<key>libmono-component-marshal-ilgen.dylib</key>
 		<data>
-		hKLjeoMUY6a3uiSF/BygqannfmA=
+		Cin7tPyhMpVXOiDCdEMBVkHAzu0=
 		</data>
 		<key>libmonosgen-2.0.dylib</key>
 		<data>
-		9FLTodQUhv0VjQzCpwSOD8RyL1c=
+		v67msmEj7sejwCDA4ScOoFDvFAs=
 		</data>
 		<key>libxamarin-dotnet-debug.dylib</key>
 		<data>
-		/fQxTerJG74cswGdCWCciLhK2Rs=
+		EMe+gHU4SPck5Yyte3yKXsCVn7I=
 		</data>
 		<key>ms/Microsoft.Maui.Controls.resources.dll</key>
 		<data>
@@ -1086,7 +1102,7 @@
 		</data>
 		<key>runtimeconfig.bin</key>
 		<data>
-		fGnMTvGt8lJOsiLu40LTsCCmEO8=
+		flmsFVmMvylVoNr/GUEtHKrQ3q0=
 		</data>
 		<key>sk/Microsoft.Maui.Controls.resources.dll</key>
 		<data>
@@ -1136,13 +1152,17 @@
 		<data>
 		q0Q0GZp7YrERJ+3t3OVCHrHw/wA=
 		</data>
+		<key>wwwroot/CepBankApp.0cm02h7cfh.bundle.scp.css</key>
+		<data>
+		hIC8RavU0anI3pzmxSA+Dg4k/As=
+		</data>
 		<key>wwwroot/CepBankApp.i1ewvqdnc1.bundle.scp.css</key>
 		<data>
 		knYZRlQs4SKn+OdUrpkpf791sb4=
 		</data>
 		<key>wwwroot/CepBankApp.styles.css</key>
 		<data>
-		0E6S5GP12g1clmB8pID+ZKDxPfA=
+		hIC8RavU0anI3pzmxSA+Dg4k/As=
 		</data>
 		<key>wwwroot/CepBankApp.z70fgqfr9w.bundle.scp.css</key>
 		<data>
@@ -1238,11 +1258,11 @@
 		</data>
 		<key>wwwroot/notes.css</key>
 		<data>
-		kYRS7TpdjD6tCfhyteMDU68l4+M=
+		3LV42HK3gu71GnXvGC5ThIUJaIM=
 		</data>
 		<key>wwwroot/theme.js</key>
 		<data>
-		/f7fTvYN07bipLq7US5HsEuP6tc=
+		2eixgtTvOpTtXKliFALoIDmXHTg=
 		</data>
 		<key>xml/microsoft_maui_essentials_fileprovider_file_paths.xml</key>
 		<data>
@@ -1281,14 +1301,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			DGvtzSX1J7u7JDh2RRc/vPPY2yq+EREAymb1YR8M6UE=
+			GclsQmdTfwlIRASLsScu6+jKqM5bzlKptDwobyEVuaA=
 			</data>
 		</dict>
 		<key>CepBankApp.pdb</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			F9xCdPBpOC6XN4hY/d8fV5vinnWfhWPLhDDAtEgn7lc=
+			ba6LTbCLzhxzKuf5uiCnZ/h6rXLoVf6PyO74QQkCdDc=
 			</data>
 		</dict>
 		<key>MauiInfo.plist</key>
@@ -1536,6 +1556,13 @@
 			j2yE30gi6s9UwxjDxt2m1JOSFkXqAKe1ikbxybAi/nc=
 			</data>
 		</dict>
+		<key>Microsoft.Maui.Controls.HotReload.Forms.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			Jj4FxRa/08Obj/eYaPTHijoaVHMIweIKBnQLYAyQ9xI=
+			</data>
+		</dict>
 		<key>Microsoft.Maui.Controls.Xaml.dll</key>
 		<dict>
 			<key>hash2</key>
@@ -1583,6 +1610,27 @@
 			<key>hash2</key>
 			<data>
 			6JdKHWbB7TKt+7ioJ4N8TRsit3sbLjAgqQSIbcAkK4s=
+			</data>
+		</dict>
+		<key>Microsoft.VisualStudio.DesignTools.MobileTapContracts.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			d0reKJf529ZFVtbPbo72sbTVnqrA5cIhbKQHKFKATuY=
+			</data>
+		</dict>
+		<key>Microsoft.VisualStudio.DesignTools.TapContract.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			lxh4/7EjsGHMUnyfVUWv2Cctaa6XWSBg23CI4vVsYMc=
+			</data>
+		</dict>
+		<key>Microsoft.VisualStudio.DesignTools.XamlTapContract.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			Ci42JSB1S0ttN5uBSxEyAVRbEY19df1Pz2rRHhzTKqw=
 			</data>
 		</dict>
 		<key>Microsoft.Win32.Primitives.dll</key>
@@ -1645,7 +1693,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			vSdOCYnhm9fj+qcbPQi0IfGVKZjXx/f8EMHfqNdMxU8=
+			LUmvxR+AnYD/ZW+eu2U/E662nGbklYRBNGFxJ0PKEjI=
 			</data>
 		</dict>
 		<key>SQLite-net.dll</key>
@@ -2996,77 +3044,77 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			irRTuRBcdl+59UeQJoxXJog9M7GKKXNh8XkeXLlkQUk=
+			gKxC22jSYT7LaI6AKPS3x+jhEKxSShD++opWjGCAFro=
 			</data>
 		</dict>
 		<key>libSystem.IO.Compression.Native.dylib</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			Jf5KtI8a1ch9UoWXYbUurpyXW94MoOsjJpO0JqrSJJA=
+			N6d85fAM5YqBZzC+L80KkW51OlJBKtH7VG7tc7dBrdA=
 			</data>
 		</dict>
 		<key>libSystem.Native.dylib</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			ozSZFudBOd/tsSmrL3SBEOat1fw6cRUDfwICLm1STJ4=
+			2qxZ58eCmzVYJZa0WdYFlq+3aur8K+1Ed4VOg3vA9Mo=
 			</data>
 		</dict>
 		<key>libSystem.Net.Security.Native.dylib</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			OmBSyS9lr2WshE2H9hsQH4QEHIvEWPFt6hqPTfChpO8=
+			D2Ur+G6ZqzB0CL6MWixI3gahpemwWSWyN4opb5jT1pw=
 			</data>
 		</dict>
 		<key>libSystem.Security.Cryptography.Native.Apple.dylib</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			UhbHdsqpUmrRMWBUBioM+q6x+jJSPrRFdpO6fHiuDDs=
+			CrPBE9CUJr/TezJARIQg4NRW4Hy1LWsjfCoQ59oN16I=
 			</data>
 		</dict>
 		<key>libmono-component-debugger.dylib</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			5sOL8v6N7KESGyIJtZPjVhJE32c7slUcchbSHq5+9Ag=
+			7bhRQpJ5fhumo6dfjFazeD3IEmaX5X4cATPRcSV0uks=
 			</data>
 		</dict>
 		<key>libmono-component-diagnostics_tracing.dylib</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			xNdv5kwfjTwpz6UOxTUEPRgcsO9QYKsBsoZ4MoeBBJk=
+			FW0VZI7cMJqY6/7lLt6CH734wMcjtPI5C4yxI1EEf78=
 			</data>
 		</dict>
 		<key>libmono-component-hot_reload.dylib</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			Jk80wkwOjcSXJ3q8xXNgC0TR9mqkytiAVATZQ2Eiir8=
+			0nSvgMVpTuiS9aRPGGvbKpAY3C/8c7LEWmq5terKWTc=
 			</data>
 		</dict>
 		<key>libmono-component-marshal-ilgen.dylib</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			SAURpmgF7g0PhBoEpkQvkty6Nak9prBW9wDoc/g32os=
+			c+eOEZqK26H2Mz1IKxf03B5K/Omx+63oCFl6bEirrg8=
 			</data>
 		</dict>
 		<key>libmonosgen-2.0.dylib</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			MsReFOe6I3sHkkZ60T+Z/4WqCtf3A9DhfLA5g2tBSJk=
+			WmYvnMaNqK5hjeV71PAsvG5MqFylvjYBeCipsSN62Ik=
 			</data>
 		</dict>
 		<key>libxamarin-dotnet-debug.dylib</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			cXxA/7Wt5QL3f3hui7InkuTFi9fttg5QeffuslpT6+g=
+			3S2PLZYSeoPJyl8KnsWVksaZ/kP5stFVBNkxaauJDmw=
 			</data>
 		</dict>
 		<key>ms/Microsoft.Maui.Controls.resources.dll</key>
@@ -3143,7 +3191,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			/AVw5gJwPJnYK5roVnWKdvS9SvdnWVEKw2qoE+K9ESY=
+			UtTNIUD0KpktsYjgsOtADCl+7OqTxQbGceJHVGazeV0=
 			</data>
 		</dict>
 		<key>sk/Microsoft.Maui.Controls.resources.dll</key>
@@ -3230,6 +3278,13 @@
 			Wf9q44Kvhilmt2Ye+a3VrOjp5IjJBJpLZzzwW2ZDyPw=
 			</data>
 		</dict>
+		<key>wwwroot/CepBankApp.0cm02h7cfh.bundle.scp.css</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			EAdAp9lijaJzhrflo8KHgpNKtRC5vP824vQ+DDXkfnw=
+			</data>
+		</dict>
 		<key>wwwroot/CepBankApp.i1ewvqdnc1.bundle.scp.css</key>
 		<dict>
 			<key>hash2</key>
@@ -3241,7 +3296,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			3xa1eGRv85tBWclROz/4q+9BpujJSMGoPe2MtQFI3H4=
+			EAdAp9lijaJzhrflo8KHgpNKtRC5vP824vQ+DDXkfnw=
 			</data>
 		</dict>
 		<key>wwwroot/CepBankApp.z70fgqfr9w.bundle.scp.css</key>
@@ -3409,14 +3464,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			jP2uvkSXYpdrHkYI5EeMXiNvtoSpbcA2G+mnoqQTMLA=
+			KJBmWzC+j3d0EIfhb2kbN0kI2u1W5VIvfPp5MlWjMPQ=
 			</data>
 		</dict>
 		<key>wwwroot/theme.js</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			a9PviINbKMT6ujq7Yht44wpSqmHEljSHL7KV1uQQUVA=
+			xDkHdEBlBD3krmPPEDvPqq/A/lkvTUq7yV+XcjBxymI=
 			</data>
 		</dict>
 		<key>xml/microsoft_maui_essentials_fileprovider_file_paths.xml</key>

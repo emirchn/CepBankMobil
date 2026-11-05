@@ -1,0 +1,1 @@
+-v --force --timestamp=none --sign - /Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/bin/Debug/net10.0-ios/iossimulator-arm64/CepBankApp.app/libxamarin-dotnet-debug.dylib

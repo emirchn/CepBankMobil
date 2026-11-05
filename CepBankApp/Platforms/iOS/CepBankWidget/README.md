@@ -1,17 +1,17 @@
 # CepBank iOS widget
 
-The native WidgetKit extension is kept in the repository but is disabled for normal builds (`EnableCepBankWidget=false`). After App Groups provisioning is available, build with `-p:EnableCepBankWidget=true` to build and embed the extension. The app entitlement file is `App.entitlements` in this folder; it is intentionally outside the auto-detected `Platforms/iOS/Entitlements.plist` location so normal device builds do not request App Groups.
+The native WidgetKit extension is included in normal iOS builds (`EnableCepBankWidget=true`). Pass `-p:EnableCepBankWidget=false` to make an iOS build without it. The app entitlement file is `App.entitlements` in this folder; it is intentionally outside the auto-detected `Platforms/iOS/Entitlements.plist` location so non-widget builds do not request App Groups.
 
 ## Apple signing setup
 
-The connected Apple account currently shows **Join the Apple Developer Program**. Its Personal Team provisioning profile does not contain the App Groups entitlement. A live finance-summary widget on an iPhone requires an Apple Developer Program team with App Groups access; a successful MAUI compilation using the Personal Team is not a working device widget.
+The Apple Developer Program team is `CP6N6FNF43`. The current EC Apps and widget development profiles both contain `group.com.emir.cepbankapp.cepbankapp`. Older profiles without that group must not be selected when signing a widget build.
 
-Register the App Group `group.com.emir.cepbankapp.cepbankapp` in the Apple Developer account. Enable it for both App IDs:
+In Certificates, Identifiers & Profiles, register the App Group `group.com.emir.cepbankapp.cepbankapp` under **Identifiers → + → App Groups**. Enable the **App Groups** capability and assign that group to both App IDs:
 
 - `com.emir.cepbankapp.cepbankapp`
 - `com.emir.cepbankapp.cepbankapp.widget`
 
-Regenerate the provisioning profiles for both IDs after enabling the group. The extension's bundle ID must remain a child of the app's bundle ID. Both targets must be signed by the same team. The app and extension entitlement files in this directory tree contain the matching group ID. `CepBankApp.csproj` uses team `CP6N6FNF43` for the device widget build; update `_WidgetTeamId` if the app moves to another team. The device build requires a signed extension with its own `embedded.mobileprovision` and fails if Xcode cannot obtain one.
+Regenerate the iOS App Development profile for EC Apps and create an iOS App Development profile for the widget, including the registered iPhone and an Apple Development certificate. Download both through Xcode's **Settings → Apple Accounts → Download Manual Profiles**. The extension's bundle ID must remain a child of the app's bundle ID. Both targets must be signed by the same team. The app and extension entitlement files in this directory tree contain the matching group ID. `CepBankApp.csproj` uses team `CP6N6FNF43` for the device widget build; update `_WidgetTeamId` if the app moves to another team. The device build requires a signed extension with its own `embedded.mobileprovision` and fails if Xcode cannot obtain one.
 
 ## Data flow
 
@@ -26,4 +26,4 @@ dotnet restore CepBankApp/CepBankApp.csproj -p:TargetFramework=net10.0-ios -p:Ru
 dotnet build CepBankApp/CepBankApp.csproj -f net10.0-ios -r iossimulator-arm64 -p:EnableCodeSigning=false --no-restore
 ```
 
-When provisioning is ready, add `-p:EnableCepBankWidget=true` to restore and build commands. After installation, open CepBank once to write the summary, then add “CepBank Aylık Özet” from the iPhone Home Screen widget gallery. Check the small and medium sizes, a transaction change, a card debt change, and a month rollover. A successful build alone does not confirm that the widget appeared on a device.
+For the registered iPhone, restore and build with `-p:RuntimeIdentifier=ios-arm64` and `-r ios-arm64`. The default iOS build includes the widgets. After installation, open EC Apps → CepBank once to write the summary. The Home Screen widget gallery has **CepBank Hesap Özeti** (small) and **CepBank Hızlı Erişim** (medium, 4×2). The medium widget opens the credit-card picker, meal-card tab, fuel-card tab, and the new reminder, shopping-item, and place forms through the `ecappscepbank://widget/` URL scheme. Verify all six links on the iPhone. A successful build alone does not confirm that the widgets appeared in the gallery or that taps navigated correctly.

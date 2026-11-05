@@ -40,6 +40,7 @@ public class ShoppingItem
     public ShoppingCategory Category { get; set; }
     public string Link { get; set; } = string.Empty;
     public string ImageDataUrl { get; set; } = string.Empty;
+    public bool HasImage { get; set; }
     [Indexed] public DateTime CreatedAt { get; set; } = DateTime.Now;
     [Indexed] public bool IsPurchased { get; set; }
     public DateTime? PurchasedAt { get; set; }

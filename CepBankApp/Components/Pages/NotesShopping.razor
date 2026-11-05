@@ -23,15 +23,26 @@
             else
             {
             <article class="notes-panel shopping-row" @key="item.Id">
-                @if (!string.IsNullOrWhiteSpace(item.ImageDataUrl)) { <img class="shopping-thumb" src="@item.ImageDataUrl" alt="@item.Name" /> }
-                else { <div class="shopping-thumb placeholder" aria-hidden="true">◇</div> }
                 <div class="shopping-info">
                     <strong>@item.Name</strong><small>@ShoppingCategories.Label(item.Category) · @item.CreatedAt.ToString("dd.MM.yyyy")</small>
                     @if (item.Price.HasValue) { <b>@item.Price.Value.ToString("N2", Turkish) TL</b> }
                     @if (item.IsPurchased && item.PurchasedAt.HasValue) { <small>@item.PurchasedAt.Value.ToString("dd.MM.yyyy") tarihinde alındı</small> }
                     @if (SafeLink(item.Link) is string link) { <a href="@link" target="_blank" rel="noopener noreferrer">Ürün bağlantısı ↗</a> }
-                    <div class="notes-actions"><button type="button" @onclick="() => TogglePurchasedAsync(item)">@(item.IsPurchased ? "Geri al" : "Aldım")</button><NavLink href="@($"notes/shopping/edit/{item.Id}")">Düzenle</NavLink><button type="button" class="danger" @onclick="() => _deleteId = item.Id">Sil</button></div>
                     @if (_deleteId == item.Id) { <div class="inline-confirm"><span>Ürün silinsin mi?</span><button type="button" @onclick="() => DeleteAsync(item)">Evet, sil</button><button type="button" @onclick="() => _deleteId = null">Vazgeç</button></div> }
+                </div>
+                <div class="shopping-actions" role="group" aria-label="@($"{item.Name} işlemleri")">
+                    <button type="button" aria-label="@(item.HasImage ? "Fotoğrafı aç" : "Fotoğraf yok")" title="@(item.HasImage ? "Fotoğrafı aç" : "Fotoğraf yok")" disabled="@(!item.HasImage)" @onclick="() => OpenPhotoAsync(item)">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h3l1.5-2h7L17 7h3a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1Z"/><circle cx="12" cy="13" r="3.5"/></svg>
+                    </button>
+                    <button type="button" class="@(item.IsPurchased ? "is-done" : "")" aria-label="@(item.IsPurchased ? "Geri al" : "Aldım")" title="@(item.IsPurchased ? "Geri al" : "Aldım")" @onclick="() => TogglePurchasedAsync(item)">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4.5 4.5L19 7"/></svg>
+                    </button>
+                    <NavLink href="@($"notes/shopping/edit/{item.Id}")" aria-label="Ürünü düzenle" title="Düzenle">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4l11-11a2.1 2.1 0 0 0-4-4L4 16v4Z"/><path d="m13.5 6.5 4 4"/></svg>
+                    </NavLink>
+                    <button type="button" class="danger" aria-label="Ürünü sil" title="Sil" @onclick="() => _deleteId = item.Id">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3m3 0-1 13H7L6 7m4 4v6m4-6v6"/></svg>
+                    </button>
                 </div>
             </article>
             }
@@ -39,19 +50,63 @@
         @if (_loaded && !FilteredItems().Any()) { <div class="notes-empty">Bu filtreye uygun ürün yok.</div> }
     </div>
     @if (!string.IsNullOrWhiteSpace(_secretError)) { <p class="notes-error" role="alert">@_secretError</p> }
+    @if (_photoOpen)
+    {
+        <div class="notes-modal-backdrop shopping-photo-backdrop" @onclick="ClosePhoto">
+            @if (_photoLoading)
+            {
+                <div class="shopping-photo-loading" role="status" aria-live="polite"><span class="shopping-photo-spinner" aria-hidden="true"></span><span>Fotoğraf yükleniyor…</span></div>
+            }
+            @if (_photoDataUrl is not null)
+            {
+                <div class="notes-modal shopping-photo-modal @(_photoLoading ? "is-loading" : "")" role="dialog" aria-modal="true" aria-label="@($"{_photoName} fotoğrafı")" @onclick:stopPropagation="true">
+                    <div class="notes-heading"><h2>@_photoName</h2><button type="button" aria-label="Kapat" @onclick="ClosePhoto">✕</button></div>
+                    <img src="@_photoDataUrl" alt="@($"{_photoName} fotoğrafı")" @onload="PhotoLoaded" @onerror="PhotoFailed" />
+                </div>
+            }
+            else if (!_photoLoading)
+            {
+                <div class="notes-modal shopping-photo-modal" role="dialog" aria-modal="true" aria-label="Fotoğraf" @onclick:stopPropagation="true">
+                    <div class="notes-heading"><h2>Fotoğraf</h2><button type="button" aria-label="Kapat" @onclick="ClosePhoto">✕</button></div>
+                    <p class="notes-error">@_photoError</p>
+                </div>
+            }
+        </div>
+    }
     @if (_revealedItem is { } secret)
     {
-        <div class="notes-modal-backdrop" @onclick="CloseSecret">
+        <div class="notes-modal-backdrop secret-detail-backdrop" @onclick="CloseSecret">
             <div class="notes-modal secret-detail" role="dialog" aria-modal="true" aria-label="Gizli ürün ayrıntıları" @onclick:stopPropagation="true">
                 <div class="notes-heading"><h2>Ürün ayrıntıları</h2><button type="button" aria-label="Kapat" @onclick="CloseSecret">✕</button></div>
-                @if (!string.IsNullOrWhiteSpace(secret.ImageDataUrl)) { <img class="secret-detail-photo" src="@secret.ImageDataUrl" alt="Ürün resmi" /> }
-                <strong>@secret.Name</strong>
-                <small>@ShoppingCategories.Label(secret.Category) · @secret.CreatedAt.ToString("dd.MM.yyyy")</small>
-                @if (secret.Price.HasValue) { <b>@secret.Price.Value.ToString("N2", Turkish) TL</b> }
-                @if (secret.IsPurchased && secret.PurchasedAt.HasValue) { <small>@secret.PurchasedAt.Value.ToString("dd.MM.yyyy") tarihinde alındı</small> }
-                @if (SafeLink(secret.Link) is string secretLink) { <a href="@secretLink" target="_blank" rel="noopener noreferrer">Ürün bağlantısı ↗</a> }
-                <div class="notes-actions"><button type="button" @onclick="() => TogglePurchasedAsync(secret)">@(secret.IsPurchased ? "Geri al" : "Aldım")</button><NavLink href="@($"notes/shopping/edit/{secret.Id}")">Düzenle</NavLink><button type="button" class="danger" @onclick="() => _deleteId = secret.Id">Sil</button></div>
+                <div class="secret-detail-body">
+                    <div class="secret-detail-copy">
+                        <strong>@secret.Name</strong>
+                        <small>@ShoppingCategories.Label(secret.Category) · @secret.CreatedAt.ToString("dd.MM.yyyy")</small>
+                        @if (secret.Price.HasValue) { <b>@secret.Price.Value.ToString("N2", Turkish) TL</b> }
+                        @if (secret.IsPurchased && secret.PurchasedAt.HasValue) { <small>@secret.PurchasedAt.Value.ToString("dd.MM.yyyy") tarihinde alındı</small> }
+                        @if (SafeLink(secret.Link) is string secretLink) { <a href="@secretLink" target="_blank" rel="noopener noreferrer">Ürün bağlantısı ↗</a> }
+                    </div>
+                    <div class="shopping-actions secret-detail-actions" role="group" aria-label="Gizli ürün işlemleri">
+                        <button type="button" class="@(secret.IsPurchased ? "is-done" : "")" aria-label="@(secret.IsPurchased ? "Geri al" : "Aldım")" title="@(secret.IsPurchased ? "Geri al" : "Aldım")" @onclick="() => TogglePurchasedAsync(secret)">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4.5 4.5L19 7"/></svg>
+                        </button>
+                        <NavLink href="@($"notes/shopping/edit/{secret.Id}")" aria-label="Ürünü düzenle" title="Düzenle">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4l11-11a2.1 2.1 0 0 0-4-4L4 16v4Z"/><path d="m13.5 6.5 4 4"/></svg>
+                        </NavLink>
+                        <button type="button" class="danger secret-delete-icon" aria-label="Ürünü sil" title="Sil" @onclick="() => _deleteId = secret.Id">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3m3 0-1 13H7L6 7m4 4v6m4-6v6"/></svg>
+                        </button>
+                    </div>
+                </div>
                 @if (_deleteId == secret.Id) { <div class="inline-confirm"><span>Ürün silinsin mi?</span><button type="button" @onclick="() => DeleteAsync(secret)">Evet, sil</button><button type="button" @onclick="() => _deleteId = null">Vazgeç</button></div> }
+                @if (secret.HasImage)
+                {
+                    <div class="secret-detail-photo-frame" aria-label="Ürün fotoğrafı">
+                        @if (_secretPhotoLoading) { <div class="secret-photo-loading" role="status"><span class="shopping-photo-spinner" aria-hidden="true"></span><span>Fotoğraf yükleniyor…</span></div> }
+                        @if (_secretPhotoDataUrl is not null) { <img class="@(_secretPhotoLoading ? "is-loading" : "")" src="@_secretPhotoDataUrl" alt="@($"{secret.Name} fotoğrafı")" @onload="SecretPhotoLoaded" @onerror="SecretPhotoFailed" /> }
+                        @if (!string.IsNullOrEmpty(_secretPhotoError)) { <span class="notes-error">@_secretPhotoError</span> }
+                    </div>
+                }
             </div>
         </div>
     }
@@ -65,7 +120,14 @@
     private ShoppingItem? _revealedItem;
     private int? _deleteId;
     private Window? _window;
-    private bool _loaded, _imageLoadStarted, _disposed;
+    private bool _loaded, _disposed, _photoOpen, _photoLoading;
+    private string _photoName = "", _photoError = "";
+    private string? _photoDataUrl;
+    private int _photoRequestId;
+    private bool _secretPhotoLoading;
+    private string? _secretPhotoDataUrl;
+    private string _secretPhotoError = "";
+    private int _secretPhotoRequestId;
     protected override async Task OnInitializedAsync()
     {
         _window = Application.Current?.Windows.FirstOrDefault();
@@ -73,41 +135,38 @@
         _items = await Store.GetShoppingItemsAsync();
         _loaded = true;
     }
-    protected override Task OnAfterRenderAsync(bool firstRender)
+    private async Task OpenPhotoAsync(ShoppingItem item)
     {
-        if (_loaded && !_imageLoadStarted)
-        {
-            _imageLoadStarted = true;
-            _ = LoadImagesAsync();
-        }
-        return Task.CompletedTask;
-    }
-    private async Task LoadImagesAsync()
-    {
+        if (item.Category == ShoppingCategory.Gizli) return;
+        var requestId = ++_photoRequestId;
+        _photoOpen = true;
+        _photoLoading = true;
+        _photoDataUrl = null;
+        _photoName = item.Name;
+        _photoError = "";
+        await Task.Yield();
         try
         {
-            var changed = false;
-            var checkedCount = 0;
-            foreach (var item in _items.Where(x => x.Category != ShoppingCategory.Gizli))
+            var image = await Store.GetShoppingItemImageAsync(item.Id);
+            if (_disposed || requestId != _photoRequestId) return;
+            if (string.IsNullOrWhiteSpace(image))
             {
-                if (_disposed) return;
-                var stored = await Store.GetShoppingItemAsync(item.Id);
-                if (_disposed) return;
-                if (stored is not null && !string.IsNullOrWhiteSpace(stored.ImageDataUrl))
-                {
-                    item.ImageDataUrl = stored.ImageDataUrl;
-                    changed = true;
-                }
-                if (++checkedCount % 4 == 0 && changed)
-                {
-                    await InvokeAsync(StateHasChanged);
-                    changed = false;
-                }
+                _photoError = "Fotoğraf bulunamadı.";
+                _photoLoading = false;
             }
-            if (changed && !_disposed) await InvokeAsync(StateHasChanged);
+            else _photoDataUrl = image;
         }
-        catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"Shopping images could not be loaded: {ex}"); }
+        catch (Exception ex)
+        {
+            if (_disposed || requestId != _photoRequestId) return;
+            _photoError = "Fotoğraf yüklenemedi.";
+            _photoLoading = false;
+            System.Diagnostics.Debug.WriteLine($"Shopping photo could not be loaded: {ex}");
+        }
     }
+    private void PhotoLoaded() { if (_photoOpen) _photoLoading = false; }
+    private void PhotoFailed() { if (_photoOpen) { _photoDataUrl = null; _photoLoading = false; _photoError = "Fotoğraf açılamadı."; } }
+    private void ClosePhoto() { _photoRequestId++; _photoOpen = false; _photoLoading = false; _photoDataUrl = null; }
     private IEnumerable<ShoppingItem> FilteredItems() => _items.Where(x =>
         (_status == "all" || (_status == "open" ? !x.IsPurchased : x.IsPurchased)) &&
         (string.IsNullOrEmpty(_category) || x.Category.ToString() == _category) &&
@@ -121,16 +180,57 @@
         try
         {
             var result = await SecretItemAuthentication.AuthenticateAsync();
-            if (result.Succeeded) _revealedItem = await Store.GetShoppingItemAsync(item.Id);
+            if (result.Succeeded)
+            {
+                _revealedItem = await Store.GetSecretShoppingItemDetailsAsync(item.Id);
+                if (_revealedItem?.HasImage == true)
+                {
+                    _secretPhotoLoading = true;
+                    var requestId = ++_secretPhotoRequestId;
+                    _ = LoadSecretPhotoAsync(item.Id, requestId);
+                }
+            }
             else _secretError = result.Message;
         }
         catch { _secretError = "Face ID doğrulaması başlatılamadı."; }
     }
-    private void CloseSecret() { _revealedItem = null; _deleteId = null; }
-    private void OnWindowStopped(object? sender, EventArgs args) => _ = InvokeAsync(() => { CloseSecret(); StateHasChanged(); });
+    private async Task LoadSecretPhotoAsync(int id, int requestId)
+    {
+        await Task.Yield();
+        try
+        {
+            var image = await Store.GetShoppingItemImageAsync(id, secret: true);
+            if (_disposed || requestId != _secretPhotoRequestId || _revealedItem?.Id != id) return;
+            if (string.IsNullOrWhiteSpace(image)) { _secretPhotoError = "Fotoğraf bulunamadı."; _secretPhotoLoading = false; }
+            else _secretPhotoDataUrl = image;
+            await InvokeAsync(StateHasChanged);
+        }
+        catch (Exception ex)
+        {
+            if (_disposed || requestId != _secretPhotoRequestId) return;
+            _secretPhotoError = "Fotoğraf yüklenemedi.";
+            _secretPhotoLoading = false;
+            System.Diagnostics.Debug.WriteLine($"Secret shopping photo could not be loaded: {ex}");
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+    private void SecretPhotoLoaded() { if (_revealedItem is not null) _secretPhotoLoading = false; }
+    private void SecretPhotoFailed() { if (_revealedItem is not null) { _secretPhotoDataUrl = null; _secretPhotoLoading = false; _secretPhotoError = "Fotoğraf açılamadı."; } }
+    private void CloseSecret()
+    {
+        _secretPhotoRequestId++;
+        _revealedItem = null;
+        _secretPhotoDataUrl = null;
+        _secretPhotoLoading = false;
+        _secretPhotoError = "";
+        _deleteId = null;
+    }
+    private void OnWindowStopped(object? sender, EventArgs args) => _ = InvokeAsync(() => { CloseSecret(); ClosePhoto(); StateHasChanged(); });
     public void Dispose()
     {
         _disposed = true;
+        CloseSecret();
+        ClosePhoto();
         if (_window is not null) _window.Stopped -= OnWindowStopped;
     }
     private async Task TogglePurchasedAsync(ShoppingItem item)

@@ -1,6 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <_CodesignBundle Include="CepBankApp.app/PlugIns/CepBankWidget.appex">
+      <EnableCodeSigning>true</EnableCodeSigning>
+      <CodesignSigningKey>5A97F6F3789801377B31AB79A23E80CF8C71E5D1</CodesignSigningKey>
+      <CodesignEntitlements>Platforms/iOS/CepBankWidget/Widget.entitlements</CodesignEntitlements>
+      <CodesignUseSecureTimestamp></CodesignUseSecureTimestamp>
+      <CodesignAllocate>/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/codesign_allocate</CodesignAllocate>
+      <CodesignResourceRules></CodesignResourceRules>
+      <CodesignWarnIfNoEntitlements>true</CodesignWarnIfNoEntitlements>
+      <CodesignDisableTimestamp>true</CodesignDisableTimestamp>
+      <CodesignKeychain></CodesignKeychain>
+      <CodesignUseHardenedRuntime></CodesignUseHardenedRuntime>
+    </_CodesignBundle>
     <_CodesignBundle Include="CepBankApp.app">
       <EnableCodeSigning>true</EnableCodeSigning>
       <CodesignSigningKey>5A97F6F3789801377B31AB79A23E80CF8C71E5D1</CodesignSigningKey>

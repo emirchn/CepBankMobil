@@ -1,0 +1,19 @@
+{
+  "" : {
+    "diagnostics" : "/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/widget/Build/Intermediates.noindex/CepBankWidget.build/Debug-iphoneos/CepBankWidget.build/Objects-normal/arm64/CepBankWidget-primary.dia",
+    "emit-module-dependencies" : "/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/widget/Build/Intermediates.noindex/CepBankWidget.build/Debug-iphoneos/CepBankWidget.build/Objects-normal/arm64/CepBankWidget-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/widget/Build/Intermediates.noindex/CepBankWidget.build/Debug-iphoneos/CepBankWidget.build/Objects-normal/arm64/CepBankWidget-primary-emit-module.dia",
+    "pch" : "/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/widget/Build/Intermediates.noindex/CepBankWidget.build/Debug-iphoneos/CepBankWidget.build/Objects-normal/arm64/CepBankWidget-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/widget/Build/Intermediates.noindex/CepBankWidget.build/Debug-iphoneos/CepBankWidget.build/Objects-normal/arm64/CepBankWidget-primary.swiftdeps"
+  },
+  "/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/Platforms/iOS/CepBankWidget/CepBankWidget.swift" : {
+    "const-values" : "/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/widget/Build/Intermediates.noindex/CepBankWidget.build/Debug-iphoneos/CepBankWidget.build/Objects-normal/arm64/CepBankWidget.swiftconstvalues",
+    "dependencies" : "/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/widget/Build/Intermediates.noindex/CepBankWidget.build/Debug-iphoneos/CepBankWidget.build/Objects-normal/arm64/CepBankWidget.d",
+    "diagnostics" : "/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/widget/Build/Intermediates.noindex/CepBankWidget.build/Debug-iphoneos/CepBankWidget.build/Objects-normal/arm64/CepBankWidget.dia",
+    "index-unit-output-path" : "/CepBankWidget.build/Debug-iphoneos/CepBankWidget.build/Objects-normal/arm64/CepBankWidget.o",
+    "llvm-bc" : "/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/widget/Build/Intermediates.noindex/CepBankWidget.build/Debug-iphoneos/CepBankWidget.build/Objects-normal/arm64/CepBankWidget.bc",
+    "object" : "/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/widget/Build/Intermediates.noindex/CepBankWidget.build/Debug-iphoneos/CepBankWidget.build/Objects-normal/arm64/CepBankWidget.o",
+    "swift-dependencies" : "/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/widget/Build/Intermediates.noindex/CepBankWidget.build/Debug-iphoneos/CepBankWidget.build/Objects-normal/arm64/CepBankWidget.swiftdeps",
+    "swiftmodule" : "/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/obj/widget/Build/Intermediates.noindex/CepBankWidget.build/Debug-iphoneos/CepBankWidget.build/Objects-normal/arm64/CepBankWidget~partial.swiftmodule"
+  }
+}
