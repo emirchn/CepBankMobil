@@ -28,6 +28,7 @@ public class DatabaseService
         var hadStatementDebt = await _database.ExecuteScalarAsync<int>(
             "SELECT COUNT(*) FROM pragma_table_info('CreditCard') WHERE name = 'StatementDebt'") > 0;
         await _database.CreateTableAsync<FinancialTransaction>();
+        await _database.CreateTableAsync<ExpenseRecord>();
         await _database.CreateTableAsync<RecurringItem>();
         await _database.CreateTableAsync<CreditCard>();
         await _database.CreateTableAsync<CardInstallment>();
@@ -36,9 +37,16 @@ public class DatabaseService
         await _database.CreateTableAsync<BenefitCardMovement>();
         await _database.CreateTableAsync<BankAccount>();
         await _database.CreateTableAsync<BankAccountMovement>();
+        await _database.CreateTableAsync<ImportedCardStatementLine>();
         await _database.CreateTableAsync<Loan>();
         await _database.CreateTableAsync<LoanPayment>();
         try { await _database.ExecuteAsync("ALTER TABLE BankAccount ADD COLUMN BankLogoCode TEXT NOT NULL DEFAULT ''"); }
+        catch (SQLiteException ex) when (ex.Message.Contains("duplicate column", StringComparison.OrdinalIgnoreCase)) { }
+        try { await _database.ExecuteAsync("ALTER TABLE BankAccountMovement ADD COLUMN Source TEXT NOT NULL DEFAULT 'Manual'"); }
+        catch (SQLiteException ex) when (ex.Message.Contains("duplicate column", StringComparison.OrdinalIgnoreCase)) { }
+        try { await _database.ExecuteAsync("ALTER TABLE BankAccountMovement ADD COLUMN ExternalKey TEXT NOT NULL DEFAULT ''"); }
+        catch (SQLiteException ex) when (ex.Message.Contains("duplicate column", StringComparison.OrdinalIgnoreCase)) { }
+        try { await _database.ExecuteAsync("ALTER TABLE BankAccountMovement ADD COLUMN HasBalanceAfter INTEGER NOT NULL DEFAULT 1"); }
         catch (SQLiteException ex) when (ex.Message.Contains("duplicate column", StringComparison.OrdinalIgnoreCase)) { }
 
         var cardsToMigrate = await _database.Table<CreditCard>().ToListAsync();
@@ -397,6 +405,89 @@ public class DatabaseService
             .OrderByDescending(item => item.Date).ThenByDescending(item => item.Id).ToListAsync();
     }
 
+    public Task<List<BankAccountMovement>> GetBankMovementsAsync(int accountId) =>
+        _database.Table<BankAccountMovement>().Where(item => item.AccountId == accountId)
+            .OrderByDescending(item => item.Date).ThenByDescending(item => item.Id).ToListAsync();
+
+    public async Task<(int Added, int Skipped)> ImportBankFileAsync(int accountId, BankFilePreview preview,
+        bool updateBalance)
+    {
+        var added = 0;
+        await _database.RunInTransactionAsync(connection =>
+        {
+        var account = connection.Find<BankAccount>(accountId) ?? throw new InvalidOperationException("Hesap bulunamadı.");
+        if (!string.IsNullOrWhiteSpace(preview.Iban) &&
+            !string.Equals(account.Iban, preview.Iban, StringComparison.OrdinalIgnoreCase))
+            throw new InvalidOperationException("Dosyadaki IBAN seçilen hesapla eşleşmiyor.");
+        if (updateBalance && !preview.Balance.HasValue)
+            throw new InvalidOperationException("Dosyada güncel bakiye bulunamadı.");
+        var keys = connection.Table<BankAccountMovement>().Where(x => x.AccountId == accountId).ToList()
+            .Where(x => x.ExternalKey.Length > 0).Select(x => x.ExternalKey).ToHashSet();
+        foreach (var row in preview.Rows)
+        {
+            var key = ImportKey($"Garanti:Account:{accountId}:{row.Reference}");
+            if (!keys.Add(key)) continue;
+            connection.Insert(new BankAccountMovement
+            {
+                AccountId = accountId,
+                Kind = row.SignedAmount >= 0 ? BankMovementKind.Deposit : BankMovementKind.Spend,
+                Amount = Math.Abs(row.SignedAmount),
+                BalanceAfter = row.BalanceAfter ?? 0,
+                HasBalanceAfter = row.BalanceAfter.HasValue,
+                Description = row.Description,
+                Date = row.Date,
+                Source = "GarantiDosya",
+                ExternalKey = key
+            });
+            added++;
+        }
+        if (updateBalance)
+        {
+            account.CurrentBalance = preview.Balance!.Value;
+            connection.Update(account);
+        }
+        });
+        return (added, preview.Rows.Count - added);
+    }
+
+    public async Task<(int Added, int Skipped)> ImportCardStatementAsync(int cardId, CardFilePreview preview)
+    {
+        var added = 0;
+        await _database.RunInTransactionAsync(connection =>
+        {
+            var card = connection.Find<CreditCard>(cardId);
+            if (card is null || !card.IsActive) throw new InvalidOperationException("Kart bulunamadı.");
+            if (preview.CardLastFour is not null && card.LastFourDigits != preview.CardLastFour)
+                throw new InvalidOperationException("Ekstredeki kartın son dört hanesi seçilen kartla eşleşmiyor.");
+            var keys = connection.Table<ImportedCardStatementLine>().Where(x => x.CardId == cardId).ToList()
+                .Select(x => x.ExternalKey).ToHashSet();
+            foreach (var row in preview.Rows)
+            {
+                var key = ImportKey($"Garanti:Card:{cardId}:{preview.StatementReference}:{row.Sequence}");
+                if (!keys.Add(key)) continue;
+                connection.Insert(new ImportedCardStatementLine
+                {
+                    CardId = cardId,
+                    StatementDate = preview.StatementDate,
+                    TransactionDate = row.Date,
+                    Description = row.Description,
+                    Amount = row.Amount,
+                    IsCredit = row.IsCredit,
+                    ExternalKey = key
+                });
+                added++;
+            }
+        });
+        return (added, preview.Rows.Count - added);
+    }
+
+    public Task<List<ImportedCardStatementLine>> GetImportedCardStatementsAsync(int cardId) =>
+        _database.Table<ImportedCardStatementLine>().Where(x => x.CardId == cardId)
+            .OrderByDescending(x => x.StatementDate).ThenByDescending(x => x.TransactionDate).ToListAsync();
+
+    private static string ImportKey(string value) =>
+        Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(System.Text.Encoding.UTF8.GetBytes(value)));
+
     public Task SaveBankAccountAsync(BankAccount input) => _database.RunInTransactionAsync(connection =>
     {
         var iban = new string(input.Iban.Where(char.IsLetterOrDigit).ToArray()).ToUpperInvariant();
@@ -536,6 +627,22 @@ public class DatabaseService
         return await _database.Table<CreditCard>().OrderBy(card => card.Name).ToListAsync();
     }
 
+    public Task<List<ExpenseRecord>> GetExpenseRecordsAsync() =>
+        _database.Table<ExpenseRecord>().OrderByDescending(x => x.Date).ThenByDescending(x => x.Id).ToListAsync();
+
+    public async Task<ExpenseRecord?> GetExpenseRecordAsync(int id) => await _database.Table<ExpenseRecord>()
+        .Where(x => x.Id == id).FirstOrDefaultAsync();
+
+    public Task AddExpenseRecordsAsync(IReadOnlyList<ExpenseRecord> records) =>
+        _database.RunInTransactionAsync(connection =>
+        {
+            foreach (var record in records) connection.Insert(record);
+        });
+
+    public Task DeleteExpenseRecordAsync(ExpenseRecord record) => _database.DeleteAsync(record);
+
+    public Task UpdateExpenseRecordAsync(ExpenseRecord record) => _database.UpdateAsync(record);
+
     public Task<List<FinancialTransaction>> GetCardTransactionsForCurrentPeriodAsync(CreditCard card)
     {
         var cardId = card.Id;
@@ -594,6 +701,8 @@ public class DatabaseService
             connection.Delete(installment);
         foreach (var statement in connection.Table<CardStatement>().Where(item => item.CardId == cardId).ToList())
             connection.Delete(statement);
+        foreach (var line in connection.Table<ImportedCardStatementLine>().Where(item => item.CardId == cardId).ToList())
+            connection.Delete(line);
         foreach (var recurring in connection.Table<RecurringItem>().Where(item => item.CardId == cardId).ToList())
             connection.Delete(recurring);
         card.CurrentDebt = 0;
@@ -793,8 +902,10 @@ public class DatabaseService
             connection.DeleteAll<BenefitCardMovement>();
             connection.DeleteAll<BenefitCard>();
             connection.DeleteAll<BankAccountMovement>();
+            connection.DeleteAll<ImportedCardStatementLine>();
             connection.DeleteAll<BankAccount>();
             connection.DeleteAll<FinancialTransaction>();
+            connection.DeleteAll<ExpenseRecord>();
             connection.DeleteAll<RecurringItem>();
             connection.DeleteAll<CreditCard>();
         });
@@ -804,6 +915,7 @@ public class DatabaseService
         var data = new
         {
             Transactions = await GetTransactionsAsync(),
+            Expenses = await GetExpenseRecordsAsync(),
             RecurringItems = await GetRecurringItemsAsync(),
             CreditCards = await GetCreditCardsAsync(),
             CardInstallments = await _database.Table<CardInstallment>().ToListAsync(),
@@ -811,6 +923,7 @@ public class DatabaseService
             BenefitMovements = await _database.Table<BenefitCardMovement>().ToListAsync(),
             BankAccounts = await GetBankAccountsAsync(),
             BankMovements = await _database.Table<BankAccountMovement>().ToListAsync(),
+            ImportedCardStatements = await _database.Table<ImportedCardStatementLine>().ToListAsync(),
             Loans = await GetLoansAsync(),
             LoanPayments = await _database.Table<LoanPayment>().ToListAsync(),
             Statements = await GetStatementsAsync(),

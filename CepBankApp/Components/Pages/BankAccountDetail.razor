@@ -28,6 +28,7 @@
             <button type="button" class="benefit-action secondary" @onclick="() => ShowAction(BankMovementKind.Deposit)">Bakiye Ekle</button>
             <button type="button" class="benefit-action" @onclick="() => ShowAction(BankMovementKind.Spend)">Harcama Yap</button>
         </div>
+        <NavLink href="@($"accounts/{Id}/import")" class="inline-link">Hesap hareketlerini dosyadan aktar →</NavLink>
         @if (_action.HasValue)
         {
             <section class="add-card benefit-movement-form">
@@ -38,10 +39,11 @@
             </section>
         }
         <section class="transactions-section">
-            <div class="section-heading"><div><p class="section-kicker">BU AY</p><h2>Son hareketler</h2></div><span>@_movements.Count kayıt</span></div>
+            <div class="section-heading"><div><p class="section-kicker">HESAP GEÇMİŞİ</p><h2>Hareketler</h2></div><span>@_movements.Count kayıt</span></div>
+            <label class="statement-month-picker">Ay ve yıl<input type="month" value="@_selectedMonth" @onchange="ChangeMonth" /></label>
             @if (_movements.Count == 0)
             {
-                <div class="empty-state"><strong>Bu ay hareket yok</strong><p>Bakiye eklediğinde veya harcama yaptığında burada görünür.</p></div>
+                <div class="empty-state"><strong>Bu ay hareket yok</strong><p>Başka bir ay seçerek geçmiş hareketleri görebilirsin.</p></div>
             }
             else
             {
@@ -51,7 +53,7 @@
                         var deposit = movement.Kind == BankMovementKind.Deposit;
                         <article class="transaction-row" @key="movement.Id">
                             <div class="transaction-icon @(deposit ? "income" : "expense")">@(deposit ? "↗" : "↘")</div>
-                            <div class="transaction-details"><strong>@(string.IsNullOrWhiteSpace(movement.Description) ? (deposit ? "Bakiye eklendi" : "Harcama") : movement.Description)</strong><span>@movement.Date.ToString("dd.MM.yyyy HH:mm") · İşlem sonrası @Money(movement.BalanceAfter)</span></div>
+                            <div class="transaction-details"><strong>@(string.IsNullOrWhiteSpace(movement.Description) ? (deposit ? "Bakiye eklendi" : "Harcama") : movement.Description)</strong><span>@(movement.Source == "GarantiDosya" ? movement.Date.ToString("dd.MM.yyyy") : movement.Date.ToString("dd.MM.yyyy HH:mm"))@if (movement.HasBalanceAfter) { <text> · İşlem sonrası @Money(movement.BalanceAfter)</text> }@if (movement.Source == "GarantiDosya") { <text> · Garanti dosyası</text> }</span></div>
                             <div class="transaction-actions"><strong class="@(deposit ? "positive" : "negative")">@(deposit ? "+" : "-")@Money(movement.Amount)</strong></div>
                         </article>
                     }
@@ -64,7 +66,9 @@
 @code {
     [Parameter] public int Id { get; set; }
     private BankAccount? _account;
+    private List<BankAccountMovement> _allMovements = new();
     private List<BankAccountMovement> _movements = new();
+    private string _selectedMonth = DateTime.Today.ToString("yyyy-MM", CultureInfo.InvariantCulture);
     private BankMovementKind? _action;
     private string _amountText = string.Empty;
     private string _error = string.Empty;
@@ -79,7 +83,25 @@
     private async Task ReloadAsync()
     {
         _account = await Database.GetBankAccountAsync(Id);
-        _movements = _account is null ? new() : await Database.GetBankMovementsForMonthAsync(Id, DateTime.Today);
+        _allMovements = _account is null ? new() : await Database.GetBankMovementsAsync(Id);
+        RefreshMonth();
+    }
+
+    private void ChangeMonth(ChangeEventArgs args)
+    {
+        var value = args.Value?.ToString() ?? string.Empty;
+        if (!DateTime.TryParseExact(value, "yyyy-MM", CultureInfo.InvariantCulture,
+            DateTimeStyles.None, out _)) return;
+        _selectedMonth = value;
+        RefreshMonth();
+    }
+
+    private void RefreshMonth()
+    {
+        if (!DateTime.TryParseExact(_selectedMonth, "yyyy-MM", CultureInfo.InvariantCulture,
+            DateTimeStyles.None, out var month)) return;
+        _movements = _allMovements.Where(item => item.Date.Year == month.Year &&
+            item.Date.Month == month.Month).ToList();
     }
 
     private void ShowAction(BankMovementKind kind) { _action = kind; _amountText = _error = string.Empty; }

@@ -2,62 +2,42 @@
 @implements IDisposable
 @layout LauncherLayout
 @inject CepBankApp.Services.NotesAppearance Appearance
-@inject NavigationManager Navigation
 @inject IJSRuntime JS
 
-<div class="notes-shell @(Appearance.IsDark ? "dark" : "light")">
+<div class="notes-shell @(Appearance.IsDark ? "dark" : "light") @Appearance.Mode">
     <main class="notes-content">@Body</main>
     <nav class="notes-nav" aria-label="Notlarım menüsü">
-        @if (_activeIndex >= 0) { <span class="notes-nav-indicator" style="transform: translateX(@(_activeIndex * 100)%);" aria-hidden="true"></span> }
-        <NavLink href="notes/reminders" aria-label="Hatırlatıcı"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 3v4M17 3v4M3 10h18"/><circle cx="12" cy="15" r="2"/></svg><span class="visually-hidden">Hatırlatıcı</span></NavLink>
-        <NavLink href="notes/shopping" aria-label="Alınacaklar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h16l-1.5 12h-13L4 8Z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg><span class="visually-hidden">Alınacaklar</span></NavLink>
-        <NavLink href="notes/places" aria-label="Gidilecek Yerler"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z"/><circle cx="12" cy="10" r="2.3"/></svg><span class="visually-hidden">Gidilecek Yerler</span></NavLink>
-        <NavLink href="notes/groceries" aria-label="Market Listesi"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="m8 9 1.5 1.5L12 8M14 9h3M8 16h9"/></svg><span class="visually-hidden">Market Listesi</span></NavLink>
-        <NavLink href="notes/settings" aria-label="Ayarlar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 3h4l.5 2.1 1.6.9 2-.7 2 3.4-1.5 1.5v1.8l1.5 1.5-2 3.4-2-.7-1.6.9L14 21h-4l-.5-2.1-1.6-.9-2 .7-2-3.4 1.5-1.5v-1.8L3.9 10l2-3.4 2 .7 1.6-.9L10 3Z"/><circle cx="12" cy="12" r="2.6"/></svg><span class="visually-hidden">Ayarlar</span></NavLink>
+        <NavLink href="notes/reminders" aria-label="Hatırlatıcı"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 3v4M17 3v4M3 10h18"/><circle cx="12" cy="15" r="2"/></svg><span class="notes-nav-label">Hatırlatıcı</span></NavLink>
+        <NavLink href="notes/shopping" aria-label="Alınacaklar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h16l-1.5 12h-13L4 8Z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg><span class="notes-nav-label">Alınacaklar</span></NavLink>
+        <NavLink href="notes/places" aria-label="Gidilecek Yerler"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z"/><circle cx="12" cy="10" r="2.3"/></svg><span class="notes-nav-label">Gidilecek Y.</span></NavLink>
+        <NavLink href="notes/groceries" aria-label="Market Listesi"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="m8 9 1.5 1.5L12 8M14 9h3M8 16h9"/></svg><span class="notes-nav-label">Market L.</span></NavLink>
+        <NavLink href="notes/settings" aria-label="Ayarlar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 3h4l.5 2.1 1.6.9 2-.7 2 3.4-1.5 1.5v1.8l1.5 1.5-2 3.4-2-.7-1.6.9L14 21h-4l-.5-2.1-1.6-.9-2 .7-2-3.4 1.5-1.5v-1.8L3.9 10l2-3.4 2 .7 1.6-.9L10 3Z"/><circle cx="12" cy="12" r="2.6"/></svg><span class="notes-nav-label">Ayarlar</span></NavLink>
     </nav>
 </div>
 
 @code {
-    private int _activeIndex = -1;
     protected override void OnInitialized()
     {
         Appearance.PrepareForNotes();
         Appearance.Changed += OnAppearanceChanged;
-        Navigation.LocationChanged += OnLocationChanged;
-        UpdateActiveIndex();
     }
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            await JS.InvokeVoidAsync("notesSurface.apply", Appearance.IsDark);
+            await JS.InvokeVoidAsync("notesSurface.apply", Appearance.IsDark, Appearance.Mode);
             await CepBankApp.MainPage.SetNotesBackgroundAsync(Appearance.Mode, Appearance.IsDark);
         }
     }
     private void OnAppearanceChanged() => _ = InvokeAsync(async () =>
     {
-        await JS.InvokeVoidAsync("notesSurface.apply", Appearance.IsDark);
+        await JS.InvokeVoidAsync("notesSurface.apply", Appearance.IsDark, Appearance.Mode);
         await CepBankApp.MainPage.SetNotesBackgroundAsync(Appearance.Mode, Appearance.IsDark);
         StateHasChanged();
     });
-    private void OnLocationChanged(object? sender, LocationChangedEventArgs args) => _ = InvokeAsync(() =>
-    {
-        UpdateActiveIndex();
-        StateHasChanged();
-    });
-    private void UpdateActiveIndex()
-    {
-        var path = Navigation.ToBaseRelativePath(Navigation.Uri).Split('?')[0];
-        _activeIndex = path.StartsWith("notes/reminders", StringComparison.OrdinalIgnoreCase) ? 0 :
-            path.StartsWith("notes/shopping", StringComparison.OrdinalIgnoreCase) ? 1 :
-            path.StartsWith("notes/places", StringComparison.OrdinalIgnoreCase) ? 2 :
-            path.StartsWith("notes/groceries", StringComparison.OrdinalIgnoreCase) ? 3 :
-            path.StartsWith("notes/settings", StringComparison.OrdinalIgnoreCase) ? 4 : -1;
-    }
     public void Dispose()
     {
         Appearance.Changed -= OnAppearanceChanged;
-        Navigation.LocationChanged -= OnLocationChanged;
         _ = JS.InvokeVoidAsync("notesSurface.restore");
         _ = CepBankApp.MainPage.RestoreFinanceBackgroundAsync();
     }

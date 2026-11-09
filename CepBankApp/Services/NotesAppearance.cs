@@ -19,7 +19,7 @@ public sealed class NotesAppearance
         }
     }
 
-    public bool IsDark => Mode == "dark" || (Mode == "device" && DeviceThemeIsDark());
+    public bool IsDark => Mode is "dark" or "forest" or "violet" or "glassy" || (Mode == "device" && DeviceThemeIsDark());
 
     public void PrepareForNotes()
     {

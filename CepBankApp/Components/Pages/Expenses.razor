@@ -1,0 +1,127 @@
+@page "/expenses"
+@using CepBankApp.Data
+@using CepBankApp.Models
+@using System.Globalization
+@inject DatabaseService Database
+
+<div class="finance-page expenses-page">
+    <header class="finance-header">
+        <div><NavLink href="transaction" class="back-link">← İşlemler</NavLink><p class="eyebrow">CEPBANK / HARCAMALAR</p><h1>Harcamalar</h1></div>
+    </header>
+    <p class="field-hint">Bu kayıtlar kart borcunu ve hesap bakiyesini değiştirmez.</p>
+    <div class="expenses-toolbar">
+        <NavLink href="expenses/new" class="primary-button expense-add"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg><span>Harcama ekle</span></NavLink>
+        <button type="button" class="secondary-button expense-filter-toggle" aria-expanded="@_filtersOpen" aria-controls="expense-filters" @onclick="() => _filtersOpen = !_filtersOpen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18l-7 8v5l-4 2v-7L3 5Z" /></svg><span>Filtreler</span></button>
+    </div>
+    @if (_filtersOpen)
+    {
+        <section id="expense-filters" class="expenses-filter-panel" aria-label="Harcama filtreleri">
+            <div class="expenses-filter-heading"><strong>Filtreler</strong><button type="button" @onclick="ClearFilters">Temizle</button></div>
+            <div class="expenses-filters">
+                <label class="expense-search-filter">İşlem ara<input type="search" placeholder="İşlem adı" @bind="_search" @bind:event="oninput" /></label>
+                <label class="expense-date-filter">Başlangıç tarihi<span class="expense-date-control"><input type="date" @bind="_startDate" /></span></label>
+                <label class="expense-date-filter">Bitiş tarihi<span class="expense-date-control"><input type="date" @bind="_endDate" /></span></label>
+                <label>Kategori<select @bind="_category"><option value="">Tüm kategoriler</option>@foreach (var category in _items.Select(x => x.Category).Distinct().OrderBy(x => x)) { <option value="@category">@category</option> }</select></label>
+                <label>Kart<select @bind="_card"><option value="">Tüm kartlar</option><option value="__none">Kartsız</option>@foreach (var card in _items.Select(x => x.CardName).Where(x => !string.IsNullOrWhiteSpace(x)).Distinct().OrderBy(x => x)) { <option value="@card">@card</option> }</select></label>
+            </div>
+            <label class="expense-recurring-filter"><input type="checkbox" @bind="_onlyRecurring" /><span class="expense-check-box" aria-hidden="true"></span><span>Yinelenen İşlemler</span></label>
+        </section>
+    }
+    @{ var groups = DisplayGroups(); }
+    <section class="transactions-section">
+        <div class="section-heading"><h2>Kayıtlı ödemeler</h2><span>@groups.Count kayıt</span></div>
+        @if (groups.Count == 0) { <div class="empty-state"><strong>Kayıt bulunamadı</strong><span>Yeni harcama ekleyebilir veya filtreleri değiştirebilirsin.</span></div> }
+        else
+        {
+            <div class="transaction-list">
+                @foreach (var group in groups)
+                {
+                    var item = group.Items[0];
+                    var expanded = _expandedSeries.Contains(group.Key);
+                    <article class="transaction-row expense-record-row" @key="item.Id">
+                        <div class="transaction-icon expense">↗</div>
+                        <div class="transaction-details"><strong>@item.Name</strong><span>@item.Date.ToString("dd.MM.yyyy") · @item.Category</span>@if (!string.IsNullOrWhiteSpace(item.CardName)) { <span>@item.CardName</span> }@if (group.Items.Count > 1) { <button type="button" class="expense-series-toggle" aria-expanded="@expanded" @onclick="() => ToggleSeries(group.Key)">@(expanded ? "Gelecek ödemeleri gizle" : $"Gelecek ödemeleri göster ({group.Items.Count - 1})") <span aria-hidden="true">@(expanded ? "⌃" : "⌄")</span></button> }</div>
+                        <div class="transaction-actions"><strong class="negative">@item.Amount.ToString("C", Turkish)</strong><div class="expense-row-actions"><NavLink href="@($"expenses/edit/{item.Id}")" class="expense-edit">Düzenle</NavLink><button type="button" class="delete-button" @onclick="() => _deleteId = item.Id">Sil</button></div></div>
+                    </article>
+                    @if (_deleteId == item.Id) { <div class="expense-confirm"><span>Bu kayıt silinsin mi?</span><button type="button" class="danger-button" @onclick="() => DeleteAsync(item)">Evet, sil</button><button type="button" class="secondary-button" @onclick="() => _deleteId = null">Vazgeç</button></div> }
+                    @if (expanded)
+                    {
+                        @foreach (var future in group.Items.Skip(1))
+                        {
+                            <article class="transaction-row expense-record-row expense-series-child" @key="future.Id">
+                                <div class="transaction-icon expense">↗</div>
+                                <div class="transaction-details"><strong>@future.Name</strong><span>@future.Date.ToString("dd.MM.yyyy") · @future.Category</span>@if (!string.IsNullOrWhiteSpace(future.CardName)) { <span>@future.CardName</span> }</div>
+                                <div class="transaction-actions"><strong class="negative">@future.Amount.ToString("C", Turkish)</strong><div class="expense-row-actions"><NavLink href="@($"expenses/edit/{future.Id}")" class="expense-edit">Düzenle</NavLink><button type="button" class="delete-button" @onclick="() => _deleteId = future.Id">Sil</button></div></div>
+                            </article>
+                            @if (_deleteId == future.Id) { <div class="expense-confirm"><span>Bu kayıt silinsin mi?</span><button type="button" class="danger-button" @onclick="() => DeleteAsync(future)">Evet, sil</button><button type="button" class="secondary-button" @onclick="() => _deleteId = null">Vazgeç</button></div> }
+                        }
+                    }
+                }
+            </div>
+        }
+    </section>
+</div>
+
+@code {
+    private static readonly CultureInfo Turkish = new("tr-TR");
+    private List<ExpenseRecord> _items = [];
+    private string _search = "";
+    private DateTime? _startDate = DateTime.Today;
+    private DateTime? _endDate;
+    private string _category = "";
+    private string _card = "";
+    private bool _onlyRecurring;
+    private bool _filtersOpen;
+    private int? _deleteId;
+    private readonly HashSet<string> _expandedSeries = [];
+    private sealed record ExpenseGroup(string Key, List<ExpenseRecord> Items);
+    private bool HasUserFilters => !string.IsNullOrWhiteSpace(_search) || _startDate?.Date != DateTime.Today ||
+        _endDate.HasValue || !string.IsNullOrEmpty(_category) || !string.IsNullOrEmpty(_card) || _onlyRecurring;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Database.InitializeAsync();
+        _items = await Database.GetExpenseRecordsAsync();
+    }
+
+    private IEnumerable<ExpenseRecord> FilteredItems() => _items.Where(x =>
+        (string.IsNullOrWhiteSpace(_search) || x.Name.Contains(_search, StringComparison.CurrentCultureIgnoreCase)) &&
+        (!_startDate.HasValue || x.Date.Date >= _startDate.Value.Date) &&
+        (!_endDate.HasValue || x.Date.Date <= _endDate.Value.Date) &&
+        (string.IsNullOrEmpty(_category) || x.Category == _category) &&
+        (string.IsNullOrEmpty(_card) || (_card == "__none" ? string.IsNullOrWhiteSpace(x.CardName) : x.CardName == _card)) &&
+        (!_onlyRecurring || !string.IsNullOrEmpty(x.SeriesId)))
+        .OrderBy(x => x.Date.Date < DateTime.Today ? 1 : 0)
+        .ThenBy(x => x.Date.Date < DateTime.Today ? -x.Date.Ticks : x.Date.Ticks)
+        .ThenBy(x => x.Id);
+
+    private List<ExpenseGroup> DisplayGroups()
+    {
+        var items = FilteredItems().ToList();
+        return items.GroupBy(x => !HasUserFilters && !string.IsNullOrEmpty(x.SeriesId) ?
+                $"series:{x.SeriesId}" : $"item:{x.Id}")
+            .Select(group => new ExpenseGroup(group.Key, group.ToList())).ToList();
+    }
+
+    private void ToggleSeries(string key)
+    {
+        if (!_expandedSeries.Add(key)) _expandedSeries.Remove(key);
+    }
+
+    private void ClearFilters()
+    {
+        _search = "";
+        _startDate = DateTime.Today;
+        _endDate = null;
+        _category = "";
+        _card = "";
+        _onlyRecurring = false;
+    }
+
+    private async Task DeleteAsync(ExpenseRecord item)
+    {
+        await Database.DeleteExpenseRecordAsync(item);
+        _items.Remove(item);
+        _deleteId = null;
+    }
+}

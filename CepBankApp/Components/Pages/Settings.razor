@@ -2,7 +2,6 @@
 @using CepBankApp.Data
 @using Microsoft.Maui.ApplicationModel.DataTransfer
 @using Microsoft.Maui.Storage
-@using Microsoft.Maui.Media
 @using Plugin.LocalNotification
 @using Plugin.LocalNotification.Core.Models
 @using CepBankApp.Services
@@ -13,8 +12,8 @@
 @inject IJSRuntime JS
 
 <div class="finance-page">
-    <header class="finance-header">
-        <div><p class="eyebrow">CEPBANK / UYGULAMA</p><h1>Ayarlar</h1><p class="header-subtitle">Verilerin ve uygulama tercihlerin.</p></div>
+    <header class="finance-header settings-header">
+        <div><p class="eyebrow">CEPBANK / UYGULAMA</p><h1>Ayarlar</h1><p class="header-subtitle">Verilerin ve uygulama tercihlerin.</p></div><NavLink href="/" class="settings-return">‹ EC Apps</NavLink>
     </header>
 
     <section class="transactions-section">
@@ -31,15 +30,13 @@
             <button type="button" class="@ThemeClass("dark")" title="Gece" aria-label="Gece" aria-pressed="@(_themeMode == "dark")" @onclick="SelectDarkAsync">☾</button>
             <button type="button" class="@ThemeClass("device")" title="Cihaz teması" aria-label="Cihaz teması" aria-pressed="@(_themeMode == "device")" @onclick="SelectDeviceAsync">◐</button>
             <button type="button" class="@ThemeClass("glassy")" title="Glassy" aria-label="Glassy" aria-pressed="@(_themeMode == "glassy")" @onclick="SelectGlassyAsync">◈</button>
-            <button type="button" class="@ThemeClass("custom")" title="Özel tema" aria-label="Özel tema" aria-pressed="@(_themeMode == "custom")" @onclick="SelectCustomAsync">✦</button>
+            <button type="button" class="@ThemeClass("custom")" title="Özel renk" aria-label="Özel renk" aria-pressed="@(_themeMode == "custom")" @onclick="SelectCustomAsync">✦</button>
         </div>
         @if (_themeMode == "custom")
         {
             <div class="custom-theme-controls">
-                <button type="button" class="secondary-button" @onclick="PickWallpaperAsync">Fotoğraflardan arka plan seç</button>
                 <label>Buton rengi <input type="color" @bind="_accent" @bind:after="UpdateAccentAsync" /></label>
             </div>
-            @if (!string.IsNullOrWhiteSpace(_themeError)) { <p class="error-message">@_themeError</p> }
         }
     </section>
 
@@ -102,7 +99,6 @@
     private string _resetMessage = string.Empty;
     private string _themeMode = "device";
     private string _accent = "#6268d5";
-    private string _themeError = string.Empty;
     private bool _showResetConfirm;
     private int _statementDays;
     private int _paymentDays;
@@ -149,33 +145,13 @@
         _themeMode = mode;
         Preferences.Default.Set("theme_mode", mode);
         await CepBankApp.Services.AppAppearance.ApplyAsync(mode);
-        await JS.InvokeVoidAsync("cepbankTheme.apply", mode, _accent, await AppAppearance.GetWallpaperDataUrlAsync());
+        await JS.InvokeVoidAsync("cepbankTheme.apply", mode, _accent);
     }
 
     private async Task UpdateAccentAsync()
     {
         Preferences.Default.Set("custom_accent", _accent);
-        await JS.InvokeVoidAsync("cepbankTheme.apply", _themeMode, _accent, await AppAppearance.GetWallpaperDataUrlAsync());
-    }
-
-    private async Task PickWallpaperAsync()
-    {
-        _themeError = string.Empty;
-        try
-        {
-            var photo = (await MediaPicker.Default.PickPhotosAsync()).FirstOrDefault();
-            if (photo is null) return;
-            await using var source = await photo.OpenReadAsync();
-            await using var buffer = new MemoryStream();
-            await source.CopyToAsync(buffer);
-            if (buffer.Length > 10 * 1024 * 1024) { _themeError = "10 MB'den küçük bir fotoğraf seçin."; return; }
-            var path = Path.Combine(FileSystem.AppDataDirectory, "custom-wallpaper");
-            await File.WriteAllBytesAsync(path, buffer.ToArray());
-            Preferences.Default.Set("custom_wallpaper", path);
-            Preferences.Default.Set("custom_wallpaper_mime", photo.ContentType?.StartsWith("image/") == true ? photo.ContentType : "image/jpeg");
-            await JS.InvokeVoidAsync("cepbankTheme.apply", "custom", _accent, await AppAppearance.GetWallpaperDataUrlAsync());
-        }
-        catch (Exception ex) { _themeError = $"Fotoğraf seçilemedi: {ex.Message}"; }
+        await JS.InvokeVoidAsync("cepbankTheme.apply", _themeMode, _accent);
     }
 
     private void ShowResetConfirm()

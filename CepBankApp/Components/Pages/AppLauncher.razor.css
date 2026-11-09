@@ -1,9 +1,15 @@
-.launcher-page { box-sizing: border-box; display: grid; place-items: center; min-height: 100dvh; padding: calc(32px + env(safe-area-inset-top, 0px)) 24px calc(32px + env(safe-area-inset-bottom, 0px)); }
+.launcher-page { box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; gap: 22px; min-height: 100dvh; padding: calc(32px + env(safe-area-inset-top, 0px)) 24px calc(32px + env(safe-area-inset-bottom, 0px)); }
+.launcher-heading { width: min(100%, 560px); margin: 0 auto; }
+.launcher-heading span { color: var(--primary); font-size: .72rem; font-weight: 850; letter-spacing: .18em; }
+.launcher-heading h1 { margin: 6px 0 2px; color: var(--text); font-size: clamp(2rem, 8vw, 2.8rem); letter-spacing: -.05em; }
+.launcher-heading p { margin: 0; color: var(--muted); font-size: .84rem; }
 .launcher-options { display: grid; gap: 18px; width: min(100%, 560px); }
+.launcher-options { margin: 0 auto; }
 .launcher-options ::deep .launcher-card { display: flex; align-items: center; gap: 22px; min-height: 136px; padding: 22px; border: 1px solid var(--border); border-radius: 28px; background: var(--surface); color: var(--text); text-decoration: none; box-shadow: 0 16px 36px #17244412; transition: transform .15s, box-shadow .15s; }
 .launcher-options ::deep .launcher-card:active { transform: scale(.985); }
 .launcher-options ::deep .launcher-card:focus-visible { outline: 3px solid var(--primary); outline-offset: 3px; }
 .launcher-options ::deep .launcher-card strong { font-size: clamp(1.45rem, 6vw, 1.8rem); font-weight: 800; letter-spacing: -.035em; }
+.launcher-arrow { margin-left: auto; color: var(--muted); font-size: 1.45rem; }
 .launcher-card-icon { flex: none; width: 76px; height: 76px; display: grid; place-items: center; border-radius: 23px; }
 .launcher-card-icon svg { width: 44px; height: 44px; fill: none; stroke: currentColor; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
 .bank-icon { color: #ecfffa; background: linear-gradient(140deg, #163e53, #257d77); }

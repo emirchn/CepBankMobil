@@ -10,6 +10,10 @@
         <div><p class="eyebrow">CEPBANK / İŞLEMLER</p><h1>İşlemler</h1></div>
     </header>
     <nav class="transaction-choice-grid" aria-label="İşlem türü">
+        <NavLink href="expenses" class="transaction-tile tile-expenses">
+            <span class="transaction-tile-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 3h16v18l-4-2-4 2-4-2-4 2V3Z"/><path d="M8 8h8M8 12h8"/></svg></span>
+            <span class="transaction-tile-copy"><strong>Harcamalar</strong></span><span class="transaction-tile-arrow" aria-hidden="true">↗</span>
+        </NavLink>
         <button type="button" class="transaction-tile tile-standard" @onclick="OpenCardPicker">
             <span class="transaction-tile-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></span>
             <span class="transaction-tile-copy"><strong>Kredi Kartları</strong></span><span class="transaction-tile-arrow" aria-hidden="true">↗</span>

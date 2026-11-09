@@ -9,7 +9,7 @@
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (!firstRender) return;
-        await JS.InvokeVoidAsync("cepbankTheme.apply", Preferences.Default.Get("theme_mode", "device"), Preferences.Default.Get("custom_accent", "#6268d5"), await CepBankApp.Services.AppAppearance.GetWallpaperDataUrlAsync());
+        await JS.InvokeVoidAsync("cepbankTheme.apply", Preferences.Default.Get("theme_mode", "device"), Preferences.Default.Get("custom_accent", "#6268d5"));
         await CepBankApp.MainPage.CompleteStartupAsync();
         try { await NotesReminders.RefreshAsync(); }
         catch { /* Notification services can be unavailable before permission is granted. */ }

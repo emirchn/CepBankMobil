@@ -1,0 +1,109 @@
+@page "/cards/{CardId:int}/import"
+@using CepBankApp.Data
+@using CepBankApp.Models
+@using CepBankApp.Services
+@using Microsoft.AspNetCore.Components.Forms
+@using System.Globalization
+@inject DatabaseService Database
+
+<div class="finance-page">
+    <header class="finance-header"><div><NavLink href="cards?type=credit" class="back-link">← Kredi kartlarına dön</NavLink><p class="eyebrow">CEPBANK / KREDİ KARTI</p><h1>Garanti ekstresi aktar</h1></div></header>
+    @if (_card is null)
+    {
+        <div class="empty-state"><strong>Kart bulunamadı</strong></div>
+    }
+    else
+    {
+        <section class="transactions-section">
+            <p><strong>@_card.Name · •••• @_card.LastFourDigits</strong> için Garanti BBVA kart ekstresi PDF dosyasını seç.</p>
+            <InputFile OnChange="ReadFileAsync" accept=".pdf" />
+            <p class="header-subtitle">Bu aktarım yalnızca geçmişi gösterir; güncel kart borcunu değiştirmez.</p>
+        </section>
+        @if (!string.IsNullOrWhiteSpace(_error)) { <p class="error-message">@_error</p> }
+        @if (!string.IsNullOrWhiteSpace(_message)) { <p class="form-message">@_message</p> }
+        @if (_preview is not null)
+        {
+            <section class="transactions-section">
+                <div class="section-heading"><h2>Ekstre önizlemesi</h2><span>@_preview.Rows.Count satır</span></div>
+                <p>Hesap kesim tarihi: @_preview.StatementDate.ToString("dd.MM.yyyy")</p>
+                @if (_preview.CardLastFour is not null) { <p>Kart son dört hane: @_preview.CardLastFour</p> }
+                <div class="transaction-list">
+                    @foreach (var row in _preview.Rows.Take(5))
+                    {
+                        <div class="statement-day"><span>@row.Date.ToString("dd.MM.yyyy") · @row.Description</span><strong class="@(row.IsCredit ? "positive" : "negative")">@(row.IsCredit ? "+" : "−")@Money(row.Amount)</strong></div>
+                    }
+                </div>
+                <p class="header-subtitle">PDF'deki çok satırlı açıklamalar kısalabilir. Kaydetmeden önce satır sayısını ve örnekleri kontrol et.</p>
+                <button type="button" class="primary-button" disabled="@_saving" @onclick="ImportAsync">@(_saving ? "Aktarılıyor…" : "Evet, ekstre geçmişini aktar")</button>
+            </section>
+        }
+        @if (_imported.Count > 0)
+        {
+            <section class="transactions-section">
+                <div class="section-heading"><h2>Aktarılan ekstre geçmişi</h2><span>@_imported.Count satır</span></div>
+                @foreach (var statement in _imported.GroupBy(x => x.StatementDate.Date).OrderByDescending(x => x.Key))
+                {
+                    <div class="statement-day"><strong>@statement.Key.ToString("dd MMMM yyyy", new CultureInfo("tr-TR")) ekstresi</strong><span>@statement.Count() satır</span></div>
+                    <div class="transaction-list">
+                        @foreach (var line in statement.OrderByDescending(x => x.TransactionDate).ThenByDescending(x => x.Id))
+                        {
+                            <article class="transaction-row" @key="line.Id"><div class="transaction-icon @(line.IsCredit ? "income" : "expense")">@(line.IsCredit ? "↗" : "↘")</div><div class="transaction-details"><strong>@line.Description</strong><span>@line.TransactionDate.ToString("dd.MM.yyyy")</span></div><div class="transaction-actions"><strong class="@(line.IsCredit ? "positive" : "negative")">@(line.IsCredit ? "+" : "−")@Money(line.Amount)</strong></div></article>
+                        }
+                    </div>
+                }
+            </section>
+        }
+    }
+</div>
+
+@code {
+    [Parameter] public int CardId { get; set; }
+    private CreditCard? _card;
+    private CardFilePreview? _preview;
+    private List<ImportedCardStatementLine> _imported = new();
+    private string _error = string.Empty;
+    private string _message = string.Empty;
+    private bool _saving;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await Database.InitializeAsync();
+        _card = (await Database.GetCreditCardsAsync()).FirstOrDefault(x => x.Id == CardId && x.IsActive);
+        if (_card is not null) _imported = await Database.GetImportedCardStatementsAsync(CardId);
+    }
+
+    private async Task ReadFileAsync(InputFileChangeEventArgs e)
+    {
+        _preview = null;
+        _error = _message = string.Empty;
+        try
+        {
+            if (!Path.GetExtension(e.File.Name).Equals(".pdf", StringComparison.OrdinalIgnoreCase))
+                throw new InvalidDataException("PDF ekstresi seç.");
+            await using var stream = e.File.OpenReadStream(10 * 1024 * 1024);
+            _preview = StatementFileParser.ReadGarantiCardPdf(stream);
+            if (_preview.CardLastFour is not null && _card is not null &&
+                _preview.CardLastFour != _card.LastFourDigits)
+                throw new InvalidDataException("Ekstredeki kartın son dört hanesi seçilen kartla eşleşmiyor.");
+        }
+        catch (Exception ex) { _preview = null; _error = $"Ekstre okunamadı: {ex.Message}"; }
+    }
+
+    private async Task ImportAsync()
+    {
+        if (_preview is null || _saving) return;
+        _saving = true;
+        _error = string.Empty;
+        try
+        {
+            var result = await Database.ImportCardStatementAsync(CardId, _preview);
+            _message = $"{result.Added} satır aktarıldı, {result.Skipped} tekrar kayıt atlandı.";
+            _preview = null;
+            _imported = await Database.GetImportedCardStatementsAsync(CardId);
+        }
+        catch (Exception ex) { _error = $"Aktarım tamamlanamadı: {ex.Message}"; }
+        finally { _saving = false; }
+    }
+
+    private static string Money(decimal value) => string.Format(new CultureInfo("tr-TR"), "{0:C2}", value);
+}

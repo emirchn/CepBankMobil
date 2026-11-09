@@ -15,7 +15,6 @@ layout/flyoutcontent;compatibility/Android/Resources/layout/flyoutcontent
 layout/fragment_backstack;layout/fragment_backstack
 layout/navigationlayout;layout/navigationlayout
 layout/shellcontent;compatibility/Android/Resources/layout/shellcontent
-raw/aboutassets;raw/AboutAssets
 values/attr;values/attr
 values/colors;values/colors
 values/strings;values/strings

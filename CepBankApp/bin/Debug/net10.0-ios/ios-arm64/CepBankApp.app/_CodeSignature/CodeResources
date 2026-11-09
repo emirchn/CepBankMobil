@@ -14,11 +14,15 @@
 		</data>
 		<key>CepBankApp.dll</key>
 		<data>
-		+uQgZe4/pXCuM+Dj9S3rnJnk4Yw=
+		eBY1CJTNg5LEVm4KEaBCXM+ZdBw=
 		</data>
 		<key>CepBankApp.pdb</key>
 		<data>
-		7r7PxmxmSjUy034zkWlKfdPB6Tg=
+		V+BqCEz386VnnhAilp8WMVZK0/w=
+		</data>
+		<key>ExcelDataReader.dll</key>
+		<data>
+		JJO7SwObWLdP4XhQ+1VZ4sJaPXA=
 		</data>
 		<key>Info.plist</key>
 		<data>
@@ -164,6 +168,10 @@
 		<data>
 		qtcOeLoQI5ahuhFbSBZuto2piw4=
 		</data>
+		<key>Microsoft.Maui.Controls.HotReload.Forms.dll</key>
+		<data>
+		Yw1Hv4WZiS9Q1Snq8EHpj7557Nw=
+		</data>
 		<key>Microsoft.Maui.Controls.Xaml.dll</key>
 		<data>
 		Okfx/VA5vnf898IcbFWSuAjMSt4=
@@ -191,6 +199,18 @@
 		<key>Microsoft.VisualBasic.dll</key>
 		<data>
 		u302+8o7hfvHpwchEsPwf2PcX5s=
+		</data>
+		<key>Microsoft.VisualStudio.DesignTools.MobileTapContracts.dll</key>
+		<data>
+		G7yCLhRnxVixhZQpKoGR0TIZN/A=
+		</data>
+		<key>Microsoft.VisualStudio.DesignTools.TapContract.dll</key>
+		<data>
+		hOy70PcyGfkMrvD4RZnxsa7gtx0=
+		</data>
+		<key>Microsoft.VisualStudio.DesignTools.XamlTapContract.dll</key>
+		<data>
+		AWe4jRKeyvLIIF2AWfQsDTGKRE0=
 		</data>
 		<key>Microsoft.Win32.Primitives.dll</key>
 		<data>
@@ -222,11 +242,11 @@
 		</data>
 		<key>PlugIns/CepBankWidget.appex/CepBankWidget</key>
 		<data>
-		VErDKZ8/e2BH+727Ts8nwl9YW5U=
+		mbA/lFMdxiKKuFw31S+4RLimtBc=
 		</data>
 		<key>PlugIns/CepBankWidget.appex/CepBankWidget.debug.dylib</key>
 		<data>
-		0e6+xY8A23MICFcuN36HQuVU/Dk=
+		WlXz1yWjyMZ/gYoRwWqBvvXYk8k=
 		</data>
 		<key>PlugIns/CepBankWidget.appex/Info.plist</key>
 		<data>
@@ -234,11 +254,11 @@
 		</data>
 		<key>PlugIns/CepBankWidget.appex/_CodeSignature/CodeResources</key>
 		<data>
-		2Xik3n/GTNru11dBPTq8/geEICk=
+		EN9E87r5yPUXmb8MnUY7WsR4I/Q=
 		</data>
 		<key>PlugIns/CepBankWidget.appex/__preview.dylib</key>
 		<data>
-		Xq62qLEv6IIbi6dnMMtJ5CDZC6I=
+		WNd6RbaPaFXYouMIQkJVOW6BJHw=
 		</data>
 		<key>PlugIns/CepBankWidget.appex/embedded.mobileprovision</key>
 		<data>
@@ -932,6 +952,34 @@
 		<data>
 		+uKydvD32pEPdAmIWpfG0e0PIRg=
 		</data>
+		<key>UglyToad.PdfPig.Core.dll</key>
+		<data>
+		TB1geQYHtpyXEzQhgnX6HVTonPs=
+		</data>
+		<key>UglyToad.PdfPig.DocumentLayoutAnalysis.dll</key>
+		<data>
+		/rWdcufWfMDvcl/7kH1UWCuMFo8=
+		</data>
+		<key>UglyToad.PdfPig.Fonts.dll</key>
+		<data>
+		bLZlVaIym0Ok1ZL+pgPuvefIcKM=
+		</data>
+		<key>UglyToad.PdfPig.Package.dll</key>
+		<data>
+		UXaCVDThZGYKGFk5gW5sNggELSU=
+		</data>
+		<key>UglyToad.PdfPig.Tokenization.dll</key>
+		<data>
+		wJHCCbWB1W6j57otIx44umpG7Xo=
+		</data>
+		<key>UglyToad.PdfPig.Tokens.dll</key>
+		<data>
+		kdQEgGmumkqssuUmb3Gy0SuZcDs=
+		</data>
+		<key>UglyToad.PdfPig.dll</key>
+		<data>
+		Dr1Q8xLChXErtFvOe0wevPysLvo=
+		</data>
 		<key>WindowsBase.dll</key>
 		<data>
 		K+4G3G8h1k2uvQFVuTSVJcLddfU=
@@ -1074,7 +1122,7 @@
 		</data>
 		<key>runtimeconfig.bin</key>
 		<data>
-		fGnMTvGt8lJOsiLu40LTsCCmEO8=
+		flmsFVmMvylVoNr/GUEtHKrQ3q0=
 		</data>
 		<key>sk/Microsoft.Maui.Controls.resources.dll</key>
 		<data>
@@ -1128,9 +1176,21 @@
 		<data>
 		hIC8RavU0anI3pzmxSA+Dg4k/As=
 		</data>
+		<key>wwwroot/CepBankApp.35l0ijclzf.bundle.scp.css</key>
+		<data>
+		pGefBIXRdrBWHpN60jeq78AlL0c=
+		</data>
+		<key>wwwroot/CepBankApp.6mnj51hqra.bundle.scp.css</key>
+		<data>
+		2vaCIRVd07N/+/yiVugJWJmfO2A=
+		</data>
+		<key>wwwroot/CepBankApp.iwg3u4urrw.bundle.scp.css</key>
+		<data>
+		rEzbTdfrz6vEdrzMmJ+CC1oCtM0=
+		</data>
 		<key>wwwroot/CepBankApp.styles.css</key>
 		<data>
-		hIC8RavU0anI3pzmxSA+Dg4k/As=
+		rEzbTdfrz6vEdrzMmJ+CC1oCtM0=
 		</data>
 		<key>wwwroot/_framework/blazor.modules.json</key>
 		<data>
@@ -1142,7 +1202,7 @@
 		</data>
 		<key>wwwroot/app.css</key>
 		<data>
-		ZdzeIAQ1G2mJr1FYvSdL3PRtg1c=
+		YNRCefcvbz39xxxxar8P+9CmIGk=
 		</data>
 		<key>wwwroot/bank-logos/SOURCES.txt</key>
 		<data>
@@ -1208,6 +1268,14 @@
 		<data>
 		jZprxF3lCb/g46BHMrEE7huuoYY=
 		</data>
+		<key>wwwroot/images/cepbank-glassy-background.jpg</key>
+		<data>
+		CwQJAHFAMeW1Cf8FzfYFTC4FiSg=
+		</data>
+		<key>wwwroot/images/notes-glassy-background.jpg</key>
+		<data>
+		6A/j2qtzZmZq/LkkOm6wHzqm1jE=
+		</data>
 		<key>wwwroot/index.html</key>
 		<data>
 		WTFKcaKlEqhnTG5g2r+WIoiZ0ko=
@@ -1222,11 +1290,11 @@
 		</data>
 		<key>wwwroot/notes.css</key>
 		<data>
-		OQpDHUrP7blPLToSGH8MUtli+IQ=
+		f+AtVmmORNJRahGO0pYWgSc4RYE=
 		</data>
 		<key>wwwroot/theme.js</key>
 		<data>
-		2eixgtTvOpTtXKliFALoIDmXHTg=
+		OZAaO4fkFYovtbBcyXNED3EuKLQ=
 		</data>
 		<key>xml/microsoft_maui_essentials_fileprovider_file_paths.xml</key>
 		<data>
@@ -1265,14 +1333,21 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			SqKNUv91PsFEYrSL3beQOgNn3k4YNhoVoCQWO5brqRE=
+			lMoHz7wjjh5lkTAfVRxdMIirwOo+3wPKljUYZFF/o94=
 			</data>
 		</dict>
 		<key>CepBankApp.pdb</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			+cWrdqgztYoP6EWvoJOAP+9I1ILCuIcNVgUX4S25qyo=
+			vETsQowjpD9t1EZ6O/tERwm7e6swtjuqUCoojlGTEs8=
+			</data>
+		</dict>
+		<key>ExcelDataReader.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			TUEYqUSZAS72kyZiT5j11vnG9wvJesFZn6F7Z62C+Bw=
 			</data>
 		</dict>
 		<key>MauiInfo.plist</key>
@@ -1520,6 +1595,13 @@
 			j2yE30gi6s9UwxjDxt2m1JOSFkXqAKe1ikbxybAi/nc=
 			</data>
 		</dict>
+		<key>Microsoft.Maui.Controls.HotReload.Forms.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			Jj4FxRa/08Obj/eYaPTHijoaVHMIweIKBnQLYAyQ9xI=
+			</data>
+		</dict>
 		<key>Microsoft.Maui.Controls.Xaml.dll</key>
 		<dict>
 			<key>hash2</key>
@@ -1569,6 +1651,27 @@
 			xp5eo5KuMEQbKFj8BMWmJe90eGjjpz4uXTdkGvW5C1E=
 			</data>
 		</dict>
+		<key>Microsoft.VisualStudio.DesignTools.MobileTapContracts.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			d0reKJf529ZFVtbPbo72sbTVnqrA5cIhbKQHKFKATuY=
+			</data>
+		</dict>
+		<key>Microsoft.VisualStudio.DesignTools.TapContract.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			lxh4/7EjsGHMUnyfVUWv2Cctaa6XWSBg23CI4vVsYMc=
+			</data>
+		</dict>
+		<key>Microsoft.VisualStudio.DesignTools.XamlTapContract.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			Ci42JSB1S0ttN5uBSxEyAVRbEY19df1Pz2rRHhzTKqw=
+			</data>
+		</dict>
 		<key>Microsoft.Win32.Primitives.dll</key>
 		<dict>
 			<key>hash2</key>
@@ -1615,14 +1718,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			kUUiPVrOWNdJTcDH17kZwU2Awa5TJpcK9EIVAZLylho=
+			9yZHic7ro0lZAVcOskV9Fo13ECUZ/LUXAPlQYWi/Q3w=
 			</data>
 		</dict>
 		<key>PlugIns/CepBankWidget.appex/CepBankWidget.debug.dylib</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			QuP9FpTiqI5d4TIKBIdKyXeSwpbUpd6VCgvEUgdAEFA=
+			Ub9JwfuZIxAd5XirebcTUGtiQETfbM82MPATJzR7Z/U=
 			</data>
 		</dict>
 		<key>PlugIns/CepBankWidget.appex/Info.plist</key>
@@ -1636,14 +1739,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			EXWUq1t/0Mdob9pl4yS5uIOYZeZsiOr1zKoZKt49heM=
+			s9OGoS/JljgHdH2O9uWmWUA/I/e3U58R9AVktD2F8dE=
 			</data>
 		</dict>
 		<key>PlugIns/CepBankWidget.appex/__preview.dylib</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			kMXjBOwAd2RtTuw8BjRCXQIU05kRjl3q9EOlle4uFvw=
+			cT0T3vc9Kd+XAbp4WiHjAwyStMnD+AqyPNOKwVByV8I=
 			</data>
 		</dict>
 		<key>PlugIns/CepBankWidget.appex/embedded.mobileprovision</key>
@@ -2857,6 +2960,55 @@
 			t7VdnYdRY3zh+9dJZfSb/h624buod5CzrdOYrS8gojM=
 			</data>
 		</dict>
+		<key>UglyToad.PdfPig.Core.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			y90YCe4PS6YXkAhF0YLl5nGDN3/lhIqNnRIis8OVEWs=
+			</data>
+		</dict>
+		<key>UglyToad.PdfPig.DocumentLayoutAnalysis.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			wNHiN+q8ssdB/Hq3smwlWvb1dR0c1+hteuYTYR95vIg=
+			</data>
+		</dict>
+		<key>UglyToad.PdfPig.Fonts.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			MFIdKqAiUsAJfNOpsSgyNo1ckl4cy0vDpXNWcb09Lh4=
+			</data>
+		</dict>
+		<key>UglyToad.PdfPig.Package.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			Mif3k0cym1flB0XSreHet8zf5X2h04J5YoODKq5upBo=
+			</data>
+		</dict>
+		<key>UglyToad.PdfPig.Tokenization.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			U50MoseYG56vhUHhdDSREEL3zHPTq8JJYplLuZRy7Tw=
+			</data>
+		</dict>
+		<key>UglyToad.PdfPig.Tokens.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			1vvXOlILuWH/zJgDCraG9DyIsD9bBZuhHjeB4PCRQz0=
+			</data>
+		</dict>
+		<key>UglyToad.PdfPig.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			xHq+vf/rtuSKHUD0wizl9nPFdVjs2zGHhBtygRLeonk=
+			</data>
+		</dict>
 		<key>WindowsBase.dll</key>
 		<dict>
 			<key>hash2</key>
@@ -3106,7 +3258,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			/AVw5gJwPJnYK5roVnWKdvS9SvdnWVEKw2qoE+K9ESY=
+			UtTNIUD0KpktsYjgsOtADCl+7OqTxQbGceJHVGazeV0=
 			</data>
 		</dict>
 		<key>sk/Microsoft.Maui.Controls.resources.dll</key>
@@ -3200,11 +3352,32 @@
 			EAdAp9lijaJzhrflo8KHgpNKtRC5vP824vQ+DDXkfnw=
 			</data>
 		</dict>
+		<key>wwwroot/CepBankApp.35l0ijclzf.bundle.scp.css</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			+RYZMf2Bhy7gRhZSbbsXSRLhxmO1+UL7vAEzfJwG640=
+			</data>
+		</dict>
+		<key>wwwroot/CepBankApp.6mnj51hqra.bundle.scp.css</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			sqhxWnQY7cWZSvKD3Fz4scwSU2Jjmf74CZD44NqaGmI=
+			</data>
+		</dict>
+		<key>wwwroot/CepBankApp.iwg3u4urrw.bundle.scp.css</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			Uob9LXID67RGfViJoFoxYa4qItNTCLRxB1Q7d27VezQ=
+			</data>
+		</dict>
 		<key>wwwroot/CepBankApp.styles.css</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			EAdAp9lijaJzhrflo8KHgpNKtRC5vP824vQ+DDXkfnw=
+			Uob9LXID67RGfViJoFoxYa4qItNTCLRxB1Q7d27VezQ=
 			</data>
 		</dict>
 		<key>wwwroot/_framework/blazor.modules.json</key>
@@ -3225,7 +3398,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			LV41brHb8Dewu9eaA+TkZg0yMUv29jMDZGoeMuUvY8U=
+			/Fuu6NkM3csc9UVzxgBumFGbL4oxqqZjNNGuUxQJIHI=
 			</data>
 		</dict>
 		<key>wwwroot/bank-logos/SOURCES.txt</key>
@@ -3340,6 +3513,20 @@
 			3atul+fg0O+/LZksi3fGfp56cNGMuqCpJ1dq44kfF34=
 			</data>
 		</dict>
+		<key>wwwroot/images/cepbank-glassy-background.jpg</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			PFk/HWUN5dX6IIQyWWywG7BCMVUtfe59wpYJ/CzwpVM=
+			</data>
+		</dict>
+		<key>wwwroot/images/notes-glassy-background.jpg</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			A6w/YPh8cNsWZWSnhQKEDxHo3JFG82W3pnUw0D3CVAU=
+			</data>
+		</dict>
 		<key>wwwroot/index.html</key>
 		<dict>
 			<key>hash2</key>
@@ -3365,14 +3552,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			G6WUW7U58ILdqSTBUpt0uTL5AQgU4duut0OmY/TQ2lw=
+			SKqN4+YZwah4SYYE87R2FAStygDFjiescta9O8M5nUk=
 			</data>
 		</dict>
 		<key>wwwroot/theme.js</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			xDkHdEBlBD3krmPPEDvPqq/A/lkvTUq7yV+XcjBxymI=
+			w3QrKxpoJVxOt0mM4HBxZtTQws8CX6SAbMHml2G1a0Y=
 			</data>
 		</dict>
 		<key>xml/microsoft_maui_essentials_fileprovider_file_paths.xml</key>

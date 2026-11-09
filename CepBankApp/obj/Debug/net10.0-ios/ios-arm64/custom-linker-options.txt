@@ -11,7 +11,7 @@ AreAnyAssembliesTrimmed=false
 				DeploymentTarget=15.0
 				
 				EnableSGenConc=false
-				
+				EnvironmentVariable=Overwrite=false|DOTNET_DiagnosticPorts=127.0.0.1:9000,listen,nosuspend
 				FrameworkAssembly=Microsoft.CSharp
 FrameworkAssembly=Microsoft.VisualBasic.Core
 FrameworkAssembly=Microsoft.VisualBasic
@@ -204,14 +204,14 @@ MonoLibrary=/usr/local/share/dotnet/packs/Microsoft.NETCore.App.Runtime.Mono.ios
 MonoLibrary=/usr/local/share/dotnet/packs/Microsoft.NETCore.App.Runtime.Mono.ios-arm64/10.0.3/runtimes/ios-arm64/native/libbrotlidec.a
 MonoLibrary=/usr/local/share/dotnet/packs/Microsoft.NETCore.App.Runtime.Mono.ios-arm64/10.0.3/runtimes/ios-arm64/native/libbrotlienc.a
 MonoLibrary=/usr/local/share/dotnet/packs/Microsoft.NETCore.App.Runtime.Mono.ios-arm64/10.0.3/runtimes/ios-arm64/native/libmono-component-debugger-static.a
-MonoLibrary=/usr/local/share/dotnet/packs/Microsoft.NETCore.App.Runtime.Mono.ios-arm64/10.0.3/runtimes/ios-arm64/native/libmono-component-diagnostics_tracing-stub-static.a
+MonoLibrary=/usr/local/share/dotnet/packs/Microsoft.NETCore.App.Runtime.Mono.ios-arm64/10.0.3/runtimes/ios-arm64/native/libmono-component-diagnostics_tracing-static.a
 MonoLibrary=/usr/local/share/dotnet/packs/Microsoft.NETCore.App.Runtime.Mono.ios-arm64/10.0.3/runtimes/ios-arm64/native/libmono-component-hot_reload-static.a
 MonoLibrary=/usr/local/share/dotnet/packs/Microsoft.NETCore.App.Runtime.Mono.ios-arm64/10.0.3/runtimes/ios-arm64/native/libmono-component-marshal-ilgen-static.a
 MonoLibrary=/usr/local/share/dotnet/packs/Microsoft.NETCore.App.Runtime.Mono.ios-arm64/10.0.3/runtimes/ios-arm64/native/libmonosgen-2.0.a
 MonoLibrary=/usr/local/share/dotnet/packs/Microsoft.NETCore.App.Runtime.Mono.ios-arm64/10.0.3/runtimes/ios-arm64/native/libmono-component-debugger-static.a
 MonoLibrary=/usr/local/share/dotnet/packs/Microsoft.NETCore.App.Runtime.Mono.ios-arm64/10.0.3/runtimes/ios-arm64/native/libmono-component-hot_reload-static.a
+MonoLibrary=/usr/local/share/dotnet/packs/Microsoft.NETCore.App.Runtime.Mono.ios-arm64/10.0.3/runtimes/ios-arm64/native/libmono-component-diagnostics_tracing-static.a
 MonoLibrary=/usr/local/share/dotnet/packs/Microsoft.NETCore.App.Runtime.Mono.ios-arm64/10.0.3/runtimes/ios-arm64/native/libmono-component-marshal-ilgen-static.a
-MonoLibrary=/usr/local/share/dotnet/packs/Microsoft.NETCore.App.Runtime.Mono.ios-arm64/10.0.3/runtimes/ios-arm64/native/libmono-component-diagnostics_tracing-stub-static.a
 				MtouchFloat32=
 				NoWarn=
 				Optimize=

@@ -52,7 +52,9 @@ public sealed class NotesReminderService(NotesStore store)
                 {
                     NotificationId = id,
                     Title = "Yaklaşan etkinlik: " + candidate.item.Name,
-                    Description = $"{candidate.item.EventDate:dd.MM.yyyy} tarihine {candidate.day} gün kaldı.",
+                    Description = candidate.item.EndDate is DateTime end
+                        ? $"{candidate.item.EventDate:dd.MM.yyyy} – {end:dd.MM.yyyy} etkinliğine {candidate.day} gün kaldı."
+                        : $"{candidate.item.EventDate:dd.MM.yyyy} etkinliğine {candidate.day} gün kaldı.",
                     Schedule = new NotificationRequestSchedule { NotifyTime = candidate.when }
                 });
             }

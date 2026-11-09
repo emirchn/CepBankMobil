@@ -1,36 +1,79 @@
 @page "/notes/reminders/new"
+@page "/notes/reminders/edit/{ReminderId:int}"
 @layout NotesLayout
 @using CepBankApp.Data
 @using CepBankApp.Models
 @using CepBankApp.Services
 @inject NotesStore Store
 @inject NotesReminderService Notifications
+@inject WidgetSummaryService WidgetSummary
 @inject NavigationManager Navigation
 
 <section class="notes-page">
-    <div class="notes-heading"><div><p class="notes-kicker">HATIRLATICI</p><h1>Etkinlik ekle</h1></div><NavLink href="notes/reminders">Vazgeç</NavLink></div>
+    <div class="notes-heading"><div><p class="notes-kicker">HATIRLATICI</p><h1>@(_editingItem is null ? "Etkinlik ekle" : "Etkinliği düzenle")</h1></div><NavLink href="notes/reminders">Vazgeç</NavLink></div>
     <div class="notes-panel notes-form">
         <label>Etkinlik adı <input maxlength="120" @bind="_name" /></label>
         <label>Açıklama <span>(opsiyonel)</span><textarea maxlength="1000" rows="4" @bind="_description"></textarea></label>
-        <label>Tarih <input type="date" min="@DateTime.Today.AddDays(1).ToString("yyyy-MM-dd")" @bind="_date" /></label>
+        <label>Kategori <select @bind="_category"><option value="Etkinlik">Etkinlik</option><option value="OzelGun">Özel Gün</option><option value="Diger">Diğer</option></select></label>
+        <label>Başlangıç günü <input type="date" @bind="_date" /></label>
+        <label class="notes-range-toggle @(_hasEndDate ? "selected" : "")"><input type="checkbox" @bind="_hasEndDate" /><span class="notes-toggle-mark" aria-hidden="true">✓</span><span>Gün Aralığı Seç</span></label>
+        @if (_hasEndDate) { <label>Bitiş günü <input type="date" min="@_date.ToString("yyyy-MM-dd")" @bind="_endDate" /></label> }
+        <label class="notes-range-toggle @(_hasTime ? "selected" : "")"><input type="checkbox" @bind="_hasTime" /><span class="notes-toggle-mark" aria-hidden="true">✓</span><span>Saat Seç</span></label>
+        @if (_hasTime)
+        {
+            <label>Başlangıç saati <input type="time" @bind="_startTime" /></label>
+            <label class="notes-range-toggle @(_hasEndTime ? "selected" : "")"><input type="checkbox" @bind="_hasEndTime" /><span class="notes-toggle-mark" aria-hidden="true">✓</span><span>Saat Aralığı Seç</span></label>
+            @if (_hasEndTime) { <label>Bitiş saati <input type="time" @bind="_endTime" /></label> }
+        }
         @if (!string.IsNullOrWhiteSpace(_error)) { <p class="notes-error">@_error</p> }
-        <button type="button" class="notes-primary" disabled="@_saving" @onclick="SaveAsync">Etkinliği kaydet</button>
+        <button type="button" class="notes-primary" disabled="@_saving" @onclick="SaveAsync">@(_editingItem is null ? "Etkinliği kaydet" : "Değişiklikleri kaydet")</button>
     </div>
 </section>
 
 @code {
+    [Parameter] public int? ReminderId { get; set; }
+    private NoteReminder? _editingItem;
     private string _name = "", _description = "", _error = "";
-    private DateTime _date = DateTime.Today.AddDays(1);
+    private DateTime _date = DateTime.Today;
+    private DateTime _endDate = DateTime.Today;
+    private bool _hasEndDate, _hasTime, _hasEndTime;
+    private TimeOnly _startTime = new(9, 0), _endTime = new(10, 0);
+    private ReminderCategory _category = ReminderCategory.Etkinlik;
     private bool _saving;
+    protected override async Task OnParametersSetAsync()
+    {
+        if (ReminderId is not int id) return;
+        _editingItem = await Store.GetReminderAsync(id);
+        if (_editingItem is null) { Navigation.NavigateTo("notes/reminders"); return; }
+        _name = _editingItem.Name;
+        _description = _editingItem.Description;
+        _category = _editingItem.Category;
+        _date = _editingItem.EventDate.Date;
+        _hasEndDate = _editingItem.EndDate.HasValue;
+        _endDate = _editingItem.EndDate?.Date ?? _date;
+        _hasTime = TimeOnly.TryParse(_editingItem.StartTime, out _startTime);
+        if (!_hasTime) _startTime = new(9, 0);
+        _hasEndTime = TimeOnly.TryParse(_editingItem.EndTime, out _endTime);
+        if (!_hasEndTime) _endTime = new(10, 0);
+    }
     private async Task SaveAsync()
     {
         if (_saving) return;
         if (string.IsNullOrWhiteSpace(_name)) { _error = "Etkinlik adı gerekli."; return; }
-        if (_date.Date <= DateTime.Today) { _error = "Gelecekteki bir tarih seç."; return; }
+        if (_editingItem is null && _date.Date < DateTime.Today) { _error = "Bugün veya gelecekteki bir tarih seç."; return; }
+        if (_hasEndDate && _endDate.Date < _date.Date) { _error = "Bitiş günü başlangıçtan önce olamaz."; return; }
+        if (_hasTime && _hasEndTime && (!_hasEndDate || _endDate.Date == _date.Date) && _endTime <= _startTime) { _error = "Bitiş saati başlangıçtan sonra olmalı."; return; }
         _saving = true;
         try
         {
-            await Store.SaveReminderAsync(new NoteReminder { Name = _name.Trim(), Description = _description.Trim(), EventDate = _date.Date });
+            var item = _editingItem ?? new NoteReminder();
+            item.Name = _name.Trim(); item.Description = _description.Trim(); item.EventDate = _date.Date;
+            item.EndDate = _hasEndDate ? _endDate.Date : null;
+            item.StartTime = _hasTime ? _startTime.ToString("HH:mm") : null;
+            item.EndTime = _hasTime && _hasEndTime ? _endTime.ToString("HH:mm") : null;
+            item.Category = _category;
+            await Store.SaveReminderAsync(item);
+            await WidgetSummary.TryRefreshAsync();
             await Notifications.RequestPermissionAndRefreshAsync();
             Navigation.NavigateTo("notes/reminders");
         }

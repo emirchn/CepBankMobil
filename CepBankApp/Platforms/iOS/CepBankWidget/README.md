@@ -17,7 +17,9 @@ Regenerate the iOS App Development profile for EC Apps and create an iOS App Dev
 
 The MAUI app writes `widget-summary.json` atomically to the App Group container after relevant changes and when the overview loads. The widget reads only that summary. The private SQLite database and SecureStorage card details stay in the app's own container.
 
-The summary contains the bank account selected for the home screen, its current balance, and the separate total credit-card debt. If no account is selected, the widget shows an account-selection prompt. WidgetKit controls actual refresh timing; the timeline requests a refresh after 30 minutes, but this is not a guaranteed interval.
+The summary contains reminder date ranges, categories, names, and start times. The large widget displays the current month's calendar without a separate month heading. Below it, up to four reminders from today through the following six days appear in a left-hand list with a count of any remaining reminders; four icon shortcuts sit in a 2×2 grid on the right: Harcamalar, Hatırlatıcı, Gidilecek yerler, and Alınacaklar. The small widget shows upcoming reminders; the medium widget shows the shortcuts. WidgetKit controls actual refresh timing; the timeline requests a refresh after 30 minutes, but this is not a guaranteed interval.
+
+The widget uses translucent system materials and a clear, removable WidgetKit container background. It includes no wallpaper image; iOS decides whether the Home Screen wallpaper shows through in the user's current widget appearance.
 
 ## Build and verify
 
@@ -26,4 +28,4 @@ dotnet restore CepBankApp/CepBankApp.csproj -p:TargetFramework=net10.0-ios -p:Ru
 dotnet build CepBankApp/CepBankApp.csproj -f net10.0-ios -r iossimulator-arm64 -p:EnableCodeSigning=false --no-restore
 ```
 
-For the registered iPhone, restore and build with `-p:RuntimeIdentifier=ios-arm64` and `-r ios-arm64`. The default iOS build includes the widgets. After installation, open EC Apps → CepBank once to write the summary. The Home Screen widget gallery has **CepBank Hesap Özeti** (small) and **CepBank Hızlı Erişim** (medium, 4×2). The medium widget opens the credit-card picker, meal-card tab, fuel-card tab, and the new reminder, shopping-item, and place forms through the `ecappscepbank://widget/` URL scheme. Verify all six links on the iPhone. A successful build alone does not confirm that the widgets appeared in the gallery or that taps navigated correctly.
+For the registered iPhone, restore and build with `-p:RuntimeIdentifier=ios-arm64` and `-r ios-arm64`. The default iOS build includes the widgets. After installation, open EC Apps → CepBank once to write the summary. The Home Screen widget gallery should have **CepBank Yaklaşan Etkinlikler** (small) and **CepBank Hızlı Erişim** (medium and large). Select the large size for the requested approximately 4×6 layout. iOS controls widget dimensions, so an exact grid size cannot be requested. Verify all four shortcuts and the reminder calendar on the iPhone. A successful build alone does not confirm that the widgets appeared in the gallery or that taps navigated correctly.

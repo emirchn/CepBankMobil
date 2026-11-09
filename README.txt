@@ -53,7 +53,9 @@ Banka hesapları
   Hesap adı, IBAN ve banka logosuyla ayrı hesaplar oluşturulabilir. Her hesapta
   bakiye ekleme, harcama kaydetme, güncel bakiye ve hareketleri görme imkânı
   vardır. Hesaplar düzenlenebilir ve onay verilerek silinebilir. Uygulama,
-  bankadan gerçek bakiyeyi çekmez; görünen bakiye kaydedilen işlemlerle oluşur.
+  bankadan otomatik bakiye çekmez. Garanti BBVA hesap hareketleri CSV/XLS/XLSX
+  dosyasından önizleme ve onayla aktarılabilir; dosyadaki bakiyeyi hesaba
+  uygulamak ayrıca seçilir. Aynı dekontun tekrar aktarılması engellenir.
 
 Kredi kartları ve harcamalar
   Kart bilgileri, limit, hesap kesim günü ve son ödeme günü kaydedilebilir.
@@ -63,7 +65,19 @@ Kredi kartları ve harcamalar
   ekstre borcu elle sisteme işlenebilir. Kart ödemeleri bir banka hesabıyla
   ilişkilendirilir ve uygulama içindeki bakiye/borç kayıtlarına yansıtılır.
   Kart harcamalarını sıfırlama veya bağlı işlemleri silme, onay ister; kartın
-  temel bilgileri korunur.
+  temel bilgileri korunur. Garanti BBVA kart ekstresi PDF dosyasından ayrı bir
+  geçmiş olarak aktarılabilir; bu geçmiş güncel kart borcunu değiştirmez.
+
+Bağımsız harcama kayıtları
+  İşlemler içindeki Harcamalar ekranında ad, tarih, kategori ve tutarla ödeme
+  kaydı oluşturulabilir. İsteğe bağlı kredi kartı seçimi yalnızca kart adını
+  saklar; kart borcunu veya hesap bakiyesini değiştirmez. Yinelenen işlemde
+  seçilen tarih ve belirtilen sayı kadar sonraki ay için ayrı kayıt açılır.
+  Kayıtlar ad, tarih aralığı, kategori, kart adı ve yinelenen işlem durumuna
+  göre filtrelenebilir. Açılışta başlangıç tarihi bugündür; kayıtlar yaklaşan
+  tarihten ileriye sıralanır. Varsayılan görünümde aynı yinelenen serinin
+  gelecek ödemeleri açılabilen tek kayıt altında toplanır. Filtre değiştirildiğinde
+  ödemeler ayrı ayrı gösterilir. Kayıtlar aynı formda tek tek düzenlenebilir.
 
 Ekstre ve hareket raporları
   Her kartın mevcut dönem hareketleri ve taksitli alışverişleri ayrı görülebilir.
@@ -126,8 +140,8 @@ CSS; yerel kayıtlar sqlite-net-pcl; bildirimler yerel bildirim paketiyle
 oluşturulur. Proje dosyası CepBankApp/CepBankApp.csproj konumundadır. Kaynak
 hedefleri Android, iOS ve Mac Catalyst'tir; Windows hedefi Windows üzerinde
 tanımlanır. iOS ana ekran widget'ına ait kaynaklar projede bulunsa da normal
-derlemede widget kapalıdır ve etkinleştirilmesi uygun App Groups/provisioning
-ayarları gerektirir.
+derlemede widget açıktır; dağıtım için uygulama ve widget tarafında uygun App
+Groups/provisioning ayarları gerekir.
 
 Bu depo kişisel finans takibi için geliştirilen bir uygulama projesidir. Gerçek
 cihazdaki izinler, bildirim teslimi, platform paketleme ve mağaza dağıtımı

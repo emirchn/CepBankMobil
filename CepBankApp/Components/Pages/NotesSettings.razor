@@ -5,6 +5,7 @@
 @inject NotesStore Store
 @inject NotesReminderService Notifications
 @inject NotesAppearance Appearance
+@inject WidgetSummaryService WidgetSummary
 
 <section class="notes-page">
     <div class="notes-heading"><div><p class="notes-kicker">NOTLARIM</p><h1>Ayarlar</h1></div><NavLink href="/" class="notes-return">‹ EC Apps</NavLink></div>
@@ -17,6 +18,9 @@
         <button type="button" role="radio" aria-checked="@(Appearance.Mode == "device")" class="@ThemeClass("device")" @onclick="SelectDeviceTheme"><span aria-hidden="true">◐</span>Cihaz</button>
         <button type="button" role="radio" aria-checked="@(Appearance.Mode == "light")" class="@ThemeClass("light")" @onclick="SelectLightTheme"><span aria-hidden="true">☼</span>Açık</button>
         <button type="button" role="radio" aria-checked="@(Appearance.Mode == "dark")" class="@ThemeClass("dark")" @onclick="SelectDarkTheme"><span aria-hidden="true">☾</span>Koyu</button>
+        <button type="button" role="radio" aria-checked="@(Appearance.Mode == "forest")" class="@ThemeClass("forest") palette" @onclick="SelectForestTheme"><span class="notes-palette-preview forest-preview" aria-hidden="true"><i></i><i></i><i></i></span>Orman</button>
+        <button type="button" role="radio" aria-checked="@(Appearance.Mode == "violet")" class="@ThemeClass("violet") palette" @onclick="SelectVioletTheme"><span class="notes-palette-preview violet-preview" aria-hidden="true"><i></i><i></i><i></i></span>Mor</button>
+        <button type="button" role="radio" aria-checked="@(Appearance.Mode == "glassy")" class="@ThemeClass("glassy") palette" @onclick="SelectGlassyTheme"><span class="notes-palette-preview glassy-preview" aria-hidden="true"><i></i><i></i><i></i></span>Glassy</button>
     </div></div>
     <div class="notes-panel settings-block"><h2>Veriler</h2><p>Notlarım verileri bu cihazda saklanır. Sıfırlama; etkinlikleri, alınacak ürünleri, resimlerini, market listesini ve gidilecek yerleri siler.</p><button type="button" class="notes-text-button danger" @onclick="() => _confirmReset = true">Notlarım verilerini sıfırla</button>
         @if (_confirmReset) { <div class="inline-confirm" role="alertdialog" aria-label="Notlarım verilerini sıfırla"><strong>Bu işlem geri alınamaz. Tüm Notlarım verileri silinsin mi?</strong><div class="notes-actions"><button type="button" class="danger" @onclick="ResetAsync">Evet, sil</button><button type="button" @onclick="() => _confirmReset = false">Vazgeç</button></div></div> }
@@ -45,10 +49,14 @@
     private void SelectDeviceTheme() => Appearance.Mode = "device";
     private void SelectLightTheme() => Appearance.Mode = "light";
     private void SelectDarkTheme() => Appearance.Mode = "dark";
+    private void SelectForestTheme() => Appearance.Mode = "forest";
+    private void SelectVioletTheme() => Appearance.Mode = "violet";
+    private void SelectGlassyTheme() => Appearance.Mode = "glassy";
     private async Task EnableNotificationsAsync() { await Notifications.RequestPermissionAndRefreshAsync(); _message = "Bildirim izni kontrol edildi."; }
     private async Task ResetAsync()
     {
         await Store.ClearAllAsync();
+        await WidgetSummary.TryRefreshAsync();
         NotesReminderService.DeliveryHour = 9;
         NotesReminderService.ReminderDaysMask = 1 << 3;
         Appearance.Mode = "device";

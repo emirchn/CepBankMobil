@@ -17,6 +17,8 @@ public sealed class NotesStore
     private async Task InitializeCoreAsync()
     {
         await _db.CreateTableAsync<NoteReminder>();
+        foreach (var column in new[] { "EndDate TEXT", "StartTime TEXT", "EndTime TEXT", "Category INTEGER NOT NULL DEFAULT 0" })
+            try { await _db.ExecuteAsync($"ALTER TABLE NoteReminder ADD COLUMN {column}"); } catch (SQLiteException) { }
         await _db.CreateTableAsync<ShoppingItem>();
         if (!Preferences.Default.Get("notes_shopping_has_image_migrated", false))
         {

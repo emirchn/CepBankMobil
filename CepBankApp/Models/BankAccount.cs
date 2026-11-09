@@ -27,4 +27,7 @@ public class BankAccountMovement
     public decimal BalanceAfter { get; set; }
     public string Description { get; set; } = string.Empty;
     public DateTime Date { get; set; } = DateTime.Now;
+    public string Source { get; set; } = "Manual";
+    public string ExternalKey { get; set; } = string.Empty;
+    public bool HasBalanceAfter { get; set; } = true;
 }

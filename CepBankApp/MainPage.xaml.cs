@@ -32,14 +32,14 @@ public partial class MainPage : ContentPage
 	{
 		if (_notesSurfaceActive) return;
 		var dark = mode == "dark" || (mode == "device" && requestedTheme == AppTheme.Dark);
-		BackgroundColor = Color.FromArgb(mode is "glassy" or "custom" ? "#C1CCF5" : dark ? "#161D38" : "#EEF2FF");
+		BackgroundColor = Color.FromArgb(mode is "glassy" or "custom" ? "#031C26" : dark ? "#161D38" : "#EEF2FF");
 	}
 
 	public static Task SetNotesBackgroundAsync(string mode, bool dark) => MainThread.InvokeOnMainThreadAsync(() =>
 	{
 		if (Application.Current?.Windows.FirstOrDefault()?.Page is not MainPage page) return;
 		page._notesSurfaceActive = true;
-		page.BackgroundColor = Color.FromArgb(dark ? "#11161C" : "#F7F8FA");
+		page.BackgroundColor = Color.FromArgb(mode == "forest" ? "#051F20" : mode == "violet" ? "#0B0720" : mode == "glassy" ? "#100C20" : dark ? "#11161C" : "#F7F8FA");
 		if (Application.Current is { } app)
 		{
 			var desiredTheme = mode == "device" ? AppTheme.Unspecified : dark ? AppTheme.Dark : AppTheme.Light;

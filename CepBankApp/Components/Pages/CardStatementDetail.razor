@@ -9,6 +9,7 @@
     <header class="finance-header">
         <div><NavLink href="cards?type=credit" class="back-link">← Kredi kartlarına dön</NavLink><p class="eyebrow">KREDİ KARTI / EKSTRE</p><h1>Ekstre Detayı</h1><p class="header-subtitle">@_card?.Name</p></div>
     </header>
+    @if (_card is not null) { <NavLink href="@($"cards/{CardId}/import")" class="inline-link">Garanti PDF ekstresi aktar / geçmişi gör →</NavLink> }
     @if (_card is null)
     {
         <div class="empty-state"><strong>Kart bulunamadı</strong></div>

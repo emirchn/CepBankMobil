@@ -1,10 +1,9 @@
 using System.Text.Json;
 using CepBankApp.Data;
-using CepBankApp.Models;
 
 namespace CepBankApp.Services;
 
-public sealed class WidgetSummaryService(DatabaseService database)
+public sealed class WidgetSummaryService(NotesStore notes)
 {
     private readonly SemaphoreSlim _writeGate = new(1, 1);
 
@@ -23,13 +22,12 @@ public sealed class WidgetSummaryService(DatabaseService database)
         await _writeGate.WaitAsync();
         try
         {
-            var account = await database.GetHomeBankAccountAsync();
-            var cardDebt = (await database.GetCreditCardsAsync()).Where(card => card.IsActive).Sum(card => card.CurrentDebt);
+            var events = (await notes.GetRemindersAsync())
+                .Select(x => new { startDate = x.EventDate.ToString("yyyy-MM-dd"), endDate = x.LastDate.ToString("yyyy-MM-dd"), category = (int)x.Category, name = x.Name, startTime = x.StartTime })
+                .ToList();
             var snapshot = new
             {
-                accountName = account?.Name,
-                accountBalance = account?.CurrentBalance,
-                cardDebt,
+                events,
                 updatedAt = DateTimeOffset.Now.ToString("O")
             };
             var path = Path.Combine(directory, "widget-summary.json");

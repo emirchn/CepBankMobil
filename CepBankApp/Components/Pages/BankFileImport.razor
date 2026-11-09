@@ -1,0 +1,106 @@
+@page "/accounts/{Id:int}/import"
+@using CepBankApp.Data
+@using CepBankApp.Models
+@using CepBankApp.Services
+@using Microsoft.AspNetCore.Components.Forms
+@using System.Globalization
+@inject DatabaseService Database
+@inject WidgetSummaryService WidgetSummary
+@inject NotificationService NotificationService
+
+<div class="finance-page">
+    <header class="finance-header"><div><NavLink href="@($"accounts/{Id}")" class="back-link">← Hesaba dön</NavLink><p class="eyebrow">CEPBANK / BANKA HESABI</p><h1>Hesap hareketlerini aktar</h1></div></header>
+    @if (_account is null)
+    {
+        <div class="empty-state"><strong>Hesap bulunamadı</strong></div>
+    }
+    else
+    {
+        <section class="transactions-section">
+            <p><strong>@_account.Name</strong> hesabı için Garanti BBVA'dan indirdiğin CSV, XLS veya XLSX dosyasını seç.</p>
+            <InputFile OnChange="ReadFileAsync" accept=".csv,.xls,.xlsx" />
+            <p class="header-subtitle">Dosya yalnızca cihazında okunur. Aynı dekont ikinci kez eklenmez.</p>
+        </section>
+        @if (!string.IsNullOrWhiteSpace(_error)) { <p class="error-message">@_error</p> }
+        @if (!string.IsNullOrWhiteSpace(_message)) { <p class="form-message">@_message</p> }
+        @if (_preview is not null)
+        {
+            <section class="transactions-section">
+                <div class="section-heading"><h2>Aktarım önizlemesi</h2><span>@_preview.Rows.Count hareket</span></div>
+                <p>@_fileName · @_preview.Rows.Min(x => x.Date).ToString("dd.MM.yyyy") – @_preview.Rows.Max(x => x.Date).ToString("dd.MM.yyyy")</p>
+                @if (!string.IsNullOrWhiteSpace(_preview.Iban)) { <p>Dosyadaki IBAN: @_preview.Iban</p> }
+                @if (_preview.Balance is decimal balance)
+                {
+                    <p>Dosyadaki bakiye: <strong>@Money(balance)</strong></p>
+                    <label class="import-balance-choice"><input type="checkbox" @bind="_updateBalance" /> Hesap bakiyesini bu değerle güncelle</label>
+                }
+                <p class="header-subtitle">Geçmiş hareketler mevcut bakiyeye yeniden eklenmez. Önceden elle girdiğin aynı işlemler otomatik eşleştirilmez.</p>
+                <div class="transaction-list">
+                    @foreach (var row in _preview.Rows.Take(5))
+                    {
+                        <div class="statement-day"><span>@row.Date.ToString("dd.MM.yyyy") · @row.Description</span><strong class="@(row.SignedAmount >= 0 ? "positive" : "negative")">@Money(row.SignedAmount)</strong></div>
+                    }
+                </div>
+                <button type="button" class="primary-button" disabled="@_saving" @onclick="ImportAsync">@(_saving ? "Aktarılıyor…" : "Evet, hareketleri aktar")</button>
+            </section>
+        }
+    }
+</div>
+
+@code {
+    [Parameter] public int Id { get; set; }
+    private BankAccount? _account;
+    private BankFilePreview? _preview;
+    private string _fileName = string.Empty;
+    private string _error = string.Empty;
+    private string _message = string.Empty;
+    private bool _updateBalance;
+    private bool _saving;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await Database.InitializeAsync();
+        _account = await Database.GetBankAccountAsync(Id);
+    }
+
+    private async Task ReadFileAsync(InputFileChangeEventArgs e)
+    {
+        _preview = null;
+        _error = _message = string.Empty;
+        _updateBalance = false;
+        try
+        {
+            var file = e.File;
+            _fileName = file.Name;
+            var extension = Path.GetExtension(file.Name).ToLowerInvariant();
+            if (extension is not (".xls" or ".xlsx" or ".csv"))
+                throw new InvalidDataException("CSV, XLS veya XLSX dosyası seç.");
+            await using var stream = file.OpenReadStream(10 * 1024 * 1024);
+            _preview = StatementFileParser.ReadBankFile(stream, file.Name);
+            if (!string.IsNullOrWhiteSpace(_preview.Iban) && _account is not null &&
+                !string.Equals(_account.Iban, _preview.Iban, StringComparison.OrdinalIgnoreCase))
+                throw new InvalidDataException("Dosyadaki IBAN bu hesapla eşleşmiyor.");
+        }
+        catch (Exception ex) { _preview = null; _error = $"Dosya okunamadı: {ex.Message}"; }
+    }
+
+    private async Task ImportAsync()
+    {
+        if (_preview is null || _saving) return;
+        _saving = true;
+        _error = string.Empty;
+        try
+        {
+            var result = await Database.ImportBankFileAsync(Id, _preview, _updateBalance);
+            _message = $"{result.Added} hareket aktarıldı, {result.Skipped} tekrar kayıt atlandı.";
+            _preview = null;
+            _account = await Database.GetBankAccountAsync(Id);
+            await WidgetSummary.TryRefreshAsync();
+            try { await NotificationService.ScheduleDailyBalanceAsync(); } catch { }
+        }
+        catch (Exception ex) { _error = $"Aktarım tamamlanamadı: {ex.Message}"; }
+        finally { _saving = false; }
+    }
+
+    private static string Money(decimal value) => string.Format(new CultureInfo("tr-TR"), "{0:C2}", value);
+}

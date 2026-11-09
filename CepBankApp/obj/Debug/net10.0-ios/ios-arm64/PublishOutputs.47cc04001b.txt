@@ -33,6 +33,7 @@
 /Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/bin/Debug/net10.0-ios/ios-arm64/publish/../CepBankApp.app/zh-Hans/Microsoft.Maui.Controls.resources.dll
 /Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/bin/Debug/net10.0-ios/ios-arm64/publish/../CepBankApp.app/zh-Hant/Microsoft.Maui.Controls.resources.dll
 /Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/bin/Debug/net10.0-ios/ios-arm64/publish/../CepBankApp.app/runtimeconfig.bin
+/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/bin/Debug/net10.0-ios/ios-arm64/publish/../CepBankApp.app/ExcelDataReader.dll
 /Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/bin/Debug/net10.0-ios/ios-arm64/publish/../CepBankApp.app/Microsoft.AspNetCore.Authorization.dll
 /Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/bin/Debug/net10.0-ios/ios-arm64/publish/../CepBankApp.app/Microsoft.AspNetCore.Components.dll
 /Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/bin/Debug/net10.0-ios/ios-arm64/publish/../CepBankApp.app/Microsoft.AspNetCore.Components.Forms.dll
@@ -68,6 +69,13 @@
 /Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/bin/Debug/net10.0-ios/ios-arm64/publish/../CepBankApp.app/Microsoft.Maui.dll
 /Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/bin/Debug/net10.0-ios/ios-arm64/publish/../CepBankApp.app/Microsoft.Maui.Essentials.dll
 /Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/bin/Debug/net10.0-ios/ios-arm64/publish/../CepBankApp.app/Microsoft.Maui.Graphics.dll
+/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/bin/Debug/net10.0-ios/ios-arm64/publish/../CepBankApp.app/UglyToad.PdfPig.Core.dll
+/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/bin/Debug/net10.0-ios/ios-arm64/publish/../CepBankApp.app/UglyToad.PdfPig.DocumentLayoutAnalysis.dll
+/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/bin/Debug/net10.0-ios/ios-arm64/publish/../CepBankApp.app/UglyToad.PdfPig.Fonts.dll
+/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/bin/Debug/net10.0-ios/ios-arm64/publish/../CepBankApp.app/UglyToad.PdfPig.Package.dll
+/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/bin/Debug/net10.0-ios/ios-arm64/publish/../CepBankApp.app/UglyToad.PdfPig.Tokenization.dll
+/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/bin/Debug/net10.0-ios/ios-arm64/publish/../CepBankApp.app/UglyToad.PdfPig.Tokens.dll
+/Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/bin/Debug/net10.0-ios/ios-arm64/publish/../CepBankApp.app/UglyToad.PdfPig.dll
 /Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/bin/Debug/net10.0-ios/ios-arm64/publish/../CepBankApp.app/Plugin.LocalNotification.dll
 /Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/bin/Debug/net10.0-ios/ios-arm64/publish/../CepBankApp.app/Plugin.LocalNotification.Core.dll
 /Users/emir-mac/VSCode_Repo/CepBankMobil/CepBankApp/bin/Debug/net10.0-ios/ios-arm64/publish/../CepBankApp.app/SQLite-net.dll

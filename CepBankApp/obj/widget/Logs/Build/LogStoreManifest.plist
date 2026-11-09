@@ -6,7 +6,7 @@
 	<integer>12</integer>
 	<key>logs</key>
 	<dict>
-		<key>98E1200B-BFA2-4A44-8B5B-155C346A47EF</key>
+		<key>0E3E5102-A3CE-480F-9166-7BB7BEB3401E</key>
 		<dict>
 			<key>className</key>
 			<string>IDECommandLineBuildLog</string>
@@ -15,7 +15,7 @@
 			<key>domainType</key>
 			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
 			<key>fileName</key>
-			<string>98E1200B-BFA2-4A44-8B5B-155C346A47EF.xcactivitylog</string>
+			<string>0E3E5102-A3CE-480F-9166-7BB7BEB3401E.xcactivitylog</string>
 			<key>hasPrimaryLog</key>
 			<true/>
 			<key>primaryObservable</key>
@@ -40,13 +40,55 @@
 			<key>signature</key>
 			<string>Building project CepBankWidget with scheme CepBankWidget and configuration Debug</string>
 			<key>timeStartedRecording</key>
-			<real>815604653.94074202</real>
+			<real>815879415.12539804</real>
 			<key>timeStoppedRecording</key>
-			<real>815604657.03223395</real>
+			<real>815879418.76086795</real>
 			<key>title</key>
 			<string>Building project CepBankWidget with scheme CepBankWidget and configuration Debug</string>
 			<key>uniqueIdentifier</key>
-			<string>98E1200B-BFA2-4A44-8B5B-155C346A47EF</string>
+			<string>0E3E5102-A3CE-480F-9166-7BB7BEB3401E</string>
+		</dict>
+		<key>B90A2CD1-5802-45DF-83BB-E0BD127B1D6A</key>
+		<dict>
+			<key>className</key>
+			<string>IDECommandLineBuildLog</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>B90A2CD1-5802-45DF-83BB-E0BD127B1D6A.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>S</string>
+				<key>totalNumberOfAnalyzerIssues</key>
+				<integer>0</integer>
+				<key>totalNumberOfErrors</key>
+				<integer>0</integer>
+				<key>totalNumberOfTestFailures</key>
+				<integer>0</integer>
+				<key>totalNumberOfWarnings</key>
+				<integer>0</integer>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>CepBankWidget project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>CepBankWidget</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>1</integer>
+			<key>signature</key>
+			<string>Building project CepBankWidget with scheme CepBankWidget and configuration Debug</string>
+			<key>timeStartedRecording</key>
+			<real>815879077.69509602</real>
+			<key>timeStoppedRecording</key>
+			<real>815879081.31228197</real>
+			<key>title</key>
+			<string>Building project CepBankWidget with scheme CepBankWidget and configuration Debug</string>
+			<key>uniqueIdentifier</key>
+			<string>B90A2CD1-5802-45DF-83BB-E0BD127B1D6A</string>
 		</dict>
 	</dict>
 </dict>

@@ -5,6 +5,10 @@ public static class WidgetNavigation
     private static readonly Dictionary<string, string> Routes = new(StringComparer.Ordinal)
     {
         ["/credit-cards"] = "transaction/cards",
+        ["/cards"] = "cards",
+        ["/accounts"] = "accounts",
+        ["/expenses"] = "expenses",
+        ["/reminders"] = "notes/reminders",
         ["/meal-card"] = "cards?type=meal",
         ["/fuel-card"] = "cards?type=fuel",
         ["/reminder/new"] = "notes/reminders/new",

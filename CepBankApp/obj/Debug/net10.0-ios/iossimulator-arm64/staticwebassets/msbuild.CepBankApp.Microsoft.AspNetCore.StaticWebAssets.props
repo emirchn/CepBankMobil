@@ -12,12 +12,12 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>z4e140e5tn</Fingerprint>
-      <Integrity>LV41brHb8Dewu9eaA+TkZg0yMUv29jMDZGoeMuUvY8U=</Integrity>
+      <Fingerprint>qhp708t2u8</Fingerprint>
+      <Integrity>MhNW2s4C5yiJjcsHBChQ8/JXlyFLAqeZR7pKPQ+lTv4=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <FileLength>72119</FileLength>
-      <LastWriteTime>Sat, 31 Oct 2026 23:13:07 GMT</LastWriteTime>
+      <FileLength>79476</FileLength>
+      <LastWriteTime>Mon, 09 Nov 2026 00:23:54 GMT</LastWriteTime>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\app.css'))</OriginalItemSpec>
     </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\bank-logos\akbank.svg'))">
@@ -332,12 +332,12 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName>ScopedCss</AssetTraitName>
       <AssetTraitValue>ApplicationBundle</AssetTraitValue>
-      <Fingerprint>0cm02h7cfh</Fingerprint>
-      <Integrity>EAdAp9lijaJzhrflo8KHgpNKtRC5vP824vQ+DDXkfnw=</Integrity>
+      <Fingerprint>iwg3u4urrw</Fingerprint>
+      <Integrity>Uob9LXID67RGfViJoFoxYa4qItNTCLRxB1Q7d27VezQ=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <FileLength>14912</FileLength>
-      <LastWriteTime>Thu, 05 Nov 2026 19:06:25 GMT</LastWriteTime>
+      <FileLength>17744</FileLength>
+      <LastWriteTime>Sun, 08 Nov 2026 22:42:36 GMT</LastWriteTime>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\CepBankApp.styles.css'))</OriginalItemSpec>
     </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\glassy-wallpaper.png'))">
@@ -359,6 +359,46 @@
       <FileLength>1934222</FileLength>
       <LastWriteTime>Thu, 29 Oct 2026 22:45:18 GMT</LastWriteTime>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\glassy-wallpaper.png'))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\cepbank-glassy-background.jpg'))">
+      <SourceType>Package</SourceType>
+      <SourceId>CepBankApp</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>/</BasePath>
+      <RelativePath>images/cepbank-glassy-background.jpg</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>s2eirxjt5s</Fingerprint>
+      <Integrity>PFk/HWUN5dX6IIQyWWywG7BCMVUtfe59wpYJ/CzwpVM=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <FileLength>189414</FileLength>
+      <LastWriteTime>Sat, 07 Nov 2026 13:27:10 GMT</LastWriteTime>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\cepbank-glassy-background.jpg'))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\notes-glassy-background.jpg'))">
+      <SourceType>Package</SourceType>
+      <SourceId>CepBankApp</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>/</BasePath>
+      <RelativePath>images/notes-glassy-background.jpg</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>riipmvtkme</Fingerprint>
+      <Integrity>A6w/YPh8cNsWZWSnhQKEDxHo3JFG82W3pnUw0D3CVAU=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <FileLength>157617</FileLength>
+      <LastWriteTime>Sat, 07 Nov 2026 13:17:46 GMT</LastWriteTime>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\notes-glassy-background.jpg'))</OriginalItemSpec>
     </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\index.html'))">
       <SourceType>Package</SourceType>
@@ -432,12 +472,12 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>di1hlt7k61</Fingerprint>
-      <Integrity>G6WUW7U58ILdqSTBUpt0uTL5AQgU4duut0OmY/TQ2lw=</Integrity>
+      <Fingerprint>wu3vhdk1yn</Fingerprint>
+      <Integrity>SKqN4+YZwah4SYYE87R2FAStygDFjiescta9O8M5nUk=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <FileLength>16010</FileLength>
-      <LastWriteTime>Thu, 05 Nov 2026 19:37:46 GMT</LastWriteTime>
+      <FileLength>20835</FileLength>
+      <LastWriteTime>Sat, 07 Nov 2026 13:21:02 GMT</LastWriteTime>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\notes.css'))</OriginalItemSpec>
     </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\theme.js'))">
@@ -452,12 +492,12 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>g3kisx1vmc</Fingerprint>
-      <Integrity>xDkHdEBlBD3krmPPEDvPqq/A/lkvTUq7yV+XcjBxymI=</Integrity>
+      <Fingerprint>nfh200vrmg</Fingerprint>
+      <Integrity>w3QrKxpoJVxOt0mM4HBxZtTQws8CX6SAbMHml2G1a0Y=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <FileLength>1318</FileLength>
-      <LastWriteTime>Wed, 04 Nov 2026 19:36:01 GMT</LastWriteTime>
+      <FileLength>1224</FileLength>
+      <LastWriteTime>Sat, 07 Nov 2026 13:28:30 GMT</LastWriteTime>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\theme.js'))</OriginalItemSpec>
     </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\_framework\blazor.modules.json'))">

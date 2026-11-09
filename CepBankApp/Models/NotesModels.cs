@@ -8,9 +8,17 @@ public class NoteReminder
     public string Name { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     [Indexed] public DateTime EventDate { get; set; }
+    public DateTime? EndDate { get; set; }
+    public string? StartTime { get; set; }
+    public string? EndTime { get; set; }
+    public ReminderCategory Category { get; set; } = ReminderCategory.Etkinlik;
+    [Ignore] public DateTime LastDate => EndDate?.Date ?? EventDate.Date;
+    public bool Includes(DateTime day) => EventDate.Date <= day.Date && LastDate >= day.Date;
     // Retained for data compatibility; reminder days are now a shared Notlarım setting.
     public int ReminderDaysMask { get; set; } = 1 << 3;
 }
+
+public enum ReminderCategory { Etkinlik, OzelGun, Diger }
 
 public enum ShoppingCategory
 {

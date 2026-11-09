@@ -6,23 +6,10 @@ public static class AppAppearance
     {
         "light" => AppTheme.Light,
         "dark" => AppTheme.Dark,
-        "glassy" => AppTheme.Light,
-        "custom" => AppTheme.Light,
+        "glassy" => AppTheme.Dark,
+        "custom" => AppTheme.Dark,
         _ => AppTheme.Unspecified
     };
-
-    public static async Task<string> GetWallpaperDataUrlAsync()
-    {
-        var path = Preferences.Default.Get("custom_wallpaper", "");
-        if (string.IsNullOrWhiteSpace(path) || !File.Exists(path)) return "";
-        try
-        {
-            var bytes = await File.ReadAllBytesAsync(path);
-            var mime = Preferences.Default.Get("custom_wallpaper_mime", "image/jpeg");
-            return $"data:{mime};base64,{Convert.ToBase64String(bytes)}";
-        }
-        catch (IOException) { return ""; }
-    }
 
     public static Task ApplyAsync(string mode) => MainThread.InvokeOnMainThreadAsync(() =>
     {

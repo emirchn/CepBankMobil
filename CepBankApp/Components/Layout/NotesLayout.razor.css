@@ -2,6 +2,7 @@
     --background: #f7f8fa; --surface: #ffffff; --text: #2d3748; --muted: #687585;
     --border: #dfe4e9; --primary: #83aac2; --soft-primary: #e3edf4;
     --soft-peach: #f4e5e9; --soft-mint: #e4f0eb; --soft-blue: #e7edf4;
+    --on-primary: #203341; --danger: #b84658; --done: #28785b;
     box-sizing: border-box; height: 100dvh; display: flex; flex-direction: column; overflow: hidden;
     background: var(--background);
     color: var(--text);
@@ -10,22 +11,46 @@
     --background: #11161c; --surface: #242832; --text: #f7fafc; --muted: #aeb7c4;
     --border: #333b47; --primary: #94a9c1; --soft-primary: #2b3949;
     --soft-peach: #493d48; --soft-mint: #304843; --soft-blue: #293a4c;
+    --on-primary: #16202b; --danger: #f294a4; --done: #a4d3b7;
     background: var(--background);
+}
+.notes-shell.forest {
+    --background: #051F20; --surface: #0B2B26; --text: #DAF1DE; --muted: #8EB69B;
+    --border: #235347; --primary: #8EB69B; --soft-primary: #163832;
+    --soft-peach: #235347; --soft-mint: #163832; --soft-blue: #0B2B26;
+    --on-primary: #051F20; --danger: #f3a0a2; --done: #DAF1DE;
+    background: var(--background);
+}
+.notes-shell.violet {
+    --background: #0B0720; --surface: #25134D; --text: #F2E9FF; --muted: #D1B8FF;
+    --border: #6A2FC8; --primary: #9D71E8; --soft-primary: #25134D;
+    --soft-peach: #6A2FC8; --soft-mint: #25134D; --soft-blue: #6A2FC8;
+    --on-primary: #0B0720; --danger: #ffb0c6; --done: #D1B8FF;
+    background: var(--background);
+}
+.notes-shell.glassy {
+    --background: #100C20; --surface: rgba(36, 28, 60, .64); --text: #F7F2FF; --muted: #D3C8E1;
+    --border: rgba(241, 221, 255, .24); --primary: #D4A9FF; --soft-primary: rgba(120, 38, 196, .58);
+    --soft-peach: rgba(149, 45, 111, .40); --soft-mint: rgba(106, 47, 200, .33); --soft-blue: rgba(56, 38, 114, .47);
+    --on-primary: #160B25; --danger: #FFB3C8; --done: #D1B8FF;
+    background: #100C20 url('/images/notes-glassy-background.jpg') center center / cover no-repeat;
 }
 .notes-content { box-sizing: border-box; flex: 1; min-height: 0; width: 100%; max-width: 760px; margin: 0 auto; padding: calc(14px + env(safe-area-inset-top, 0px)) 20px 24px; overflow-y: auto; -webkit-overflow-scrolling: touch; }
 .notes-nav {
-    box-sizing: border-box; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr));
+    box-sizing: border-box; display: flex; align-items: center; gap: 3px;
     position: relative; z-index: 40; flex: none;
-    width: 100%; max-width: none; margin: 0; padding: 7px 8px max(4px, calc(env(safe-area-inset-bottom, 0px) - 8px));
-    border: 0; border-top: 1px solid var(--border); border-radius: 0; background: var(--background);
+    width: min(calc(100% - 24px), 720px); margin: 0 auto max(10px, env(safe-area-inset-bottom, 0px)); padding: 6px;
+    border: 1px solid var(--border); border-radius: 26px; background: var(--surface);
+    box-shadow: 0 12px 32px rgba(9, 8, 23, .18);
 }
-.notes-nav-indicator {
-    position: absolute; top: 7px; bottom: max(4px, calc(env(safe-area-inset-bottom, 0px) - 8px)); left: 8px; width: calc((100% - 16px) / 5);
-    border-radius: 14px; background: var(--soft-primary);
-    transition: transform .34s cubic-bezier(.22, 1, .36, 1);
-}
-.notes-nav ::deep a { position: relative; z-index: 1; display: grid; place-items: center; min-width: 0; min-height: 55px; border-radius: 14px; color: var(--muted); text-decoration: none; transition: color .2s, transform .25s; }
-.notes-nav ::deep a.active { color: var(--primary); transform: translateY(-2px); }
-.notes-nav ::deep a svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
+.notes-nav ::deep a { position: relative; display: flex; flex: 1; align-items: center; justify-content: center; gap: 6px; min-width: 0; min-height: 50px; padding: 0 4px; border-radius: 19px; color: var(--muted); text-decoration: none; transition: color .2s, background .2s, flex .25s; }
+.notes-nav ::deep a.active { flex: 1.75; background: var(--soft-primary); color: var(--text); }
+.notes-nav ::deep a svg { flex: none; width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
+.notes-nav ::deep a .notes-nav-label { display: none; overflow: hidden; white-space: nowrap; font-size: .72rem; font-weight: 800; }
+.notes-nav ::deep a.active .notes-nav-label { display: inline; }
+.notes-shell.glassy .notes-nav { background: rgba(15, 12, 24, .55); border-color: rgba(255,255,255,.28); box-shadow: 0 14px 36px rgba(0,0,0,.35), inset 0 1px rgba(255,255,255,.16); backdrop-filter: blur(24px) saturate(155%); -webkit-backdrop-filter: blur(24px) saturate(155%); }
+.notes-shell.glassy .notes-nav ::deep a.active { background: linear-gradient(135deg, rgba(106, 47, 200, .88), rgba(113, 20, 166, .82)); color: #F7F2FF; box-shadow: inset 0 1px rgba(255,255,255,.16); }
 .notes-nav ::deep a:focus-visible { outline: 2px solid var(--primary); outline-offset: -3px; }
-@media (prefers-reduced-motion: reduce) { .notes-nav-indicator, .notes-nav ::deep a { transition: none; } }
+@media (max-width: 390px) { .notes-nav ::deep a.active { flex: 2.1; } .notes-nav ::deep a .notes-nav-label { font-size: .65rem; } .notes-nav ::deep a svg { width: 21px; height: 21px; } }
+@media (prefers-reduced-transparency: reduce) { .notes-shell.glassy .notes-nav { background: #1A1428; backdrop-filter: none; -webkit-backdrop-filter: none; } }
+@media (prefers-reduced-motion: reduce) { .notes-nav ::deep a { transition: none; } }

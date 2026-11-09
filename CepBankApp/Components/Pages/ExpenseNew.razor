@@ -1,0 +1,120 @@
+@page "/expenses/new"
+@page "/expenses/edit/{ExpenseId:int}"
+@using CepBankApp.Data
+@using CepBankApp.Models
+@using CepBankApp.Services
+@using System.Globalization
+@inject DatabaseService Database
+@inject NavigationManager Navigation
+
+<div class="finance-page expenses-page">
+    <header class="finance-header"><div><NavLink href="expenses" class="back-link">← Harcamalar</NavLink><p class="eyebrow">CEPBANK / HARCAMALAR</p><h1>@(ExpenseId.HasValue ? "Harcamayı düzenle" : "Harcama ekle")</h1></div></header>
+    @if (_notFound) { <div class="empty-state"><strong>Harcama bulunamadı</strong><NavLink href="expenses" class="inline-link">Harcamalara dön →</NavLink></div> }
+    else
+    {
+    <section class="add-card">
+        <div class="form-grid">
+            <label>İşlem Adı<input type="text" maxlength="120" placeholder="Örn. Telefon faturası" @bind="_name" @bind:event="oninput" /></label>
+            <label>Tarih<input type="date" @bind="_date" /></label>
+            <label>Kategori<select @bind="_category">@foreach (var category in CardCategories.Purchases) { <option value="@category">@category</option> }</select></label>
+            <label>Tutar (TL)<input type="text" inputmode="decimal" placeholder="0,00" @bind="_amountText" @bind:event="oninput" /></label>
+            <label>Kredi Kartı Seçimi<select @bind="_cardId"><option value="">Kart seçilmedi</option>@if (_cardId == "__saved") { <option value="__saved">@_savedCardName (kayıtlı ad)</option> }@foreach (var card in _cards) { <option value="@card.Id">@card.Name</option> }</select></label>
+        </div>
+        <p class="field-hint">Kart adı bilgi amaçlı saklanır; kart borcu ve bakiyesi değişmez.</p>
+        @if (_editingRecord is null)
+        {
+            <label class="expense-recurring"><input type="checkbox" @bind="_repeat" /> Yinelenen İşlem</label>
+            @if (_repeat) { <label class="expense-count">Sonraki ay sayısı<input type="number" min="1" max="120" @bind="_additionalMonths" /></label><p class="field-hint">Seçilen tarih ve sonraki @_additionalMonths ay için toplam @(_additionalMonths + 1) kayıt oluşturulur.</p> }
+        }
+        else if (!string.IsNullOrEmpty(_editingRecord.SeriesId)) { <p class="field-hint">Bu değişiklik yalnızca seçilen ayın kaydına uygulanır.</p> }
+        @if (!string.IsNullOrWhiteSpace(_error)) { <p class="error-message" role="alert">@_error</p> }
+        <button type="button" class="primary-button" disabled="@_saving" @onclick="SaveAsync">@(_saving ? "Kaydediliyor…" : _editingRecord is null ? "Harcamayı kaydet" : "Değişiklikleri kaydet")</button>
+    </section>
+    }
+</div>
+
+@code {
+    [Parameter] public int? ExpenseId { get; set; }
+    private List<CreditCard> _cards = [];
+    private ExpenseRecord? _editingRecord;
+    private bool _notFound;
+    private string _savedCardName = "";
+    private string _name = "";
+    private DateTime _date = DateTime.Today;
+    private string _category = "Diğer";
+    private string _amountText = "";
+    private string _cardId = "";
+    private bool _repeat;
+    private int _additionalMonths = 1;
+    private bool _saving;
+    private string _error = "";
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await Database.InitializeAsync();
+        _cards = (await Database.GetCreditCardsAsync()).Where(x => x.IsActive).ToList();
+        _editingRecord = null;
+        _notFound = false;
+        _error = "";
+        if (ExpenseId is not int id)
+        {
+            _name = "";
+            _date = DateTime.Today;
+            _category = "Diğer";
+            _amountText = "";
+            _cardId = "";
+            _savedCardName = "";
+            _repeat = false;
+            _additionalMonths = 1;
+            return;
+        }
+        _editingRecord = await Database.GetExpenseRecordAsync(id);
+        _notFound = _editingRecord is null;
+        if (_editingRecord is null) return;
+        _name = _editingRecord.Name;
+        _date = _editingRecord.Date;
+        _category = _editingRecord.Category;
+        _amountText = _editingRecord.Amount.ToString("0.##", new CultureInfo("tr-TR"));
+        _savedCardName = _editingRecord.CardName;
+        _cardId = string.IsNullOrEmpty(_savedCardName) ? "" :
+            _cards.FirstOrDefault(x => x.Name == _savedCardName)?.Id.ToString() ?? "__saved";
+    }
+
+    private async Task SaveAsync()
+    {
+        if (_saving) return;
+        _error = "";
+        var culture = _amountText.Contains(',') ? new CultureInfo("tr-TR") : CultureInfo.InvariantCulture;
+        if (string.IsNullOrWhiteSpace(_name)) { _error = "İşlem adı girin."; return; }
+        if (!decimal.TryParse(_amountText, NumberStyles.Number, culture, out var amount) || amount <= 0) { _error = "Geçerli bir tutar girin."; return; }
+        if (_repeat && _additionalMonths is < 1 or > 120) { _error = "Sonraki ay sayısı 1 ile 120 arasında olmalı."; return; }
+        var card = string.IsNullOrEmpty(_cardId) || _cardId == "__saved" ? null : _cards.FirstOrDefault(x => x.Id.ToString() == _cardId);
+        if (!string.IsNullOrEmpty(_cardId) && _cardId != "__saved" && card is null) { _error = "Geçerli bir kart seçin."; return; }
+        var cardName = _cardId == "__saved" ? _savedCardName : card?.Name ?? "";
+        if (_editingRecord is not null)
+        {
+            _editingRecord.Name = _name.Trim();
+            _editingRecord.Date = _date.Date;
+            _editingRecord.Category = _category;
+            _editingRecord.Amount = amount;
+            _editingRecord.CardName = cardName;
+            _saving = true;
+            try { await Database.UpdateExpenseRecordAsync(_editingRecord); Navigation.NavigateTo("expenses"); }
+            catch (Exception ex) { _error = ex.Message; }
+            finally { _saving = false; }
+            return;
+        }
+        var count = _repeat ? _additionalMonths + 1 : 1;
+        var seriesId = _repeat ? Guid.NewGuid().ToString("N") : "";
+        var start = _date.Date;
+        var records = Enumerable.Range(0, count).Select(month => new ExpenseRecord
+        {
+            Name = _name.Trim(), Date = start.AddMonths(month), Category = _category,
+            Amount = amount, CardName = cardName, SeriesId = seriesId
+        }).ToList();
+        _saving = true;
+        try { await Database.AddExpenseRecordsAsync(records); Navigation.NavigateTo("expenses"); }
+        catch (Exception ex) { _error = ex.Message; }
+        finally { _saving = false; }
+    }
+}

@@ -5,6 +5,8 @@
 @using CepBankApp.Services
 @inject NotesStore Store
 @inject NotesReminderService Notifications
+@inject WidgetSummaryService WidgetSummary
+@inject NavigationManager Navigation
 
 <section class="notes-page">
     <div class="notes-heading"><div><p class="notes-kicker">NOTLARIM</p><h1>Hatırlatıcı</h1></div><NavLink class="notes-primary" href="notes/reminders/new">+ Etkinlik ekle</NavLink></div>
@@ -19,8 +21,8 @@
                 else
                 {
                     var day = date.Value;
-                    var hasEvents = _items.Any(x => x.EventDate.Date == day);
-                    <button type="button" class="calendar-day @(hasEvents ? "has-events" : "")" disabled="@(!hasEvents)" @onclick="() => OpenDay(day)" aria-label="@day.ToString("dd MMMM yyyy", Turkish)"><span>@day.Day</span>@if (hasEvents) { <i aria-hidden="true"></i> }</button>
+                    var categories = _items.Where(x => x.Includes(day)).Select(x => x.Category).Distinct().ToList();
+                    <button type="button" class="calendar-day @(day.Date == DateTime.Today ? "is-today" : "") @(categories.Count > 0 ? "has-events" : "")" disabled="@(categories.Count == 0)" @onclick="() => OpenDay(day)" aria-label="@day.ToString("dd MMMM yyyy", Turkish)"><span>@day.Day</span><span class="calendar-dots">@foreach (var category in categories) { <i class="@CategoryClass(category)" aria-hidden="true"></i> }</span></button>
                 }
             }
         </div>
@@ -31,22 +33,14 @@
         @foreach (var item in FilteredItems())
         {
             <article class="notes-panel reminder-row" @key="item.Id">
-                <div class="reminder-date"><strong>@item.EventDate.Day</strong><small>@item.EventDate.ToString("MMM", Turkish)</small></div>
+                <div class="reminder-date @CategoryClass(item.Category)"><strong>@item.EventDate.Day</strong><small>@item.EventDate.ToString("MMM", Turkish)</small></div>
                 <div class="reminder-info">
-                    @if (_editingId == item.Id)
-                    {
-                        <input aria-label="Etkinlik adı" maxlength="120" @bind="_editName" />
-                        <textarea aria-label="Açıklama" maxlength="1000" @bind="_editDescription"></textarea>
-                        <div class="notes-actions"><button type="button" @onclick="() => SaveEditAsync(item)">Kaydet</button><button type="button" @onclick="CancelEdit">Vazgeç</button></div>
-                    }
-                    else
-                    {
                         <strong>@item.Name</strong>
+                        <small class="reminder-category @CategoryClass(item.Category)">@CategoryName(item.Category)</small>
                         @if (!string.IsNullOrWhiteSpace(item.Description)) { <p>@item.Description</p> }
-                        <small>@item.EventDate.ToString("dddd, dd MMMM yyyy", Turkish)</small>
-                        <div class="notes-actions"><button type="button" @onclick="() => StartEdit(item)">Düzenle</button><button type="button" class="danger" @onclick="() => AskDelete(item.Id)">Sil</button></div>
+                        <small>@DateLabel(item)</small>
+                        <div class="notes-actions"><NavLink href="@($"notes/reminders/edit/{item.Id}")">Düzenle</NavLink><button type="button" class="danger" @onclick="() => AskDelete(item.Id)">Sil</button></div>
                         @if (_deleteId == item.Id) { <div class="inline-confirm"><span>Etkinlik silinsin mi?</span><button type="button" @onclick="() => DeleteAsync(item)">Evet, sil</button><button type="button" @onclick="() => _deleteId = null">Vazgeç</button></div> }
-                    }
                 </div>
             </article>
         }
@@ -60,7 +54,7 @@
     <div class="notes-modal-backdrop" role="presentation" @onclick="CloseDay">
         <div class="notes-modal" role="dialog" aria-modal="true" aria-label="Günün etkinlikleri" @onclick:stopPropagation="true">
             <div class="notes-heading"><h2>@_selectedDay.Value.ToString("dd MMMM yyyy", Turkish)</h2><button type="button" @onclick="CloseDay" aria-label="Kapat">✕</button></div>
-            @foreach (var item in _items.Where(x => x.EventDate.Date == _selectedDay.Value)) { <div class="modal-event"><strong>@item.Name</strong>@if (!string.IsNullOrWhiteSpace(item.Description)) { <p>@item.Description</p> }</div> }
+            @foreach (var item in _items.Where(x => x.Includes(_selectedDay.Value))) { <div class="modal-event @CategoryClass(item.Category)"><strong>@item.Name</strong><small>@DateLabel(item)</small>@if (!string.IsNullOrWhiteSpace(item.Description)) { <p>@item.Description</p> }</div> }
         </div>
     </div>
 }
@@ -73,8 +67,13 @@
     private DateTime? _selectedDay;
     private string _search = "";
     private string _filter = "upcoming";
-    private int? _editingId, _deleteId;
-    private string _editName = "", _editDescription = "", _message = "";
+    private int? _deleteId;
+    private string _message = "";
+    private static string CategoryClass(ReminderCategory category) => category switch { ReminderCategory.OzelGun => "category-special", ReminderCategory.Diger => "category-other", _ => "category-event" };
+    private static string CategoryName(ReminderCategory category) => category switch { ReminderCategory.OzelGun => "Özel Gün", ReminderCategory.Diger => "Diğer", _ => "Etkinlik" };
+    private static string DateLabel(NoteReminder item) => item.EventDate.ToString("dd MMMM yyyy", Turkish) +
+        (item.EndDate is null ? "" : " – " + item.EndDate.Value.ToString("dd MMMM yyyy", Turkish)) +
+        (string.IsNullOrWhiteSpace(item.StartTime) ? " · Tam gün" : " · " + item.StartTime + (string.IsNullOrWhiteSpace(item.EndTime) ? "" : " – " + item.EndTime));
     protected override async Task OnInitializedAsync() => _items = await Store.GetRemindersAsync();
     private IEnumerable<DateTime?> CalendarDays()
     {
@@ -86,19 +85,11 @@
     private void OpenDay(DateTime day) => _selectedDay = day;
     private void CloseDay() => _selectedDay = null;
     private IEnumerable<NoteReminder> FilteredItems() => _items.Where(x =>
-        (_filter == "all" || (_filter == "past" ? x.EventDate.Date < DateTime.Today : x.EventDate.Date >= DateTime.Today)) &&
+        (_filter == "all" || (_filter == "past" ? x.LastDate < DateTime.Today : x.LastDate >= DateTime.Today)) &&
         (string.IsNullOrWhiteSpace(_search) || x.Name.Contains(_search, StringComparison.CurrentCultureIgnoreCase) || x.Description.Contains(_search, StringComparison.CurrentCultureIgnoreCase)));
-    private void StartEdit(NoteReminder item) { _editingId = item.Id; _editName = item.Name; _editDescription = item.Description; _deleteId = null; }
-    private void CancelEdit() => _editingId = null;
-    private async Task SaveEditAsync(NoteReminder item)
-    {
-        if (string.IsNullOrWhiteSpace(_editName)) { _message = "Etkinlik adı gerekli."; return; }
-        item.Name = _editName.Trim(); item.Description = _editDescription.Trim();
-        await Store.SaveReminderAsync(item); await Notifications.RefreshAsync(); _editingId = null; _message = "Etkinlik güncellendi.";
-    }
     private void AskDelete(int id) => _deleteId = id;
     private async Task DeleteAsync(NoteReminder item)
     {
-        await Store.DeleteReminderAsync(item); _items.Remove(item); await Notifications.RefreshAsync(); _deleteId = null;
+        await Store.DeleteReminderAsync(item); _items.Remove(item); await Notifications.RefreshAsync(); await WidgetSummary.TryRefreshAsync(); _deleteId = null;
     }
 }
